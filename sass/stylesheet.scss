@@ -1,0 +1,146 @@
+body {
+	padding-top: 70px;
+}
+
+/* 
+*
+* bootstrap site header overrides 
+*
+*/
+
+.navbar-brand {
+    padding: 5px;
+}
+
+.navbar-default .navbar-brand {
+    color: #999999;
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+color: #ffffff;
+}
+
+.navbar-default {
+    background-color: #1b1b1b;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    color: #999999;
+    background-color: #111111;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #999999;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #ffffff;
+}
+
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+    background-color: #111111;
+}
+
+.navbar-brandname {
+    padding: 10px 10px;
+}
+
+/*
+*
+* blog
+*
+*/
+
+.postFooter {
+    margin-top: 10px;
+}
+
+/*
+*
+* collection
+*
+*/
+
+.gameBoxArt {
+	border: 1px solid #FFFFFF;
+    box-shadow: 0 1px 3px #000000, 0 0 0 1px #FFFFFF;
+}
+
+.collectionStatusBadge {
+	width: 85px;
+}
+
+.gameStatusBadge {
+	width: 90px;
+}
+
+/* 
+* 
+* search 
+*
+*/
+
+.searchResults {
+    padding-top: 20px;    
+}
+
+.searchResultImage {
+    width: 23.40426%;
+}      
+
+.searchResultBody {
+    margin-left: 1%;
+    width: 74.59574%;
+}
+
+.searchResultBody h4 {
+    margin-top: 0px;
+}
+
+.searchResultButton {
+    margin-bottom: 10px;
+}
+
+.instructionsTag {
+	width: 100px;
+	padding-top: 5px;
+}
+
+.instructionsTagDescription {
+	width: 265px;
+}
+
+/* game page */
+.gamePageBoxArt {
+    width: 100%;
+}
+
+.gamePageFactsLabel{
+    width: 120px;
+    font-size: 12px;
+}
+
+.gamePageFactsDetails{
+    font-size: 12px;
+}
+
+@media (max-width: 480px) {
+    /* search */
+    .searchResultImage, .searchResultBody {
+        margin-left: 0%;
+        width: 100%;  
+    } 
+    .searchResultBody h4 {
+        margin-top: 10px;
+    } 
+}
+
+/*
+*
+* admin 
+*
+*/
+
+#wysihtml5-textarea {
+    height: 500px;
+}
