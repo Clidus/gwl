@@ -1,0 +1,70 @@
+CREATE TABLE IF NOT EXISTS `blog` (
+  `PostID` int(11) NOT NULL AUTO_INCREMENT,
+  `Title` varchar(100) NOT NULL,
+  `URL` varchar(100) NOT NULL,
+  `Post` text NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `Date` date NOT NULL,
+  PRIMARY KEY (`PostID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `ci_sessions` (
+  `session_id` varchar(40) NOT NULL DEFAULT '0',
+  `ip_address` varchar(45) NOT NULL DEFAULT '0',
+  `user_agent` varchar(120) NOT NULL,
+  `last_activity` int(10) unsigned NOT NULL DEFAULT '0',
+  `user_data` text NOT NULL,
+  PRIMARY KEY (`session_id`),
+  KEY `last_activity_idx` (`last_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `collections` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `GameID` int(11) NOT NULL,
+  `ListID` int(11) NOT NULL,
+  `StatusID` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `games` (
+  `GameID` int(11) NOT NULL AUTO_INCREMENT,
+  `GBID` int(11) NOT NULL,
+  `Name` varchar(300) NOT NULL,
+  `API_Detail` varchar(50) DEFAULT NULL,
+  `Image` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`GameID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `gameStatuses` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+INSERT INTO `gameStatuses` (`ID`, `Name`) VALUES
+(1, 'Unplayed'),
+(2, 'Unfinished'),
+(3, 'Complete'),
+(4, 'Uncompletable');
+
+CREATE TABLE IF NOT EXISTS `lists` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+INSERT INTO `lists` (`ID`, `Name`) VALUES
+(1, 'Own'),
+(2, 'Want'),
+(3, 'Borrowed'),
+(4, 'Played');
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `UserID` int(11) NOT NULL AUTO_INCREMENT,
+  `Username` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `Password` varbinary(250) NOT NULL,
+  `Email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `Admin` tinyint(1) NOT NULL,
+  PRIMARY KEY (`UserID`,`Username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
