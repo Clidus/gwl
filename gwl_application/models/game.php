@@ -15,71 +15,18 @@ class Game extends CI_Model {
    
     // search Giant Bomb API for games  
     function searchForGame($query, $page, $userID) {  
-        $url = $this->APIRoot . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
+        //$url = $this->APIRoot . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
         
+        // giant bomb search API is broken. Filter by game resource instead
+        $url = $this->APIRoot . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&limit=" . $this->resultsPerPage . "&page=" . $page . "&filter=name:" . urlencode ($query);
+    
         $result = $this->getData($url);
 
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
         {                                                                                                    
             foreach($result->results as $game)
             {    
-                $collection = $this->isGameIsInCollection($game->id, $userID);
-                // if in collection
-                if($collection != null)
-                {
-                    $game->listID = $collection->ListID;
-                    $game->statusID = $collection->StatusID;
-
-                    // list button
-                    switch($game->listID)
-                    {
-                        case 1:
-                            $game->listLabel = "Own";
-                            $game->listStyle = "success";
-                            break;
-                        case 2:
-                            $game->listLabel = "Want";
-                            $game->listStyle = "warning";
-                            break;
-                        case 3:
-                            $game->listLabel = "Borrowed";
-                            $game->listStyle = "info";
-                            break;
-                        case 4:
-                            $game->listLabel = "Played";
-                            $game->listStyle = "primary";
-                            break;
-                    }
-
-                    // status button
-                    switch($game->statusID)
-                    {
-                        case 1:
-                            $game->statusLabel = "Unplayed";
-                            $game->statusStyle = "default";
-                            break;
-                        case 2:
-                            $game->statusLabel = "Unfinished";
-                            $game->statusStyle = "warning";
-                            break;
-                        case 3:
-                            $game->statusLabel = "Complete";
-                            $game->statusStyle = "success";
-                            break;
-                        case 4:
-                            $game->statusLabel = "Uncompletable";
-                            $game->statusStyle = "primary";
-                            break;
-                    }
-                } else {
-                    // not in collection
-                    $game->listID = 0; 
-                    $game->statusID = 0; 
-                    $game->listLabel = "Add to Collection";
-                    $game->listStyle = "default";
-                    $game->statusLabel = "Unplayed";
-                    $game->statusStyle = "default";
-                }
+                $game = $this->addCollectionStatus($game, $userID);
             }
             return $result;
         } else {
@@ -101,21 +48,79 @@ class Game extends CI_Model {
 
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
         {
-            $game = $result->results;
-            $collection = $this->isGameIsInCollection($gbID, $userID);
-            if($collection != null)
-            {
-                $game->listID = $collection->ListID;
-                $game->statusID = $collection->StatusID;
-            } else {
-                // not in collection
-                $game->listID = 0; 
-                $game->statusID = 0; 
-            }
-            return $game;
+            return $game = $this->addCollectionStatus($result->results, $userID);
         } else {
             return null;
         }
+    }
+
+    // add collection status (ownership and played status) to game object
+    function addCollectionStatus($game, $userID)
+    {
+        $collection = $this->isGameIsInCollection($game->id, $userID);
+
+        // if in collection
+        if($collection != null)
+        {
+            $game->listID = $collection->ListID;
+            $game->statusID = $collection->StatusID;
+
+            // list button
+            switch($game->listID)
+            {
+                case 1:
+                    $game->listLabel = "Own";
+                    $game->listStyle = "success";
+                    break;
+                case 2:
+                    $game->listLabel = "Want";
+                    $game->listStyle = "warning";
+                    break;
+                case 3:
+                    $game->listLabel = "Borrowed";
+                    $game->listStyle = "info";
+                    break;
+                case 4:
+                    $game->listLabel = "Lent";
+                    $game->listStyle = "danger";
+                    break;
+                case 5:
+                    $game->listLabel = "Played";
+                    $game->listStyle = "primary";
+                    break;
+            }
+
+            // status button
+            switch($game->statusID)
+            {
+                case 1:
+                    $game->statusLabel = "Unplayed";
+                    $game->statusStyle = "default";
+                    break;
+                case 2:
+                    $game->statusLabel = "Unfinished";
+                    $game->statusStyle = "warning";
+                    break;
+                case 3:
+                    $game->statusLabel = "Complete";
+                    $game->statusStyle = "success";
+                    break;
+                case 4:
+                    $game->statusLabel = "Uncompletable";
+                    $game->statusStyle = "primary";
+                    break;
+            }
+        } else {
+            // not in collection
+            $game->listID = 0; 
+            $game->statusID = 0; 
+            $game->listLabel = "Add to Collection";
+            $game->listStyle = "default";
+            $game->statusLabel = "Unplayed";
+            $game->statusStyle = "default";
+        }
+
+        return $game;
     }
 
     // get API response
@@ -177,7 +182,7 @@ class Game extends CI_Model {
                'GBID' => $result->results->id,
                'Name' => $result->results->name,
                'API_Detail' => $result->results->api_detail_url,
-               'Image' => $result->results->image->small_url
+               'Image' => is_object($result->results->image) ? $result->results->image->small_url : null
             );
 
             return $this->db->insert('games', $data); 
@@ -233,6 +238,21 @@ class Game extends CI_Model {
             $this->db->where('GameID', $row->GameID); 
             $this->db->where('UserID', $userID); 
             $this->db->update('collections', array('StatusID' => $statusID)); 
+        }
+    }
+
+    // remove game from users collection
+    function removeFromCollection($GBID, $userID)
+    {
+        // get GameID from GBID
+        $query = $this->db->get_where('games', array('GBID' => $GBID));
+        if($query->num_rows() == 1)
+        {
+            $row = $query->first_row();
+
+            $this->db->where('GameID', $row->GameID);
+            $this->db->where('UserID', $userID);
+            $this->db->delete('collections'); 
         }
     }
 }

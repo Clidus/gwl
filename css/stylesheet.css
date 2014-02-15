@@ -80,79 +80,73 @@ body {
   width: 85px;
 }
 
-/* line 73, ../sass/stylesheet.scss */
-.gameStatusBadge {
-  width: 90px;
-}
-
 /* 
 * 
 * search 
 *
 */
-/* line 83, ../sass/stylesheet.scss */
+/* line 79, ../sass/stylesheet.scss */
 .searchResults {
   padding-top: 20px;
 }
 
-/* line 87, ../sass/stylesheet.scss */
+/* line 83, ../sass/stylesheet.scss */
 .searchResultImage {
   width: 23.40426%;
 }
 
-/* line 91, ../sass/stylesheet.scss */
+/* line 87, ../sass/stylesheet.scss */
 .searchResultBody {
   margin-left: 1%;
   width: 74.59574%;
 }
 
-/* line 96, ../sass/stylesheet.scss */
+/* line 92, ../sass/stylesheet.scss */
 .searchResultBody h4 {
   margin-top: 0px;
 }
 
-/* line 100, ../sass/stylesheet.scss */
+/* line 96, ../sass/stylesheet.scss */
 .searchResultButton {
   margin-bottom: 10px;
 }
 
-/* line 104, ../sass/stylesheet.scss */
-.instructionsTag {
-  width: 100px;
-  padding-top: 5px;
-}
-
-/* line 109, ../sass/stylesheet.scss */
-.instructionsTagDescription {
-  width: 265px;
-}
-
-/* game page */
-/* line 114, ../sass/stylesheet.scss */
+/* 
+* 
+* game page
+*
+*/
+/* line 106, ../sass/stylesheet.scss */
 .gamePageBoxArt {
   width: 100%;
 }
 
-/* line 118, ../sass/stylesheet.scss */
+/* line 110, ../sass/stylesheet.scss */
 .gamePageFactsLabel {
   width: 120px;
   font-size: 12px;
 }
 
-/* line 123, ../sass/stylesheet.scss */
+/* line 115, ../sass/stylesheet.scss */
 .gamePageFactsDetails {
   font-size: 12px;
 }
 
+/* line 119, ../sass/stylesheet.scss */
+.readMoreOn {
+  float: right;
+  margin: 0px;
+}
+
 @media (max-width: 480px) {
   /* search */
-  /* line 129, ../sass/stylesheet.scss */
+  /* line 126, ../sass/stylesheet.scss */
   .searchResultImage, .searchResultBody {
     margin-left: 0%;
     width: 100%;
   }
 
-  /* line 133, ../sass/stylesheet.scss */
+  /* line 130, ../sass/stylesheet.scss */
   .searchResultBody h4 {
     margin-top: 10px;
   }
@@ -162,7 +156,7 @@ body {
 * admin 
 *
 */
-/* line 144, ../sass/stylesheet.scss */
+/* line 141, ../sass/stylesheet.scss */
 #wysihtml5-textarea {
   height: 500px;
 }

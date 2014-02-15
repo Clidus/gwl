@@ -58,7 +58,8 @@ INSERT INTO `lists` (`ID`, `Name`) VALUES
 (1, 'Own'),
 (2, 'Want'),
 (3, 'Borrowed'),
-(4, 'Played');
+(4, 'Lent'),
+(5, 'Played');
 
 CREATE TABLE IF NOT EXISTS `users` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,

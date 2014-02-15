@@ -70,10 +70,6 @@ color: #ffffff;
 	width: 85px;
 }
 
-.gameStatusBadge {
-	width: 90px;
-}
-
 /* 
 * 
 * search 
@@ -101,27 +97,28 @@ color: #ffffff;
     margin-bottom: 10px;
 }
 
-.instructionsTag {
-	width: 100px;
-	padding-top: 5px;
-}
+/* 
+* 
+* game page
+*
+*/
 
-.instructionsTagDescription {
-	width: 265px;
-}
-
-/* game page */
 .gamePageBoxArt {
     width: 100%;
 }
 
-.gamePageFactsLabel{
+.gamePageFactsLabel {
     width: 120px;
     font-size: 12px;
 }
 
 .gamePageFactsDetails{
     font-size: 12px;
+}
+
+.readMoreOn {
+    float: right;
+    margin: 0px;
 }
 
 @media (max-width: 480px) {

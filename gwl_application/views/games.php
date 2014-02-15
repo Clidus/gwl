@@ -85,58 +85,46 @@
     <div class="col-sm-8">
         <div class="panel panel-default"> 
             <div class="panel-body">
-              <?php echo $game->deck; ?>             
+              <p><?php echo $game->deck; ?></p>
+              <p class="readMoreOn"><a href="<?php echo $game->site_detail_url; ?>" target="_blank">Read more on GiantBomb.com.</a></p>         
             </div>  
-            <div class="panel-footer">
-                <?php    
-                    if(property_exists($game, "platforms") && $game->platforms != null)
-                        foreach($game->platforms as $gbPlatform)
-                            echo "<span class='label label-info'>" . $gbPlatform->name . "</span> ";    
-                ?>  
-            </div>                                                   
-        </div>                 
-        <div class="pull-right">  
-            <div class="btn-group searchResultButton">
-            <?php 
-                if($sessionUserID > 0) 
-                {            
-                    if($game->listID > 0)
+            <?php    
+                if(property_exists($game, "platforms") && $game->platforms != null)
+                {
+                    echo "<div class='panel-footer'>";
+                    foreach($game->platforms as $gbPlatform)
                     {
-                        switch($game->listID)
-                        {
-                            case 1:
-                                $buttonLabel = "Own";
-                                $buttonStyle = "success";
-                                break;
-                            case 2:
-                                $buttonLabel = "Want";
-                                $buttonStyle = "warning";
-                                break;
-                            case 3:
-                                $buttonLabel = "Borrowed";
-                                $buttonStyle = "info";
-                                break;
-                            case 4:
-                                $buttonLabel = "Played";
-                                $buttonStyle = "primary";
-                                break;
-                        }
-                        echo "<button id='gameButton" . $game->id . "' data-toggle='dropdown' class='btn btn-" . $buttonStyle . " dropdown-toggle'>" . $buttonLabel . " <span class='caret'></span></button>";
-                    }  
-                    else
-                    {           
-                        echo "<button id='gameButton" . $game->id . "' data-toggle='dropdown' class='btn btn-default dropdown-toggle'>Add to Collection <span class='caret'></span></button>";
-                    } 
-            ?>
-                <ul class="dropdown-menu">
-                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url . "'," . $game->listID ?>, 1);">Own</a></li>
-                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url . "'," . $game->listID ?>, 2);">Want</a></li>
-                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url . "'," . $game->listID ?>, 3);">Borrowed</a></li>
-                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url . "'," . $game->listID ?>, 4);">Played</a></li>
-                </ul>
-            </div> 
-            <a href="<?php echo $game->site_detail_url; ?>" target="_blank" class="btn btn-default searchResultButton">Read More</a>
-            <?php } ?>   
-        </div>
+                        echo "<span class='label label-info'>" . $gbPlatform->name . "</span> ";  
+                    }
+                    echo "</div>";  
+                }
+            ?>                                
+        </div>                 
+        <?php if($sessionUserID > 0) { ?>
+            <div class="pull-right">  
+                <div class='btn-group searchResultButton'>
+                    <button id='gameButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->listStyle ?> dropdown-toggle'><?php echo $game->listLabel ?> <span class='caret'></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 1);">Own</a></li>
+                        <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 2);">Want</a></li>
+                        <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 3);">Borrowed</a></li>
+                        <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 4);">Lent</a></li>
+                        <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 5);">Played</a></li>
+                    </ul>
+                </div> 
+                <span id="inCollectionControls<?php echo $game->id ?>" class="<?php if($game->listID == 0) echo "hidden" ?>">
+                    <div id='statusButtonGroup<?php echo $game->id ?>' class='btn-group searchResultButton'>
+                        <button id='statusButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->statusStyle ?> dropdown-toggle'><?php echo $game->statusLabel  ?> <span class='caret'></span></button>
+                        <ul class='dropdown-menu'>
+                            <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 1);">Unplayed</a></li>
+                            <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 2);">Unfinished</a></li>
+                            <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 3);">Complete</a></li>
+                            <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 4);">Uncompletable</a></li>
+                        </ul>
+                    </div> 
+                    <a onclick="javascript:removeFromCollection(<?php echo $game->id ?>);" class='btn btn-danger searchResultButton'>Remove from Collection</a> 
+                </span>
+            </div>
+        <?php } ?>
     </div>
 </div>

@@ -24,25 +24,26 @@
 
                             <div class="clearfix">    
                                 <a href='<?php echo $baseUrl . "game/" . $game->id ?>'>
-                                    <img class="media-object pull-left gameBoxArt searchResultImage" src="<?php echo $game->image->small_url; ?>">
+                                    <img class="media-object pull-left gameBoxArt searchResultImage" src="<?php if(is_object($game->image)) echo $game->image->small_url; ?>">
                                 </a>    
                                 <div class="pull-left searchResultBody">  
                                     <h4><?php echo "<a href='" . $baseUrl . "game/" . $game->id . "'>" . $game->name . "</a>" ?></h4>
                                     <div class="panel panel-default"> 
                                         <div class="panel-body">
-                                          <?php echo $game->deck; ?>             
+                                          <p><?php echo $game->deck; ?></p>   
+                                          <p class="readMoreOn"><a href="<?php echo $game->site_detail_url; ?>" target="_blank">Read more on GiantBomb.com.</a></p>
                                         </div>  
-                                        <div class="panel-footer">
-                                            <?php    
-                                                if($game->platforms != null)
+                                        <?php    
+                                            if(property_exists($game, "platforms") && $game->platforms != null)
+                                            {
+                                                echo "<div class='panel-footer'>";
+                                                foreach($game->platforms as $gbPlatform)
                                                 {
-                                                    foreach($game->platforms as $gbPlatform)
-                                                    {
-                                                        echo "<span class='label label-info'>" . $gbPlatform->name . "</span> ";    
-                                                    }   
+                                                    echo "<span class='label label-info'>" . $gbPlatform->name . "</span> ";  
                                                 }
-                                            ?>  
-                                        </div>                                                   
+                                                echo "</div>";  
+                                            }
+                                        ?>                                              
                                     </div>   
                                     <?php if($sessionUserID > 0) { ?>
                                         <div class="pull-right">  
@@ -52,18 +53,21 @@
                                                     <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 1);">Own</a></li>
                                                     <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 2);">Want</a></li>
                                                     <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 3);">Borrowed</a></li>
-                                                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 4);">Played</a></li>
+                                                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 4);">Lent</a></li>
+                                                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 5);">Played</a></li>
                                                 </ul>
                                             </div> 
-                                            <div id='statusButtonGroup<?php echo $game->id ?>' class='btn-group searchResultButton <?php if($game->listID == 0) echo "hidden" ?>'>
-                                                <button id='statusButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->statusStyle ?> dropdown-toggle'><?php echo $game->statusLabel  ?> <span class='caret'></span></button>
-                                                <ul class='dropdown-menu'>
-                                                    <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 1);">Unplayed</a></li>
-                                                    <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 2);">Unfinished</a></li>
-                                                    <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 3);">Complete</a></li>
-                                                    <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 4);">Uncompletable</a></li>
-                                                </ul>
-                                            </div> 
+                                            <span id="inCollectionControls<?php echo $game->id ?>" class="<?php if($game->listID == 0) echo "hidden" ?>">
+                                                <div id="statusButtonGroup<?php echo $game->id ?>" class="btn-group searchResultButton">
+                                                    <button id='statusButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->statusStyle ?> dropdown-toggle'><?php echo $game->statusLabel  ?> <span class='caret'></span></button>
+                                                    <ul class='dropdown-menu'>
+                                                        <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 1);">Unplayed</a></li>
+                                                        <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 2);">Unfinished</a></li>
+                                                        <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 3);">Complete</a></li>
+                                                        <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 4);">Uncompletable</a></li>
+                                                    </ul>
+                                                </div> 
+                                            </span>
                                         </div>
                                     <?php } ?>
                                 </div>
@@ -133,13 +137,22 @@
             You're borrowing this game from a friend. You wanted to play it, but not enough to buy it apparently.
           </div>
         </div>
+
+        <div class="media">
+          <a class="pull-left" href="#">
+            <span class='btn btn-danger collectionStatusBadge media-object'>Lent</span> 
+          </a>
+          <div class="media-body">
+            You've lent this game out to someone. You are going to get it back right?
+          </div>
+        </div>
         
         <div class="media">
           <a class="pull-left" href="#">
             <span class='btn btn-primary collectionStatusBadge media-object'>Played</span> 
           </a>
           <div class="media-body">
-            You played this game, but you don't own it. Maybe you traded it in for the new hot jam. Or you just flushed it down a toilet, because it was terrible.
+            You played this game, but you don't own it. Maybe you traded it in for the new hot jam. Or you just flushed it down a toilet, because it was that terrible.
           </div>
         </div>
     </div>

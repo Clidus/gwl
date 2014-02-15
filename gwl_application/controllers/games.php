@@ -86,6 +86,22 @@ class Games extends CI_Controller {
         echo json_encode($result);
     }
 
+    function remove()
+    {
+        // form validation
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('gbID', 'gbID', 'trim|xss_clean');
+
+        $GBID = $this->input->post('gbID');
+        $userID = $this->session->userdata('userID');
+       
+        $this->load->model('Game');
+        $this->Game->removeFromCollection($GBID, $userID);
+       
+        $result['error'] = false;  
+        echo json_encode($result);
+    }
+
     // view game
     function view($gbID)
     {   

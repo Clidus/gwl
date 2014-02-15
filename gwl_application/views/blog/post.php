@@ -4,7 +4,7 @@
 </ul>
 
 <h2><?php echo $post->Title ?></h2>
-<p>By <?php echo $post->username ?></p>
+<p>By <?php echo $post->Username ?></p>
 
 <div class="clearfix">
 	<?php echo $post->Post ?>

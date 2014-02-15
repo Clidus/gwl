@@ -32,6 +32,10 @@ function addGame(giantbombID, detailUrl, currentListID, listID) {
                             buttonStyle = "info";
                             break;
                         case 4:
+                            buttonLabel = "Lent";
+                            buttonStyle = "danger";
+                            break;
+                        case 5:
                             buttonLabel = "Played";
                             buttonStyle = "primary";
                             break;
@@ -39,7 +43,7 @@ function addGame(giantbombID, detailUrl, currentListID, listID) {
                     $('#gameButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>');
                     $('#gameButton' + giantbombID).removeClass();
                     $('#gameButton' + giantbombID).addClass("btn btn-" + buttonStyle + " dropdown-toggle");
-                    $('#statusButtonGroup' + giantbombID).removeClass("hidden");
+                    $('#inCollectionControls' + giantbombID).removeClass("hidden");
                 }
             }
         },
@@ -85,6 +89,29 @@ function changeStatus(giantbombID, statusID) {
                 $('#statusButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>');
                 $('#statusButton' + giantbombID).removeClass();
                 $('#statusButton' + giantbombID).addClass("btn btn-" + buttonStyle + " dropdown-toggle");
+            }
+        },
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+            alert('Error');
+        }
+    });
+}
+
+/* update game played status */
+function removeFromCollection(giantbombID) {
+    $.ajax({
+        type : 'POST',
+        url : baseUrl + 'games/remove',
+        dataType : 'json',
+        data: {
+            gbID: giantbombID
+        },
+        success : function(data){
+            if (data.error === true) {
+                alert(data.errorMessage);
+            } else {
+                // redirect to same page to refresh state
+                window.location = document.URL;
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
