@@ -1,3 +1,22 @@
+<!-- Modal -->
+<div class="modal fade" id="removeGameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">This is serious business duder.</h4>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove this game from your collection? If you have sold it, consider changing it's status to "Played".
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <span id="removeGameButtonPlaceholder"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <ul class="breadcrumb">
     <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="<?php echo $baseUrl ?>">Home</a></span></li>       
     <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb" class="active"><span itemprop="title"><?php echo $game->name ?></span></li>
@@ -122,7 +141,7 @@
                             <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 4);">Uncompletable</a></li>
                         </ul>
                     </div> 
-                    <a onclick="javascript:removeFromCollection(<?php echo $game->id ?>);" class='btn btn-danger searchResultButton'>Remove from Collection</a> 
+                    <a onclick="javascript:showRemoveGameWarning(<?php echo $game->id ?>);" class='btn btn-danger searchResultButton'>Remove from Collection</a>
                 </span>
             </div>
         <?php } ?>

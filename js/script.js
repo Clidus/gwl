@@ -1,5 +1,6 @@
 /* add/update game status in collection */
 function addGame(giantbombID, detailUrl, currentListID, listID) {
+    $('#gameButton' + giantbombID).addClass('disabled').html('Saving...');
     $.ajax({
         type : 'POST',
         url : baseUrl + 'games/add',
@@ -40,9 +41,7 @@ function addGame(giantbombID, detailUrl, currentListID, listID) {
                             buttonStyle = "primary";
                             break;
                     }
-                    $('#gameButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>');
-                    $('#gameButton' + giantbombID).removeClass();
-                    $('#gameButton' + giantbombID).addClass("btn btn-" + buttonStyle + " dropdown-toggle");
+                    $('#gameButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + buttonStyle + " dropdown-toggle");
                     $('#inCollectionControls' + giantbombID).removeClass("hidden");
                 }
             }
@@ -55,6 +54,7 @@ function addGame(giantbombID, detailUrl, currentListID, listID) {
 
 /* update game played status */
 function changeStatus(giantbombID, statusID) {
+    $('#statusButton' + giantbombID).addClass('disabled').html('Saving...');
     $.ajax({
         type : 'POST',
         url : baseUrl + 'games/changeStatus',
@@ -86,9 +86,7 @@ function changeStatus(giantbombID, statusID) {
                         buttonStyle = "primary";
                         break;
                 }
-                $('#statusButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>');
-                $('#statusButton' + giantbombID).removeClass();
-                $('#statusButton' + giantbombID).addClass("btn btn-" + buttonStyle + " dropdown-toggle");
+                $('#statusButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + buttonStyle + " dropdown-toggle");
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -97,8 +95,15 @@ function changeStatus(giantbombID, statusID) {
     });
 }
 
-/* update game played status */
+function showRemoveGameWarning(giantbombID) {
+    $('#removeGameButtonPlaceholder').html("<a id='removeGameButton" + giantbombID + "' onclick='javascript:removeFromCollection(" + giantbombID + ");'' class='btn btn-danger'>Remove from Collection</a>");
+    $('#removeGameModal').modal();
+}
+
+/* remove game from collection */
+/* TODO: add warning dialogue */
 function removeFromCollection(giantbombID) {
+    $('#removeGameButton' + giantbombID).addClass('disabled').html('Removing...');
     $.ajax({
         type : 'POST',
         url : baseUrl + 'games/remove',
