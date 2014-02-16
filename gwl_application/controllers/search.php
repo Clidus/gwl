@@ -17,7 +17,7 @@ class Search extends CI_Controller {
 		// search for game
 		if($query != '') {
 			$this->load->model('Game');
-			$result = $this->Game->searchForGame($query, $page, $this->session->userdata('userID'));
+			$result = $this->Game->searchForGame($query, $page, $this->session->userdata('UserID'));
 			$data['searchResults'] = $result;
 		}
 

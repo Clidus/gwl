@@ -69,3 +69,12 @@ CREATE TABLE IF NOT EXISTS `users` (
   `Admin` tinyint(1) NOT NULL,
   PRIMARY KEY (`UserID`,`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `platforms` (
+  `PlatformID` int(11) NOT NULL AUTO_INCREMENT,
+  `GBID` int(11) NOT NULL,
+  `Name` varchar(300) NOT NULL,
+  `Abbreviation` varchar(50) NOT NULL,
+  `API_Detail` varchar(50) NOT NULL,
+  PRIMARY KEY (`PlatformID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

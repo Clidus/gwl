@@ -30,8 +30,33 @@
                                     <h4><?php echo "<a href='" . $baseUrl . "game/" . $game->id . "'>" . $game->name . "</a>" ?></h4>
                                     <div class="panel panel-default"> 
                                         <div class="panel-body">
-                                          <p><?php echo $game->deck; ?></p>   
-                                          <p class="readMoreOn"><a href="<?php echo $game->site_detail_url; ?>" target="_blank">Read more on GiantBomb.com.</a></p>
+                                            <p><?php echo $game->deck; ?></p>   
+                                            <p><a href="<?php echo $game->site_detail_url; ?>" target="_blank">Read more on GiantBomb.com.</a></p>
+                                            <?php if($sessionUserID > 0) { ?>
+                                                <div class="pull-right">  
+                                                    <div class='btn-group'>
+                                                        <button id='gameButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->listStyle ?> dropdown-toggle'><?php echo $game->listLabel ?> <span class='caret'></span></button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 1);">Own</a></li>
+                                                            <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 2);">Want</a></li>
+                                                            <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 3);">Borrowed</a></li>
+                                                            <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 4);">Lent</a></li>
+                                                            <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 5);">Played</a></li>
+                                                        </ul>
+                                                    </div> 
+                                                    <span id="inCollectionControls<?php echo $game->id ?>" class="<?php if($game->listID == 0) echo "hidden" ?>">
+                                                        <div id="statusButtonGroup<?php echo $game->id ?>" class="btn-group">
+                                                            <button id='statusButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->statusStyle ?> dropdown-toggle'><?php echo $game->statusLabel  ?> <span class='caret'></span></button>
+                                                            <ul class='dropdown-menu'>
+                                                                <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 1);">Unplayed</a></li>
+                                                                <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 2);">Unfinished</a></li>
+                                                                <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 3);">Complete</a></li>
+                                                                <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 4);">Uncompletable</a></li>
+                                                            </ul>
+                                                        </div> 
+                                                    </span>
+                                                </div>
+                                            <?php } ?>
                                         </div>  
                                         <?php    
                                             if(property_exists($game, "platforms") && $game->platforms != null)
@@ -39,37 +64,12 @@
                                                 echo "<div class='panel-footer'>";
                                                 foreach($game->platforms as $gbPlatform)
                                                 {
-                                                    echo "<span class='label label-info'>" . $gbPlatform->name . "</span> ";  
+                                                    echo "<label><input type='checkbox'> <span class='label label-info'>" . $gbPlatform->name . "</span></label> ";  
                                                 }
                                                 echo "</div>";  
                                             }
                                         ?>                                              
                                     </div>   
-                                    <?php if($sessionUserID > 0) { ?>
-                                        <div class="pull-right">  
-                                            <div class='btn-group searchResultButton'>
-                                                <button id='gameButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->listStyle ?> dropdown-toggle'><?php echo $game->listLabel ?> <span class='caret'></span></button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 1);">Own</a></li>
-                                                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 2);">Want</a></li>
-                                                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 3);">Borrowed</a></li>
-                                                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 4);">Lent</a></li>
-                                                    <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 5);">Played</a></li>
-                                                </ul>
-                                            </div> 
-                                            <span id="inCollectionControls<?php echo $game->id ?>" class="<?php if($game->listID == 0) echo "hidden" ?>">
-                                                <div id="statusButtonGroup<?php echo $game->id ?>" class="btn-group searchResultButton">
-                                                    <button id='statusButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->statusStyle ?> dropdown-toggle'><?php echo $game->statusLabel  ?> <span class='caret'></span></button>
-                                                    <ul class='dropdown-menu'>
-                                                        <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 1);">Unplayed</a></li>
-                                                        <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 2);">Unfinished</a></li>
-                                                        <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 3);">Complete</a></li>
-                                                        <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 4);">Uncompletable</a></li>
-                                                    </ul>
-                                                </div> 
-                                            </span>
-                                        </div>
-                                    <?php } ?>
                                 </div>
                             </div>                            
                             <hr>
@@ -109,7 +109,7 @@
     </div>
     <div class="col-sm-4">
         <h2>Build your collection!</h2>
-        <p>Keep track of the games you've completed and your backlog of shame by building your collection. It's real simple, just tag a game under one of our four categories.</p>
+        <p>Keep track of the games you've completed and your backlog of shame by building your collection. It's real simple, just tag a game under one of our five categories.</p>
         
         <div class="media">
           <a class="pull-left" href="#">

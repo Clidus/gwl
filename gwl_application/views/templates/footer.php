@@ -1,7 +1,7 @@
     <hr>
 
     <footer>
-      <p>Website created by <a href="http://www.clidus.com/" target="_blank">Joshua Marketis</a>. Video game data provided by the top men at <a href="http://www.giantbomb.com" target="_blank">Giant Bomb</a>. Logo design by <a href="http://www.drugs4kids.com/" target="_blank">Michael Orson</a>.</p>
+      <p>Website created by <a href="http://www.clidus.com/" target="_blank">Joshua Marketis</a>. Logo design by <a href="http://www.drugs4kids.com/" target="_blank">Michael Orson</a>. Video game data provided by the top men at <a href="http://www.giantbomb.com" target="_blank">Giant Bomb</a>.</p>
     </footer>
 
   </div>

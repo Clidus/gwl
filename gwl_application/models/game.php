@@ -35,9 +35,9 @@ class Game extends CI_Model {
     }
 
     // get game from Giant Bomb API by API URL
-    function getGame($apiUrl) {  
+    public function getGame($apiUrl) {  
         $url = $apiUrl . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
-
+        
         return $this->getData($url);
     }
 
@@ -125,7 +125,6 @@ class Game extends CI_Model {
 
     // get API response
     function getData($url) {
-
         $ch = curl_init($url); 
         $options = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -171,24 +170,16 @@ class Game extends CI_Model {
     }
 
     // add game to database
-    function addGame($API_Detail)
+    function addGame($game)
     {
-        // get game details from Giant Bomb API
-        $result = $this->getGame($API_Detail);
+        $data = array(
+           'GBID' => $game->id,
+           'Name' => $game->name,
+           'API_Detail' => $game->api_detail_url,
+           'Image' => is_object($game->image) ? $game->image->small_url : null
+        );
 
-        if($result->error == "OK" && $result->number_of_total_results == 1) 
-        {
-            $data = array(
-               'GBID' => $result->results->id,
-               'Name' => $result->results->name,
-               'API_Detail' => $result->results->api_detail_url,
-               'Image' => is_object($result->results->image) ? $result->results->image->small_url : null
-            );
-
-            return $this->db->insert('games', $data); 
-        } else {
-            return false;
-        }
+        return $this->db->insert('games', $data); 
     }
 
     // add game to users collection

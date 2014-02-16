@@ -97,10 +97,6 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     margin-top: 0px;
 }
 
-.searchResultButton {
-    margin-bottom: 10px;
-}
-
 /* 
 * game page
 */
@@ -116,11 +112,6 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 
 .gamePageFactsDetails{
     font-size: 12px;
-}
-
-.readMoreOn {
-    float: right;
-    margin: 0px;
 }
 
 @media (max-width: 480px) {
