@@ -35,18 +35,15 @@ class Games extends CI_Controller {
             // check if game is in collection
             $collection = $this->Game->isGameIsInCollection($GBID, $userID);
             $currentListID = $collection != null ? $collection->ListID : 0;
-           
+            
+            // default value for auto selected platform
+            $result['autoSelectPlatform'] = null;
+
             // if game isnt in collection
             if($currentListID == 0) 
             {
                 // add game to users collection
-                if(!$this->Game->addToCollection($GBID, $userID, $listID)) 
-                {
-                    $result['error'] = true; 
-                    $result['errorMessage'] = "Failed to add game to collection. Please try again."; 
-                    echo json_encode($result);
-                    return;
-                }
+                $collectionID = $this->Game->addToCollection($GBID, $userID, $listID);
 
                 // if game has one platform, automaticly add it
                 if(count($game->platforms) == 1)
@@ -61,6 +58,11 @@ class Games extends CI_Controller {
                         // add platform to db
                         $this->Platform->addPlatform($platform);
                     }
+
+                    // add game to platform in collection
+                    $this->Game->addPlatform($collectionID, $platform->id);
+                    // tell UI to check platform that was auto-selected
+                    $result['autoSelectPlatform'] = $platform->id; 
                 }
             // game is in collection, update list
             } else {
@@ -123,6 +125,91 @@ class Games extends CI_Controller {
        
         $result['error'] = false;  
         echo json_encode($result);
+    }
+
+    function addPlatform()
+    {
+        // form validation
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('gbID', 'gbID', 'trim|xss_clean');
+        $this->form_validation->set_rules('platformID', 'platformID', 'trim|xss_clean');
+
+        $GBID = $this->input->post('gbID');
+        $GBPlatformID = $this->input->post('platformID');
+        $userID = $this->session->userdata('UserID');
+
+        // load game model
+        $this->load->model('Game');
+
+        // check if game is in collection
+        $collection = $this->Game->isGameIsInCollection($GBID, $userID);
+
+        // if game is in collection
+        if($collection != null)
+        {
+            // if game is not on platform, add it
+            if(!$this->Game->isGameOnPlatformInCollection($collection->ID, $GBPlatformID))
+            {
+                // load platform model
+                $this->load->model('Platform');
+
+                // if platform isnt in db
+                if(!$this->Platform->isPlatformInDB($GBPlatformID))
+                {
+                    // get platform data 
+                    $platform = $this->Platform->getPlatform($GBPlatformID);
+
+                    // add platform to db
+                    $this->Platform->addPlatform($platform);
+                }
+
+                // add game to platform in collection
+                $this->Game->addPlatform($collection->ID, $GBPlatformID);
+            }
+            
+            $result['error'] = false; 
+            echo json_encode($result);
+            return;
+        } else {
+            $result['error'] = true; 
+            $result['errorMessage'] = "You haven't added this game to your collection. You probably need to do that first kido."; 
+            echo json_encode($result);
+            return;
+        }
+    }
+
+    function removePlatform()
+    {
+        // form validation
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('gbID', 'gbID', 'trim|xss_clean');
+        $this->form_validation->set_rules('platformID', 'platformID', 'trim|xss_clean');
+
+        $GBID = $this->input->post('gbID');
+        $GBPlatformID = $this->input->post('platformID');
+        $userID = $this->session->userdata('UserID');
+
+        // load game model
+        $this->load->model('Game');
+
+        // check if game is in collection
+        $collection = $this->Game->isGameIsInCollection($GBID, $userID);
+
+        // if game is in collection
+        if($collection != null)
+        {
+            // remove platform from game in collection
+            $this->Game->removePlatform($collection->ID, $GBPlatformID);
+            
+            $result['error'] = false; 
+            echo json_encode($result);
+            return;
+        } else {
+            $result['error'] = true; 
+            $result['errorMessage'] = "You haven't added this game to your collection. You probably need to do that first kido."; 
+            echo json_encode($result);
+            return;
+        }
     }
 
     // view game

@@ -28,4 +28,19 @@ class Platform extends CI_Model {
 
         return $this->db->insert('platforms', $data); 
     }
+
+    // get platform data from Giant Bomb API
+    function getPlatform($gbID)
+    {
+        $url = $this->config->item('gb_api_root') . "/platform/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
+    
+        $result = $this->Utility->getData($url);
+
+        if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
+        {
+            return $result->results;
+        } else {
+            return null;
+        }
+    }
 }

@@ -3,5 +3,8 @@
 /* API key for Giant Bomb */
 $config['gb_api_key'] = '';
 
+/* API url root for Giant Bomb */
+$config['gb_api_root'] = 'http://www.giantbomb.com/api';
+
 /* Password salt for user auth model */
 $config['password_salt'] = '';

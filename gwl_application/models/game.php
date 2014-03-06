@@ -10,23 +10,22 @@ class Game extends CI_Model {
         parent::__construct();
     }
 
-    var $APIRoot = "http://www.giantbomb.com/api";    
     var $resultsPerPage = 10;
    
     // search Giant Bomb API for games  
     function searchForGame($query, $page, $userID) {  
-        //$url = $this->APIRoot . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
+        //$url = $this->config->item('gb_api_root') . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
         
         // giant bomb search API is broken. Filter by game resource instead
-        $url = $this->APIRoot . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&limit=" . $this->resultsPerPage . "&page=" . $page . "&filter=name:" . urlencode ($query);
+        $url = $this->config->item('gb_api_root') . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&limit=" . $this->resultsPerPage . "&page=" . $page . "&filter=name:" . urlencode ($query);
     
-        $result = $this->getData($url);
+        $result = $this->Utility->getData($url);
 
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
         {                                                                                                    
             foreach($result->results as $game)
             {    
-                $game = $this->addCollectionStatus($game, $userID);
+                $game = $this->addCollectionInfo($game, $userID);
             }
             return $result;
         } else {
@@ -38,24 +37,24 @@ class Game extends CI_Model {
     public function getGame($apiUrl) {  
         $url = $apiUrl . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
         
-        return $this->getData($url);
+        return $this->Utility->getData($url);
     }
 
     // get game from Giant Bomb API by ID
     public function getGameByID($gbID, $userID) {   
-        $url = $this->APIRoot . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
-        $result = $this->getData($url);
+        $url = $this->config->item('gb_api_root') . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
+        $result = $this->Utility->getData($url);
 
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
         {
-            return $game = $this->addCollectionStatus($result->results, $userID);
+            return $game = $this->addCollectionInfo($result->results, $userID);
         } else {
             return null;
         }
     }
 
-    // add collection status (ownership and played status) to game object
-    function addCollectionStatus($game, $userID)
+    // add collection status (ownership and played status) and platforms to game object
+    function addCollectionInfo($game, $userID)
     {
         $collection = $this->isGameIsInCollection($game->id, $userID);
 
@@ -110,6 +109,9 @@ class Game extends CI_Model {
                     $game->statusStyle = "primary";
                     break;
             }
+
+            // get platforms user has game in collection
+            $platforms = $this->getGamesPlatformsInCollection($game->id, $userID);
         } else {
             // not in collection
             $game->listID = 0; 
@@ -118,26 +120,34 @@ class Game extends CI_Model {
             $game->listStyle = "default";
             $game->statusLabel = "Unplayed";
             $game->statusStyle = "default";
+            $platforms = null;
+        }
+
+        // add platforms user has game on in collection (if any)
+        // if game has platforms
+        if(property_exists($game, "platforms") && $game->platforms != null)
+        {
+            // loop over platforms game is on
+            foreach($game->platforms as $gbPlatform)
+            {
+                $gbPlatform->inCollection = false;
+                if($platforms != null)
+                {
+                    // loop over platforms user has in collection
+                    foreach ($platforms->result() as $platform)
+                    {
+                        // if platform is on game in collection
+                        if($platform->GBID == $gbPlatform->id)
+                        {
+                            $gbPlatform->inCollection = true;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         return $game;
-    }
-
-    // get API response
-    function getData($url) {
-        $ch = curl_init($url); 
-        $options = array(
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTPHEADER => array('Content-type: application/json') ,
-        );                        
-        curl_setopt_array($ch, $options);             
-        $json = curl_exec($ch);
-        curl_close($ch);
-        
-        $result = json_decode($json); 
-             
-        return $result;
     }
 
     // is game in users collection?
@@ -198,7 +208,9 @@ class Game extends CI_Model {
                'StatusID' => 1 // default to unplayed
             );
 
-            return $this->db->insert('collections', $data); 
+            $this->db->insert('collections', $data); 
+
+            return $this->db->insert_id(); // return CollectionID
         }
     }
 
@@ -245,5 +257,74 @@ class Game extends CI_Model {
             $this->db->where('UserID', $userID);
             $this->db->delete('collections'); 
         }
+    }
+
+    function addPlatform($collectionID, $platformGBID)
+    {
+        // get PlatformID from GBID
+        $query = $this->db->get_where('platforms', array('GBID' => $platformGBID));
+        if($query->num_rows() == 1)
+        {
+            $row = $query->first_row();
+
+            $data = array(
+               'CollectionID' => $collectionID,
+               'PlatformID' => $row->PlatformID
+            );
+
+            return $this->db->insert('collectionPlatform', $data); 
+        }
+    }
+
+    function removePlatform($collectionID, $platformGBID)
+    {
+        // get PlatformID from GBID
+        $query = $this->db->get_where('platforms', array('GBID' => $platformGBID));
+        if($query->num_rows() == 1)
+        {
+            $row = $query->first_row();
+
+            $this->db->where('CollectionID', $collectionID);
+            $this->db->where('PlatformID', $row->PlatformID);
+            $this->db->delete('collectionPlatform'); 
+        }
+    }
+
+    function getGamesPlatformsInCollection($GBID, $userID)
+    {
+        $this->db->select('platforms.GBID');
+        $this->db->from('collections');
+        $this->db->join('games', 'collections.GameID = games.GameID');
+        $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID');
+        $this->db->join('platforms', 'collectionPlatform.PlatformID = platforms.PlatformID');
+        $this->db->where('games.GBID', $GBID); 
+        $this->db->where('collections.UserID', $userID); 
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            return $query;
+        }
+
+        return null;
+    }
+
+    function isGameOnPlatformInCollection($collectionID, $platformGBID)
+    {
+        $this->db->select('*');
+        $this->db->from('collections');
+        $this->db->join('games', 'collections.GameID = games.GameID');
+        $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID');
+        $this->db->join('platforms', 'collectionPlatform.PlatformID = platforms.PlatformID');
+        $this->db->where('collections.ID', $collectionID); 
+        $this->db->where('platforms.GBID', $platformGBID); 
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

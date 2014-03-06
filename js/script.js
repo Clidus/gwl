@@ -1,3 +1,67 @@
+$(document).ready(function() {
+    $(":checkbox").change(function(){
+        // get the game and platform id out of the checkbox id
+        match = this.id.match("platform_([0-9]+)_([0-9]+)");
+        // if ids found and checkbox checked
+        if(match.length == 3)
+        {
+            $(this).prop('disabled', true); // disable checkbox
+            var checkbox = this;
+            if(this.checked) {
+                // add platform
+                $.ajax({
+                    type : 'POST',
+                    url : baseUrl + 'games/addPlatform',
+                    dataType : 'json',
+                    data: {
+                        gbID: match[1],
+                        platformID: match[2]
+                    },
+                    success : function(data){
+                        if (data.error === true) {
+                            $(checkbox).prop('disabled', false); // enable checkbox
+                            $(checkbox).prop('checked', false); // reset to unchecked as add failed
+                            alert(data.errorMessage);
+                        } else {
+                            $(checkbox).prop('disabled', false); // enable checkbox
+                        }
+                    },
+                    error : function(XMLHttpRequest, textStatus, errorThrown) {
+                        $(checkbox).prop('disabled', false); // enable checkbox
+                        $(checkbox).prop('checked', false); // reset to unchecked as add failed
+                        alert('Well shit. Some kind of error gone done happened. Please try again.');
+                    }
+                });
+            } else {
+                 // remove platform
+                $.ajax({
+                    type : 'POST',
+                    url : baseUrl + 'games/removePlatform',
+                    dataType : 'json',
+                    data: {
+                        gbID: match[1],
+                        platformID: match[2]
+                    },
+                    success : function(data){
+                        if (data.error === true) {
+                            $(checkbox).prop('disabled', false); // enable checkbox
+                            $(checkbox).prop('checked', true); // reset to checked as remove failed
+                            alert(data.errorMessage);
+                        } else {
+                            $(checkbox).prop('disabled', false); // enable checkbox
+                        }
+                    },
+                    error : function(XMLHttpRequest, textStatus, errorThrown) {
+                        $(checkbox).prop('disabled', false); // enable checkbox
+                        $(checkbox).prop('checked', true); // reset to checked as remove failed
+                        alert('Well shit. Some kind of error gone done happened. Please try again.');
+                    }
+                });
+            }
+        }
+    });
+});
+
 /* add/update game status in collection */
 function addGame(giantbombID, detailUrl, currentListID, listID) {
     $('#gameButton' + giantbombID).addClass('disabled').html('Saving...');
@@ -41,13 +105,22 @@ function addGame(giantbombID, detailUrl, currentListID, listID) {
                             buttonStyle = "primary";
                             break;
                     }
+                    // update list button label/colour
                     $('#gameButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + buttonStyle + " dropdown-toggle");
+                    // display collection status button
                     $('#inCollectionControls' + giantbombID).removeClass("hidden");
+                    // enable platform checkboxes
+                    $('#platforms' + giantbombID).find('input[type=checkbox]').prop('disabled', false);
+                    // if a platform was auto-selected, update checkbox
+                    if(data.autoSelectPlatform != null)
+                    {
+                        $('#platform_' + giantbombID + '_' + data.autoSelectPlatform).prop('checked', true);
+                    }
                 }
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
-            alert('Error');
+            alert('Well shit. Some kind of error gone done happened. Please try again.');
         }
     });
 }
@@ -90,7 +163,7 @@ function changeStatus(giantbombID, statusID) {
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
-            alert('Error');
+            alert('Well shit. Some kind of error gone done happened. Please try again.');
         }
     });
 }
@@ -120,7 +193,7 @@ function removeFromCollection(giantbombID) {
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
-            alert('Error');
+            alert('Well shit. Some kind of error gone done happened. Please try again.');
         }
     });
 }
@@ -142,7 +215,7 @@ function deleteBlogPost(ID) {
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
-            alert('Error');
+            alert('Well shit. Some kind of error gone done happened. Please try again.');
         }
     });
 }

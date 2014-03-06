@@ -78,3 +78,8 @@ CREATE TABLE IF NOT EXISTS `platforms` (
   `API_Detail` varchar(50) NOT NULL,
   PRIMARY KEY (`PlatformID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `collectionPlatform` (
+  `CollectionID` int(11) NOT NULL,
+  `PlatformID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
