@@ -37,11 +37,11 @@
                                                     <div class='btn-group'>
                                                         <button id='gameButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->listStyle ?> dropdown-toggle'><?php echo $game->listLabel ?> <span class='caret'></span></button>
                                                         <ul class="dropdown-menu">
-                                                            <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 1);">Own</a></li>
-                                                            <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 2);">Want</a></li>
-                                                            <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 3);">Borrowed</a></li>
-                                                            <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 4);">Lent</a></li>
-                                                            <li><a onclick="javascript:addGame(<?php echo $game->id . ", '" . $game->api_detail_url ?>', null, 5);">Played</a></li>
+                                                            <li><a onclick="javascript:addGame(<?php echo $game->id ?>, 1);">Own</a></li>
+                                                            <li><a onclick="javascript:addGame(<?php echo $game->id ?>, 2);">Want</a></li>
+                                                            <li><a onclick="javascript:addGame(<?php echo $game->id ?>, 3);">Borrowed</a></li>
+                                                            <li><a onclick="javascript:addGame(<?php echo $game->id ?>, 4);">Lent</a></li>
+                                                            <li><a onclick="javascript:addGame(<?php echo $game->id ?>, 5);">Played</a></li>
                                                         </ul>
                                                     </div> 
                                                     <span id="inCollectionControls<?php echo $game->id ?>" class="<?php if($game->listID == 0) echo "hidden" ?>">

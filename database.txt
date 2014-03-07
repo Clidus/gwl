@@ -31,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `games` (
   `GameID` int(11) NOT NULL AUTO_INCREMENT,
   `GBID` int(11) NOT NULL,
   `Name` varchar(300) NOT NULL,
-  `API_Detail` varchar(50) DEFAULT NULL,
   `Image` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`GameID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
@@ -83,3 +82,9 @@ CREATE TABLE IF NOT EXISTS `collectionPlatform` (
   `CollectionID` int(11) NOT NULL,
   `PlatformID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+// reset database
+DELETE FROM `gwl`.`collections`;
+DELETE FROM `gwl`.`games`;
+DELETE FROM `gwl`.`platforms`;
+DELETE FROM `gwl`.`collectionPlatform`;

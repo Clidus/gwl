@@ -17,8 +17,10 @@ class Game extends CI_Model {
         //$url = $this->config->item('gb_api_root') . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
         
         // giant bomb search API is broken. Filter by game resource instead
-        $url = $this->config->item('gb_api_root') . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&limit=" . $this->resultsPerPage . "&page=" . $page . "&filter=name:" . urlencode ($query);
-    
+        $offset = $this->resultsPerPage * ($page-1);
+        $url = $this->config->item('gb_api_root') . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&limit=" . $this->resultsPerPage . "&offset=" . $offset . "&filter=name:" . urlencode ($query);
+        echo $url;
+
         $result = $this->Utility->getData($url);
 
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
@@ -33,13 +35,6 @@ class Game extends CI_Model {
         }
     }
 
-    // get game from Giant Bomb API by API URL
-    public function getGame($apiUrl) {  
-        $url = $apiUrl . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
-        
-        return $this->Utility->getData($url);
-    }
-
     // get game from Giant Bomb API by ID
     public function getGameByID($gbID, $userID) {   
         $url = $this->config->item('gb_api_root') . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
@@ -47,7 +42,11 @@ class Game extends CI_Model {
 
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
         {
-            return $game = $this->addCollectionInfo($result->results, $userID);
+            // if userID was passed, add collection info to game object
+            if($userID != null)
+                return $this->addCollectionInfo($result->results, $userID);
+            else
+                return $result->results;
         } else {
             return null;
         }
@@ -163,9 +162,7 @@ class Game extends CI_Model {
 
         if($query->num_rows() == 1)
         {
-            $row = $query->first_row();
-
-            return $row;
+            return $query->first_row();
         }
 
         return null;
@@ -185,7 +182,6 @@ class Game extends CI_Model {
         $data = array(
            'GBID' => $game->id,
            'Name' => $game->name,
-           'API_Detail' => $game->api_detail_url,
            'Image' => is_object($game->image) ? $game->image->small_url : null
         );
 
@@ -248,14 +244,25 @@ class Game extends CI_Model {
     function removeFromCollection($GBID, $userID)
     {
         // get GameID from GBID
-        $query = $this->db->get_where('games', array('GBID' => $GBID));
+
+        $this->db->select('*');
+        $this->db->from('collections');
+        $this->db->join('games', 'collections.GameID = games.GameID');
+        $this->db->where('games.GBID', $GBID); 
+        $this->db->where('collections.UserID', $userID); 
+        $query = $this->db->get();
         if($query->num_rows() == 1)
         {
             $row = $query->first_row();
 
+            // delete collection record
             $this->db->where('GameID', $row->GameID);
             $this->db->where('UserID', $userID);
             $this->db->delete('collections'); 
+
+            // delete collectionPlatform record
+            $this->db->where('CollectionID', $row->ID);
+            $this->db->delete('collectionPlatform'); 
         }
     }
 
@@ -320,11 +327,6 @@ class Game extends CI_Model {
         $this->db->where('platforms.GBID', $platformGBID); 
         $query = $this->db->get();
 
-        if($query->num_rows() > 0)
-        {
-            return true;
-        }
-
-        return false;
+        return $query->num_rows() > 0 ? true : false;
     }
 }

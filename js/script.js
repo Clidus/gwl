@@ -63,7 +63,7 @@ $(document).ready(function() {
 });
 
 /* add/update game status in collection */
-function addGame(giantbombID, detailUrl, currentListID, listID) {
+function addGame(giantbombID, listID) {
     $('#gameButton' + giantbombID).addClass('disabled').html('Saving...');
     $.ajax({
         type : 'POST',
@@ -71,51 +71,45 @@ function addGame(giantbombID, detailUrl, currentListID, listID) {
         dataType : 'json',
         data: {
             gbID: giantbombID,
-            apiDetail: detailUrl,
             listID: listID
         },
         success : function(data){
             if (data.error === true) {
                 alert(data.errorMessage);
             } else {
-                // if not in collection (listID == 0), redirect as page needs to change
-                if(currentListID != null && currentListID == 0) {
-                    window.location = document.URL;
-                } else {
-                    switch(listID)
-                    {
-                        case 1:
-                            buttonLabel = "Own";
-                            buttonStyle = "success";
-                            break;
-                        case 2:
-                            buttonLabel = "Want";
-                            buttonStyle = "warning";
-                            break;
-                        case 3:
-                            buttonLabel = "Borrowed";
-                            buttonStyle = "info";
-                            break;
-                        case 4:
-                            buttonLabel = "Lent";
-                            buttonStyle = "danger";
-                            break;
-                        case 5:
-                            buttonLabel = "Played";
-                            buttonStyle = "primary";
-                            break;
-                    }
-                    // update list button label/colour
-                    $('#gameButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + buttonStyle + " dropdown-toggle");
-                    // display collection status button
-                    $('#inCollectionControls' + giantbombID).removeClass("hidden");
-                    // enable platform checkboxes
-                    $('#platforms' + giantbombID).find('input[type=checkbox]').prop('disabled', false);
-                    // if a platform was auto-selected, update checkbox
-                    if(data.autoSelectPlatform != null)
-                    {
-                        $('#platform_' + giantbombID + '_' + data.autoSelectPlatform).prop('checked', true);
-                    }
+                switch(listID)
+                {
+                    case 1:
+                        buttonLabel = "Own";
+                        buttonStyle = "success";
+                        break;
+                    case 2:
+                        buttonLabel = "Want";
+                        buttonStyle = "warning";
+                        break;
+                    case 3:
+                        buttonLabel = "Borrowed";
+                        buttonStyle = "info";
+                        break;
+                    case 4:
+                        buttonLabel = "Lent";
+                        buttonStyle = "danger";
+                        break;
+                    case 5:
+                        buttonLabel = "Played";
+                        buttonStyle = "primary";
+                        break;
+                }
+                // update list button label/colour
+                $('#gameButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + buttonStyle + " dropdown-toggle");
+                // display collection status button
+                $('#inCollectionControls' + giantbombID).removeClass("hidden");
+                // enable platform checkboxes
+                $('#platforms' + giantbombID).find('input[type=checkbox]').prop('disabled', false);
+                // if a platform was auto-selected, update checkbox
+                if(data.autoSelectPlatform != null)
+                {
+                    $('#platform_' + giantbombID + '_' + data.autoSelectPlatform).prop('checked', true);
                 }
             }
         },
