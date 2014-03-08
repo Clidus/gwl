@@ -19,7 +19,6 @@ class Game extends CI_Model {
         // giant bomb search API is broken. Filter by game resource instead
         $offset = $this->resultsPerPage * ($page-1);
         $url = $this->config->item('gb_api_root') . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&limit=" . $this->resultsPerPage . "&offset=" . $offset . "&filter=name:" . urlencode ($query);
-        echo $url;
 
         $result = $this->Utility->getData($url);
 
@@ -42,11 +41,8 @@ class Game extends CI_Model {
 
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
         {
-            // if userID was passed, add collection info to game object
-            if($userID != null)
-                return $this->addCollectionInfo($result->results, $userID);
-            else
-                return $result->results;
+            // add collection info to game object
+            return $this->addCollectionInfo($result->results, $userID);
         } else {
             return null;
         }

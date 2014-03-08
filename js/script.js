@@ -21,7 +21,7 @@ $(document).ready(function() {
                         if (data.error === true) {
                             $(checkbox).prop('disabled', false); // enable checkbox
                             $(checkbox).prop('checked', false); // reset to unchecked as add failed
-                            alert(data.errorMessage);
+                            showErrorModal(data.errorMessage);
                         } else {
                             $(checkbox).prop('disabled', false); // enable checkbox
                         }
@@ -29,7 +29,7 @@ $(document).ready(function() {
                     error : function(XMLHttpRequest, textStatus, errorThrown) {
                         $(checkbox).prop('disabled', false); // enable checkbox
                         $(checkbox).prop('checked', false); // reset to unchecked as add failed
-                        alert('Well shit. Some kind of error gone done happened. Please try again.');
+                        showErrorModal('Well shit. Some kind of error gone done happened. Please try again.');
                     }
                 });
             } else {
@@ -46,7 +46,7 @@ $(document).ready(function() {
                         if (data.error === true) {
                             $(checkbox).prop('disabled', false); // enable checkbox
                             $(checkbox).prop('checked', true); // reset to checked as remove failed
-                            alert(data.errorMessage);
+                            showErrorModal(data.errorMessage);
                         } else {
                             $(checkbox).prop('disabled', false); // enable checkbox
                         }
@@ -54,13 +54,18 @@ $(document).ready(function() {
                     error : function(XMLHttpRequest, textStatus, errorThrown) {
                         $(checkbox).prop('disabled', false); // enable checkbox
                         $(checkbox).prop('checked', true); // reset to checked as remove failed
-                        alert('Well shit. Some kind of error gone done happened. Please try again.');
+                        showErrorModal('Well shit. Some kind of error gone done happened. Please try again.');
                     }
                 });
             }
         }
     });
 });
+
+function showErrorModal(error) {
+    $('#errorModalMessage').html(error);
+    $('#errorModal').modal();
+}
 
 /* add/update game status in collection */
 function addGame(giantbombID, listID) {
@@ -75,7 +80,7 @@ function addGame(giantbombID, listID) {
         },
         success : function(data){
             if (data.error === true) {
-                alert(data.errorMessage);
+                showErrorModal(data.errorMessage);
             } else {
                 switch(listID)
                 {
@@ -114,7 +119,7 @@ function addGame(giantbombID, listID) {
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
-            alert('Well shit. Some kind of error gone done happened. Please try again.');
+            showErrorModal('Well shit. Some kind of error gone done happened. Please try again.');
         }
     });
 }
@@ -132,7 +137,7 @@ function changeStatus(giantbombID, statusID) {
         },
         success : function(data){
             if (data.error === true) {
-                alert(data.errorMessage);
+                showErrorModal(data.errorMessage);
             } else {
                 switch(statusID)
                 {
@@ -157,7 +162,7 @@ function changeStatus(giantbombID, statusID) {
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
-            alert('Well shit. Some kind of error gone done happened. Please try again.');
+            showErrorModal('Well shit. Some kind of error gone done happened. Please try again.');
         }
     });
 }
@@ -180,14 +185,15 @@ function removeFromCollection(giantbombID) {
         },
         success : function(data){
             if (data.error === true) {
-                alert(data.errorMessage);
+                $('#removeGameModal').modal('hide');
+                showErrorModal(data.errorMessage);
             } else {
                 // redirect to same page to refresh state
                 window.location = document.URL;
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
-            alert('Well shit. Some kind of error gone done happened. Please try again.');
+            showErrorModal('Well shit. Some kind of error gone done happened. Please try again.');
         }
     });
 }
@@ -203,13 +209,13 @@ function deleteBlogPost(ID) {
         },
         success : function(data){
             if (data.error === true) {
-                alert(data.errorMessage);
+                showErrorModal(data.errorMessage);
             } else {
                 window.location = baseUrl + 'admin/blog/edit';
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
-            alert('Well shit. Some kind of error gone done happened. Please try again.');
+            showErrorModal('Well shit. Some kind of error gone done happened. Please try again.');
         }
     });
 }
