@@ -38,7 +38,7 @@
                     <?php if($sessionUserID != null) { ?>
                       <li id="navProfile"><a href="profile.php?userid=<?php echo $sessionUserID; ?>"><?php echo $sessionUsername; ?></a></li>
                       <?php if($sessionAdmin == 1) { ?>
-                      <li id="navProfile"><a href="<?php echo $baseUrl ?>admin">Admin</a></li>
+                      <li id="navAdmin"><a href="<?php echo $baseUrl ?>admin">Admin</a></li>
                       <?php } ?>
                       <li id="navLogin"><a href="<?php echo $baseUrl ?>logout">Logout</a></li>
                     <?php } else { ?>

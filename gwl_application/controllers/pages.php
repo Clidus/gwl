@@ -13,7 +13,7 @@ class Pages extends CI_Controller {
 
 		// page variables
 		$this->load->model('Page');
-        $data = $this->Page->create(ucfirst($page)); // Capitalize the first letter
+        $data = $this->Page->create(ucfirst($page), "Page"); // Capitalize the first letter
        
 		// load views
 		$this->load->view('templates/header', $data);

@@ -10,7 +10,7 @@ class Search extends CI_Controller {
 
 		// page variables
 		$this->load->model('Page');
-        $data = $this->Page->create("Search");
+        $data = $this->Page->create("Search", "Search");
 		$data['searchQuery'] = $query = $query == '' ? $this->input->post('query') : str_replace("%20", " ", $query);
 		$data['searchPage'] = $page;
 

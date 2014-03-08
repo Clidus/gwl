@@ -9,10 +9,11 @@ class Page extends CI_Model {
     }
 
     // create data for page view
-    function create($pageTitle)
+    function create($pageTitle, $pageTemplate)
     {
         $data['baseUrl'] = base_url();
         $data['pagetitle'] = $pageTitle;
+        $data['pagetemplate'] = $pageTemplate;
         $data['sessionUserID'] = $this->session->userdata('UserID');
         $data['sessionUsername'] = $this->session->userdata('Username');
         $data['sessionAdmin'] = $this->session->userdata('Admin');

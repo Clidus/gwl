@@ -17,7 +17,7 @@ class Auth extends CI_Controller {
 
 		// page variables 
 		$this->load->model('Page');
-		$data = $this->Page->create("Register");
+		$data = $this->Page->create("Register", "Register");
 		$data['errorMessage'] = '';
 
 		// validation failed
@@ -58,7 +58,7 @@ class Auth extends CI_Controller {
 
 		// page variables 
 		$this->load->model('Page');
-		$data = $this->Page->create("Login");
+		$data = $this->Page->create("Login", "Login");
 		$data['errorMessage'] = '';
 
 		// validation failed

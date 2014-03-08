@@ -281,7 +281,7 @@ class Games extends CI_Controller {
 
         // page variables
         $this->load->model('Page');
-        $data = $this->Page->create($game->name);
+        $data = $this->Page->create($game->name, "Search");
         $data['game'] = $game;
 
         // load views

@@ -11,7 +11,7 @@ class Admin extends CI_Controller {
 
 		// page variables
 		$this->load->model('Page');
-		$data = $this->Page->create("Admin");
+		$data = $this->Page->create("Admin", "Admin");
 
 		// load views
 		$this->load->view('templates/header', $data);
@@ -28,7 +28,7 @@ class Admin extends CI_Controller {
 
 		// page variables
 		$this->load->model('Page');
-		$data = $this->Page->create("Edit Blog Post");
+		$data = $this->Page->create("Edit Blog Post", "Admin");
 
 		// get blog posts
 		$this->load->model('Blog');
@@ -57,7 +57,7 @@ class Admin extends CI_Controller {
 
 		// page variables
 		$this->load->model('Page');
-		$data = $this->Page->create("New Blog Post");
+		$data = $this->Page->create("New Blog Post", "Admin");
 		$data['formSuccess'] = $this->form_validation->run();
 		$data['formType'] = "new";
 
@@ -113,7 +113,7 @@ class Admin extends CI_Controller {
 
 		// page variables
 		$this->load->model('Page');
-		$data = $this->Page->create("Edit " . $post->Title);
+		$data = $this->Page->create("Edit " . $post->Title, "Admin");
 		$data['formSuccess'] = $this->form_validation->run();
 		$data['formType'] = "edit/" . $PostID;
 		$data['post'] = $post;

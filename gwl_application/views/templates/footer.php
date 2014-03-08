@@ -12,11 +12,20 @@
   </script>
   <script src="<?php echo $baseUrl ?>js/jquery-2.0.3.min.js"></script>
   <script src="<?php echo $baseUrl ?>bootstrap/js/bootstrap.min.js"></script>
-  <script src="<?php echo $baseUrl ?>js/script.js"></script>
+  <?php 
+    if($pagetemplate == "Search") 
+    { 
+      echo "<script src='" . $baseUrl . "js/game.js'></script>"; 
+    }
+    else if($pagetemplate == "Admin") 
+    { 
+      echo "<script src='" . $baseUrl . "js/admin.js'></script>"; 
+    } 
+  ?>
   <script>
     $(document).ready(function() {
       <?php
-          echo "$('#nav" . $pagetitle . "').addClass('active');";
+          echo "$('#nav" . $pagetemplate . "').addClass('active');";
       ?>
     });
   </script>

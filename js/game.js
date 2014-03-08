@@ -173,7 +173,6 @@ function showRemoveGameWarning(giantbombID) {
 }
 
 /* remove game from collection */
-/* TODO: add warning dialogue */
 function removeFromCollection(giantbombID) {
     $('#removeGameButton' + giantbombID).addClass('disabled').html('Removing...');
     $.ajax({
@@ -190,28 +189,6 @@ function removeFromCollection(giantbombID) {
             } else {
                 // redirect to same page to refresh state
                 window.location = document.URL;
-            }
-        },
-        error : function(XMLHttpRequest, textStatus, errorThrown) {
-            showErrorModal('Well shit. Some kind of error gone done happened. Please try again.');
-        }
-    });
-}
-
-/* delete blog post */
-function deleteBlogPost(ID) {
-    $.ajax({
-        type : 'POST',
-        url : baseUrl + 'admin/deleteBlogPost',
-        dataType : 'json',
-        data: {
-            postID: ID
-        },
-        success : function(data){
-            if (data.error === true) {
-                showErrorModal(data.errorMessage);
-            } else {
-                window.location = baseUrl + 'admin/blog/edit';
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
