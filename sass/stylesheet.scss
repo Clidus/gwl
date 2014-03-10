@@ -103,6 +103,7 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 
 .gamePageBoxArt {
     width: 100%;
+    margin-bottom: 10px;
 }
 
 .gamePageFactsLabel {
@@ -112,6 +113,15 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 
 .gamePageFactsDetails{
     font-size: 12px;
+}
+
+.removeFromCollectionButton {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.progressionSaveButton{
+    width: 100%;
 }
 
 @media (max-width: 480px) {

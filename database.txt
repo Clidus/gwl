@@ -24,6 +24,9 @@ CREATE TABLE IF NOT EXISTS `collections` (
   `GameID` int(11) NOT NULL,
   `ListID` int(11) NOT NULL,
   `StatusID` int(11) NOT NULL,
+  `DateComplete` date DEFAULT NULL,
+  `HoursPlayed` int(11) DEFAULT NULL,
+  `CurrentlyPlaying` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 

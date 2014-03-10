@@ -269,6 +269,51 @@ class Games extends CI_Controller {
         return;
     }
 
+    // change played status of game
+    function saveProgression()
+    {
+        // form validation
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('gbID', 'gbID', 'trim|xss_clean');
+        $this->form_validation->set_rules('currentlyPlaying', 'currentlyPlaying', 'trim|xss_clean');
+        $this->form_validation->set_rules('hoursPlayed', 'hoursPlayed', 'trim|xss_clean');
+        $this->form_validation->set_rules('dateCompleted', 'dateCompleted', 'trim|xss_clean');
+
+        $GBID = $this->input->post('gbID');
+        $currentlyPlaying = $this->input->post('currentlyPlaying');
+        $hoursPlayed = $this->input->post('hoursPlayed');
+        $dateCompleted = $this->input->post('dateCompleted');
+        $userID = $this->session->userdata('UserID');
+
+        // check that user is logged in
+        if($userID <= 0)
+        {
+            $this->returnError("You've been logged out. Please login and try again.");
+            return;
+        }
+
+        // load game model
+        $this->load->model('Game');
+       
+        // check if game is in collection
+        $collection = $this->Game->isGameIsInCollection($GBID, $userID);
+       
+        // if game is in collection
+        if($collection != null) 
+        {
+            // update played status
+            $this->Game->updateProgression($collection->ID, $currentlyPlaying, $hoursPlayed, $dateCompleted);
+        } else {
+            // return error
+            $this->returnError("You haven't added this game to your collection. How did you get here?");
+            return;
+        }
+
+        // return success
+        $result['error'] = false;   
+        echo json_encode($result);
+    }
+
     // view game
     function view($gbID)
     {   

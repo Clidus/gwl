@@ -107,6 +107,10 @@ class Game extends CI_Model {
 
             // get platforms user has game in collection
             $platforms = $this->getGamesPlatformsInCollection($game->id, $userID);
+
+            $game->currentlyPlaying = ($collection->CurrentlyPlaying == 1) ? true : false;
+            $game->dateComplete = $collection->DateComplete;
+            $game->hoursPlayed = $collection->HoursPlayed;
         } else {
             // not in collection
             $game->listID = 0; 
@@ -116,6 +120,9 @@ class Game extends CI_Model {
             $game->statusLabel = "Unplayed";
             $game->statusStyle = "default";
             $platforms = null;
+            $game->currentlyPlaying = false;
+            $game->dateComplete = null;
+            $game->hoursPlayed = null;
         }
 
         // add platforms user has game on in collection (if any)
@@ -324,5 +331,15 @@ class Game extends CI_Model {
         $query = $this->db->get();
 
         return $query->num_rows() > 0 ? true : false;
+    }
+
+    function updateProgression($collectionID, $currentlyPlaying, $hoursPlayed, $dateCompleted)
+    {
+        if($hoursPlayed == '') $hoursPlayed = null;
+        if($dateCompleted == '') $dateCompleted = null;
+        $currentlyPlayingBit = ($currentlyPlaying === "true");
+
+        $this->db->where('ID', $collectionID); 
+        $this->db->update('collections', array('CurrentlyPlaying' => $currentlyPlayingBit, 'HoursPlayed' => $hoursPlayed, 'DateComplete' => $dateCompleted)); 
     }
 }

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    /* platform checkbox change */
     $(":checkbox").change(function(){
         // get the game and platform id out of the checkbox id
         match = this.id.match("platform_([0-9]+)_([0-9]+)");
@@ -33,7 +34,7 @@ $(document).ready(function() {
                     }
                 });
             } else {
-                 // remove platform
+                // remove platform
                 $.ajax({
                     type : 'POST',
                     url : baseUrl + 'games/removePlatform',
@@ -62,13 +63,14 @@ $(document).ready(function() {
     });
 });
 
+/* display error modal */
 function showErrorModal(error) {
     $('#errorModalMessage').html(error);
     $('#errorModal').modal();
 }
 
 /* add/update game status in collection */
-function addGame(giantbombID, listID) {
+function addGame(giantbombID, listID, reloadPage) {
     $('#gameButton' + giantbombID).addClass('disabled').html('Saving...');
     $.ajax({
         type : 'POST',
@@ -105,16 +107,20 @@ function addGame(giantbombID, listID) {
                         buttonStyle = "primary";
                         break;
                 }
-                // update list button label/colour
-                $('#gameButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + buttonStyle + " dropdown-toggle");
-                // display collection status button
-                $('#inCollectionControls' + giantbombID).removeClass("hidden");
-                // enable platform checkboxes
-                $('#platforms' + giantbombID).find('input[type=checkbox]').prop('disabled', false);
-                // if a platform was auto-selected, update checkbox
-                if(data.autoSelectPlatform != null)
-                {
-                    $('#platform_' + giantbombID + '_' + data.autoSelectPlatform).prop('checked', true);
+                if(reloadPage) {
+                    location.reload();
+                } else {
+                    // update list button label/colour
+                    $('#gameButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + buttonStyle + " dropdown-toggle");
+                    // display collection status button
+                    $('#inCollectionControls' + giantbombID).removeClass("hidden");
+                    // enable platform checkboxes
+                    $('#platforms' + giantbombID).find('input[type=checkbox]').prop('disabled', false);
+                    // if a platform was auto-selected, update checkbox
+                    if(data.autoSelectPlatform != null)
+                    {
+                        $('#platform_' + giantbombID + '_' + data.autoSelectPlatform).prop('checked', true);
+                    }
                 }
             }
         },
@@ -167,6 +173,7 @@ function changeStatus(giantbombID, statusID) {
     });
 }
 
+/* display warning modal for removing game */
 function showRemoveGameWarning(giantbombID) {
     $('#removeGameButtonPlaceholder').html("<a id='removeGameButton" + giantbombID + "' onclick='javascript:removeFromCollection(" + giantbombID + ");'' class='btn btn-danger'>Remove from Collection</a>");
     $('#removeGameModal').modal();
@@ -187,8 +194,34 @@ function removeFromCollection(giantbombID) {
                 $('#removeGameModal').modal('hide');
                 showErrorModal(data.errorMessage);
             } else {
-                // redirect to same page to refresh state
-                window.location = document.URL;
+                // reload page to refresh state
+                location.reload();
+            }
+        },
+        error : function(XMLHttpRequest, textStatus, errorThrown) {
+            showErrorModal('Well shit. Some kind of error gone done happened. Please try again.');
+        }
+    });
+}
+
+/* save progression information */
+function saveProgression(giantbombID) {
+    $('#progressionSaveButton').addClass('disabled').html('Saving...');
+    $.ajax({
+        type : 'POST',
+        url : baseUrl + 'games/saveProgression',
+        dataType : 'json',
+        data: {
+            gbID: giantbombID,
+            currentlyPlaying: $('#currentlyPlayingInput').val(),
+            hoursPlayed: $('#hoursPlayedInput').val(),
+            dateCompleted: $('#dateCompletedInput').val()
+        },
+        success : function(data){
+            if (data.error === true) {
+                showErrorModal(data.errorMessage);
+            } else {
+                $('#progressionSaveButton').removeClass('disabled').html('Saved');
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
