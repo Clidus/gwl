@@ -87,4 +87,27 @@ class User extends CI_Model {
     {
         $this->session->sess_destroy();
     }
+
+    // get user by ID
+    function getUserByID($userID)
+    {
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where('UserID', $userID); 
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1)
+        {
+            return $query->first_row();
+        }
+
+        return null;
+    }
+
+    // update user profile image
+    function updateProfileImage($userID, $profileImage)
+    {
+        $this->db->where('UserID', $userID); 
+        $this->db->update('users', array('ProfileImage' => $profileImage)); 
+    }
 }

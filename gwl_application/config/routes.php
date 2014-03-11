@@ -55,6 +55,10 @@ $route['search/(:any)/(:any)'] = 'search/index/$1/$2';
 
 $route['game/(:any)'] = 'games/view/$1';
 
+$route['user/edit'] = 'users/edit';
+$route['user/save'] = 'users/save';
+$route['user/(:any)'] = 'users/view/$1';
+
 $route['admin'] = 'admin/home';
 $route['admin/blog/new'] = 'admin/newBlogPost';
 $route['admin/blog/edit'] = 'admin/blogPostList';
