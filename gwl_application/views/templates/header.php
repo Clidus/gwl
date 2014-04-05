@@ -36,7 +36,7 @@
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                     <?php if($sessionUserID != null) { ?>
-                      <li id="navUser"><a href="user/<?php echo $sessionUserID; ?>"><?php echo $sessionUsername; ?></a></li>
+                      <li id="navUser"><a href="<?php echo $baseUrl ?>user/<?php echo $sessionUserID; ?>"><?php echo $sessionUsername; ?></a></li>
                       <?php if($sessionAdmin == 1) { ?>
                       <li id="navAdmin"><a href="<?php echo $baseUrl ?>admin">Admin</a></li>
                       <?php } ?>

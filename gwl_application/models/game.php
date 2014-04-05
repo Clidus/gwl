@@ -14,11 +14,11 @@ class Game extends CI_Model {
    
     // search Giant Bomb API for games  
     function searchForGame($query, $page, $userID) {  
-        //$url = $this->config->item('gb_api_root') . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
+        $url = $this->config->item('gb_api_root') . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
         
         // giant bomb search API is broken. Filter by game resource instead
-        $offset = $this->resultsPerPage * ($page-1);
-        $url = $this->config->item('gb_api_root') . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&limit=" . $this->resultsPerPage . "&offset=" . $offset . "&filter=name:" . urlencode ($query);
+        //$offset = $this->resultsPerPage * ($page-1);
+        //$url = $this->config->item('gb_api_root') . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&limit=" . $this->resultsPerPage . "&offset=" . $offset . "&filter=name:" . urlencode ($query);
 
         $result = $this->Utility->getData($url);
 
@@ -38,7 +38,7 @@ class Game extends CI_Model {
     public function getGameByID($gbID, $userID) {   
         $url = $this->config->item('gb_api_root') . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
         $result = $this->Utility->getData($url);
-
+        
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
         {
             // add collection info to game object
@@ -192,25 +192,18 @@ class Game extends CI_Model {
     }
 
     // add game to users collection
-    function addToCollection($GBID, $userID, $listID)
+    function addToCollection($gameID, $userID, $listID)
     {
-        // get GameID from GBID
-        $query = $this->db->get_where('games', array('GBID' => $GBID));
-        if($query->num_rows() == 1)
-        {
-            $row = $query->first_row();
+        $data = array(
+           'UserID' => $userID,
+           'GameID' => $gameID,
+           'ListID' => $listID,
+           'StatusID' => 1 // default to unplayed
+        );
 
-            $data = array(
-               'UserID' => $userID,
-               'GameID' => $row->GameID,
-               'ListID' => $listID,
-               'StatusID' => 1 // default to unplayed
-            );
+        $this->db->insert('collections', $data); 
 
-            $this->db->insert('collections', $data); 
-
-            return $this->db->insert_id(); // return CollectionID
-        }
+        return $this->db->insert_id(); // return CollectionID
     }
 
     // update list game is on in collection
@@ -341,5 +334,16 @@ class Game extends CI_Model {
 
         $this->db->where('ID', $collectionID); 
         $this->db->update('collections', array('CurrentlyPlaying' => $currentlyPlayingBit, 'HoursPlayed' => $hoursPlayed, 'DateComplete' => $dateCompleted)); 
+    }
+
+    // get GameID from GBID
+    function getGameID($GBID)
+    {
+        $query = $this->db->get_where('games', array('GBID' => $GBID));
+
+        if($query->num_rows() == 1)
+            return $query->first_row()->GameID;
+        else
+            return null;
     }
 }

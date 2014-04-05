@@ -59,11 +59,15 @@ class Games extends CI_Controller {
         // default value for auto selected platform
         $result['autoSelectPlatform'] = null;
 
+        // load user model
+        $this->load->model('User');
+
         // if game isnt in collection
         if($collection == null) 
         {
             // add game to users collection
-            $collectionID = $this->Game->addToCollection($GBID, $userID, $listID);
+            $gameID = $this->Game->getGameID($GBID);
+            $collectionID = $this->Game->addToCollection($gameID, $userID, $listID);
 
             // if game has one platform, automaticly add it
             if($collectionID != null && count($game->platforms) == 1)
@@ -88,6 +92,9 @@ class Games extends CI_Controller {
                     $result['autoSelectPlatform'] = $platform->id; 
                 }
             }
+
+            // record event
+            $this->User->addUserEvent($userID, $gameID, 1, $listID);
         // game is in collection, update list
         } else {
             $this->Game->updateList($GBID, $userID, $listID);

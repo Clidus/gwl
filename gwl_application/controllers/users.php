@@ -2,10 +2,10 @@
 
 class Users extends CI_Controller {
     
-    // view game
+    // view user
     function view($userID)
     {   
-        // lookup game
+        // get user data
         $this->load->model('User');
         $user = $this->User->getUserByID($userID);
 
@@ -16,6 +16,7 @@ class Users extends CI_Controller {
         $this->load->model('Page');
         $data = $this->Page->create($user->Username, "User");
         $data['user'] = $user;
+        $data['events'] = $this->User->getUserEvent($userID);
 
         // load views
         $this->load->view('templates/header', $data);
@@ -26,14 +27,17 @@ class Users extends CI_Controller {
     // edit profile
     function edit()
     {   
+        // load form helper
         $this->load->helper(array('form', 'url'));
 
+        // get logged in user
         $userID = $this->session->userdata('UserID');
 
+        // if not logged in, 404
         if($userID == null)
             show_404();
 
-        // lookup game
+        // get user data
         $this->load->model('User');
         $user = $this->User->getUserByID($userID);
 
@@ -52,7 +56,7 @@ class Users extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
-    // edit profile
+    // saving edit profile
     function save()
     {   
         // load user model
@@ -69,8 +73,8 @@ class Users extends CI_Controller {
         $config['upload_path'] = './uploads/';
         $config['allowed_types'] = 'gif|jpg|png';
         $config['max_size'] = '100';
-        $config['max_width']  = '500';
-        $config['max_height']  = '500';
+        $config['max_width']  = '1000';
+        $config['max_height']  = '1000';
         $this->load->library('upload', $config);
 
         // upload file
@@ -99,6 +103,7 @@ class Users extends CI_Controller {
         $data['user'] = $user;
         $data['error'] = $error;
 
+        // load views
         $this->load->view('templates/header', $data);
         $this->load->view('user/edit', $data);
         $this->load->view('templates/footer', $data);

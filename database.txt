@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `Password` varbinary(250) NOT NULL,
   `Email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `Admin` tinyint(1) NOT NULL,
+  `ProfileImage` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`UserID`,`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

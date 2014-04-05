@@ -110,4 +110,29 @@ class User extends CI_Model {
         $this->db->where('UserID', $userID); 
         $this->db->update('users', array('ProfileImage' => $profileImage)); 
     }
+
+    function addUserEvent($userID, $gameID, $actionID, $value) 
+    {
+        $data = array(
+           'UserID' => $userID,
+           'GameID' => $gameID,
+           'ActionID' => $actionID,
+           'Value' => $value,
+           'DateStamp' => date("Y-m-d H:i:s")
+        );
+
+        return $this->db->insert('userEvents', $data); 
+    }
+
+    function getUserEvent($userID) 
+    {
+        $this->db->select('*');
+        $this->db->from('userEvents');
+        $this->db->join('games', 'userEvents.GameID = games.GameID');
+        $this->db->join('users', 'userEvents.UserID = users.UserID');
+        $this->db->where('userEvents.UserID', $userID); 
+        $query = $this->db->get();
+
+        return $query->result();
+    }
 }
