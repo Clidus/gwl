@@ -131,8 +131,16 @@ class User extends CI_Model {
         $this->db->join('games', 'userEvents.GameID = games.GameID');
         $this->db->join('users', 'userEvents.UserID = users.UserID');
         $this->db->where('userEvents.UserID', $userID); 
-        $query = $this->db->get();
+        $this->db->order_by("DateStamp", "desc"); 
+        $events = $this->db->get()->result();
 
-        return $query->result();
+        $this->load->model('Game');
+
+        foreach ($events as $event)
+        {
+            $event->platforms = $this->Game->getGamesPlatformsInCollection($event->GBID, $userID);
+        }
+
+        return $events;
     }
 }

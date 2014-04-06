@@ -15,7 +15,7 @@ class Game extends CI_Model {
     // search Giant Bomb API for games  
     function searchForGame($query, $page, $userID) {  
         $url = $this->config->item('gb_api_root') . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
-        
+        //echo $url;
         // giant bomb search API is broken. Filter by game resource instead
         //$offset = $this->resultsPerPage * ($page-1);
         //$url = $this->config->item('gb_api_root') . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&limit=" . $this->resultsPerPage . "&offset=" . $offset . "&filter=name:" . urlencode ($query);
@@ -37,6 +37,7 @@ class Game extends CI_Model {
     // get game from Giant Bomb API by ID
     public function getGameByID($gbID, $userID) {   
         $url = $this->config->item('gb_api_root') . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
+        //echo $url;
         $result = $this->Utility->getData($url);
         
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
@@ -136,7 +137,7 @@ class Game extends CI_Model {
                 if($platforms != null)
                 {
                     // loop over platforms user has in collection
-                    foreach ($platforms->result() as $platform)
+                    foreach ($platforms as $platform)
                     {
                         // if platform is on game in collection
                         if($platform->GBID == $gbPlatform->id)
@@ -185,7 +186,9 @@ class Game extends CI_Model {
         $data = array(
            'GBID' => $game->id,
            'Name' => $game->name,
-           'Image' => is_object($game->image) ? $game->image->small_url : null
+           'Image' => is_object($game->image) ? $game->image->small_url : null,
+           'ImageSmall' => is_object($game->image) ? $game->image->icon_url : null,
+           'Deck' => $game->deck,
         );
 
         return $this->db->insert('games', $data); 
@@ -295,7 +298,7 @@ class Game extends CI_Model {
 
     function getGamesPlatformsInCollection($GBID, $userID)
     {
-        $this->db->select('platforms.GBID');
+        $this->db->select('platforms.GBID, platforms.Name, platforms.Abbreviation');
         $this->db->from('collections');
         $this->db->join('games', 'collections.GameID = games.GameID');
         $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID');
@@ -306,7 +309,7 @@ class Game extends CI_Model {
 
         if($query->num_rows() > 0)
         {
-            return $query;
+            return $query->result();
         }
 
         return null;

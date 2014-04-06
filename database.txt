@@ -1,3 +1,17 @@
+CREATE TABLE IF NOT EXISTS `actions` (
+  `ActionID` int(11) NOT NULL AUTO_INCREMENT,
+  `Action` varchar(50) NOT NULL,
+  PRIMARY KEY (`ActionID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+INSERT INTO `actions` (`ActionID`, `Action`) VALUES
+(1, 'Add game'),
+(2, 'Change list'),
+(3, 'Change status'),
+(4, 'Add platform'),
+(5, 'Remove platform'),
+(6, 'Remove game');
+
 CREATE TABLE IF NOT EXISTS `blog` (
   `PostID` int(11) NOT NULL AUTO_INCREMENT,
   `Title` varchar(100) NOT NULL,
@@ -18,6 +32,11 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
   KEY `last_activity_idx` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS `collectionPlatform` (
+  `CollectionID` int(11) NOT NULL,
+  `PlatformID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE IF NOT EXISTS `collections` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
@@ -34,7 +53,9 @@ CREATE TABLE IF NOT EXISTS `games` (
   `GameID` int(11) NOT NULL AUTO_INCREMENT,
   `GBID` int(11) NOT NULL,
   `Name` varchar(300) NOT NULL,
-  `Image` varchar(150) DEFAULT NULL,
+  `Image` varchar(300) DEFAULT NULL,
+  `ImageSmall` varchar(300) DEFAULT NULL,
+  `Deck` text NOT NULL,
   PRIMARY KEY (`GameID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
@@ -63,16 +84,6 @@ INSERT INTO `lists` (`ID`, `Name`) VALUES
 (4, 'Lent'),
 (5, 'Played');
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `UserID` int(11) NOT NULL AUTO_INCREMENT,
-  `Username` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `Password` varbinary(250) NOT NULL,
-  `Email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `Admin` tinyint(1) NOT NULL,
-  `ProfileImage` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`UserID`,`Username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 CREATE TABLE IF NOT EXISTS `platforms` (
   `PlatformID` int(11) NOT NULL AUTO_INCREMENT,
   `GBID` int(11) NOT NULL,
@@ -82,13 +93,30 @@ CREATE TABLE IF NOT EXISTS `platforms` (
   PRIMARY KEY (`PlatformID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `collectionPlatform` (
-  `CollectionID` int(11) NOT NULL,
-  `PlatformID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE IF NOT EXISTS `userEvents` (
+  `EventID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `GameID` int(11) NOT NULL,
+  `ActionID` int(11) NOT NULL,
+  `Value` text NOT NULL,
+  `DateStamp` datetime NOT NULL,
+  PRIMARY KEY (`EventID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `UserID` int(11) NOT NULL AUTO_INCREMENT,
+  `Username` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `Password` varbinary(250) NOT NULL,
+  `Email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `Admin` tinyint(1) NOT NULL,
+  `ProfileImage` varchar(50) DEFAULT NULL,
+  `Bio` text NOT NULL,
+  PRIMARY KEY (`UserID`,`Username`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 // reset database
 DELETE FROM `gwl`.`collections`;
 DELETE FROM `gwl`.`games`;
 DELETE FROM `gwl`.`platforms`;
 DELETE FROM `gwl`.`collectionPlatform`;
+DELETE FROM `gwl`.`userEvents`;

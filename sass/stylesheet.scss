@@ -1,3 +1,5 @@
+$grey: #898f9c;
+
 body {
 	padding-top: 70px;
 }
@@ -139,8 +141,33 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 * profile
 */
 
+.profileTabs {
+    margin-bottom: 20px;
+}
+
 .largeProfileImage {
     width: 100%;    
+}
+
+.userBio {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.eventImage {
+    width: 80px;
+    height: 80px;
+}
+
+.datestamp {
+    color: $grey;
+    font-size: 10px;
+    float: right;
+}
+
+.gameDeck {
+    margin-top: 10px;
+    font-size: 12px;
 }
 
 /*

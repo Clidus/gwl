@@ -28,7 +28,7 @@ class Users extends CI_Controller {
     function edit()
     {   
         // load form helper
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(array('form'));
 
         // get logged in user
         $userID = $this->session->userdata('UserID');
@@ -92,7 +92,7 @@ class Users extends CI_Controller {
         }
 
         // load form helper
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(array('form'));
 
         // get user data
         $user = $this->User->getUserByID($userID);
