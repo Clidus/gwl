@@ -57,73 +57,42 @@ class Game extends CI_Model {
         // if in collection
         if($collection != null)
         {
-            $game->listID = $collection->ListID;
-            $game->statusID = $collection->StatusID;
-
             // list button
-            switch($game->listID)
-            {
-                case 1:
-                    $game->listLabel = "Own";
-                    $game->listStyle = "success";
-                    break;
-                case 2:
-                    $game->listLabel = "Want";
-                    $game->listStyle = "warning";
-                    break;
-                case 3:
-                    $game->listLabel = "Borrowed";
-                    $game->listStyle = "info";
-                    break;
-                case 4:
-                    $game->listLabel = "Lent";
-                    $game->listStyle = "danger";
-                    break;
-                case 5:
-                    $game->listLabel = "Played";
-                    $game->listStyle = "primary";
-                    break;
-            }
+            $game->listID = $collection->ListID;
+            $game->listLabel = $collection->ListName;
+            $game->listStyle = $collection->ListStyle;
 
             // status button
-            switch($game->statusID)
-            {
-                case 1:
-                    $game->statusLabel = "Unplayed";
-                    $game->statusStyle = "default";
-                    break;
-                case 2:
-                    $game->statusLabel = "Unfinished";
-                    $game->statusStyle = "warning";
-                    break;
-                case 3:
-                    $game->statusLabel = "Complete";
-                    $game->statusStyle = "success";
-                    break;
-                case 4:
-                    $game->statusLabel = "Uncompletable";
-                    $game->statusStyle = "primary";
-                    break;
-            }
+            $game->statusID = $collection->StatusID;
+            $game->statusLabel = $collection->StatusName;
+            $game->statusStyle = $collection->StatusStyle;
 
-            // get platforms user has game in collection
-            $platforms = $this->getGamesPlatformsInCollection($game->id, $userID);
-
+            // data
             $game->currentlyPlaying = ($collection->CurrentlyPlaying == 1) ? true : false;
             $game->dateComplete = $collection->DateComplete;
             $game->hoursPlayed = $collection->HoursPlayed;
+
+            // get platforms user has game in collection
+            $platforms = $this->getGamesPlatformsInCollection($game->id, $userID);
+        // not in collection
         } else {
-            // not in collection
+            // list button
             $game->listID = 0; 
-            $game->statusID = 0; 
             $game->listLabel = "Add to Collection";
             $game->listStyle = "default";
+
+            // status button
+            $game->statusID = 0; 
             $game->statusLabel = "Unplayed";
             $game->statusStyle = "default";
-            $platforms = null;
+
+            // data
             $game->currentlyPlaying = false;
             $game->dateComplete = null;
             $game->hoursPlayed = null;
+
+            // get platforms user has game in collection
+            $platforms = null;
         }
 
         // add platforms user has game on in collection (if any)
@@ -160,6 +129,8 @@ class Game extends CI_Model {
         $this->db->select('*');
         $this->db->from('collections');
         $this->db->join('games', 'collections.GameID = games.GameID');
+        $this->db->join('lists', 'collections.ListID = lists.ListID');
+        $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID');
         $this->db->where('games.GBID', $GBID); 
         $this->db->where('collections.UserID', $userID); 
         $query = $this->db->get();
@@ -348,5 +319,36 @@ class Game extends CI_Model {
             return $query->first_row()->GameID;
         else
             return null;
+    }
+
+
+    function getListDetails($listID)
+    {
+        $this->db->select('*');
+        $this->db->from('lists');
+        $this->db->where('lists.ListID', $listID); 
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1)
+        {
+            return $query->first_row();
+        }
+
+        return null;
+    }
+
+    function getStatusDetails($statusID)
+    {
+        $this->db->select('*');
+        $this->db->from('gameStatuses');
+        $this->db->where('gameStatuses.StatusID', $statusID); 
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1)
+        {
+            return $query->first_row();
+        }
+
+        return null;
     }
 }

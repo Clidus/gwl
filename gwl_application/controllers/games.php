@@ -100,6 +100,11 @@ class Games extends CI_Controller {
             $this->Game->updateList($GBID, $userID, $listID);
         }
 
+        // get list name and style
+        $listData = $this->Game->getListDetails($listID);
+        $result['listName'] = $listData->ListName;
+        $result['listStyle'] = $listData->ListStyle;
+
         // return success
         $result['error'] = false;   
         echo json_encode($result);
@@ -140,6 +145,11 @@ class Games extends CI_Controller {
             $this->returnError("You haven't added this game to your collection. How did you get here?");
             return;
         }
+
+        // get status name and style
+        $statusData = $this->Game->getStatusDetails($statusID);
+        $result['statusName'] = $statusData->StatusName;
+        $result['statusStyle'] = $statusData->StatusStyle;
 
         // return success
         $result['error'] = false;   

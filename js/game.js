@@ -84,34 +84,11 @@ function addGame(giantbombID, listID, reloadPage) {
             if (data.error === true) {
                 showErrorModal(data.errorMessage);
             } else {
-                switch(listID)
-                {
-                    case 1:
-                        buttonLabel = "Own";
-                        buttonStyle = "success";
-                        break;
-                    case 2:
-                        buttonLabel = "Want";
-                        buttonStyle = "warning";
-                        break;
-                    case 3:
-                        buttonLabel = "Borrowed";
-                        buttonStyle = "info";
-                        break;
-                    case 4:
-                        buttonLabel = "Lent";
-                        buttonStyle = "danger";
-                        break;
-                    case 5:
-                        buttonLabel = "Played";
-                        buttonStyle = "primary";
-                        break;
-                }
                 if(reloadPage) {
                     location.reload();
                 } else {
                     // update list button label/colour
-                    $('#gameButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + buttonStyle + " dropdown-toggle");
+                    $('#gameButton' + giantbombID).html(data.listName + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + data.listStyle + " dropdown-toggle");
                     // display collection status button
                     $('#inCollectionControls' + giantbombID).removeClass("hidden");
                     // enable platform checkboxes
@@ -145,26 +122,7 @@ function changeStatus(giantbombID, statusID) {
             if (data.error === true) {
                 showErrorModal(data.errorMessage);
             } else {
-                switch(statusID)
-                {
-                    case 1:
-                        buttonLabel = "Unplayed";
-                        buttonStyle = "default";
-                        break;
-                    case 2:
-                        buttonLabel = "Unfinished";
-                        buttonStyle = "warning";
-                        break;
-                    case 3:
-                        buttonLabel = "Complete";
-                        buttonStyle = "success";
-                        break;
-                    case 4:
-                        buttonLabel = "Uncompletable";
-                        buttonStyle = "primary";
-                        break;
-                }
-                $('#statusButton' + giantbombID).html(buttonLabel + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + buttonStyle + " dropdown-toggle");
+                $('#statusButton' + giantbombID).html(data.statusName + ' <span class="caret"></span>').removeClass().addClass("btn btn-" + data.statusStyle + " dropdown-toggle");
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
