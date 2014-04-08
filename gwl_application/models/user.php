@@ -111,17 +111,34 @@ class User extends CI_Model {
         $this->db->update('users', array('ProfileImage' => $profileImage)); 
     }
 
-    function addUserEvent($userID, $gameID, $actionID, $value) 
+    // record new user event
+    function addUserEvent($userID, $gameID, $listID, $statusID, $currentlyPlaying) 
     {
         $data = array(
            'UserID' => $userID,
            'GameID' => $gameID,
-           'ActionID' => $actionID,
-           'Value' => $value,
            'DateStamp' => date("Y-m-d H:i:s")
         );
 
-        return $this->db->insert('userEvents', $data); 
+        if($listID != null) $data['ListID'] = $listID;
+        if($statusID != null) $data['StatusID'] = $statusID;
+        if($currentlyPlaying != null) $data['CurrentlyPlaying'] = ($currentlyPlaying === "true");
+
+        $this->db->select('*');
+        $this->db->from('userEvents');
+        $this->db->where('UserID', $userID); 
+        $this->db->where('GameID', $gameID); 
+        $this->db->where('DateStamp >', date("Y-m-d H:i:s", strtotime('-24 hour'))); 
+        $query = $this->db->get();
+
+        // if event exists for User/Game in last 24 hours, update it rather than adding a new one
+        if($query->num_rows() == 1)
+        {
+            $this->db->where('EventID', $query->first_row()->EventID); 
+            return $this->db->update('userEvents', $data); 
+        } else {
+            return $this->db->insert('userEvents', $data); 
+        }
     }
 
     function getUserEvent($userID) 
@@ -130,14 +147,17 @@ class User extends CI_Model {
         $this->db->from('userEvents');
         $this->db->join('games', 'userEvents.GameID = games.GameID');
         $this->db->join('users', 'userEvents.UserID = users.UserID');
+        $this->db->join('lists', 'userEvents.ListID = lists.ListID', 'left');
+        $this->db->join('gameStatuses', 'userEvents.StatusID = gameStatuses.StatusID', 'left');
         $this->db->where('userEvents.UserID', $userID); 
         $this->db->order_by("DateStamp", "desc"); 
         $events = $this->db->get()->result();
 
+        // loop through events
         $this->load->model('Game');
-
         foreach ($events as $event)
         {
+            // add platforms in collection
             $event->platforms = $this->Game->getGamesPlatformsInCollection($event->GBID, $userID);
         }
 

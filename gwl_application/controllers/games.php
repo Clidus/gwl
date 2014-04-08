@@ -94,10 +94,13 @@ class Games extends CI_Controller {
             }
 
             // record event
-            $this->User->addUserEvent($userID, $gameID, 1, $listID);
+            $this->User->addUserEvent($userID, $gameID, $listID, null, null);
         // game is in collection, update list
         } else {
             $this->Game->updateList($GBID, $userID, $listID);
+
+            // record event
+            $this->User->addUserEvent($userID, $collection->GameID, $listID, null, null);
         }
 
         // get list name and style
@@ -145,6 +148,10 @@ class Games extends CI_Controller {
             $this->returnError("You haven't added this game to your collection. How did you get here?");
             return;
         }
+
+        // record event
+        $this->load->model('User');
+        $this->User->addUserEvent($userID, $collection->GameID, null, $statusID, null);
 
         // get status name and style
         $statusData = $this->Game->getStatusDetails($statusID);
@@ -241,6 +248,10 @@ class Games extends CI_Controller {
             // add game to platform in collection
             $this->Game->addPlatform($collection->ID, $GBPlatformID);
         }
+
+        // record event
+        $this->load->model('User');
+        $this->User->addUserEvent($userID, $collection->GameID, $collection->ListID, null, null);
         
         $result['error'] = false; 
         echo json_encode($result);
@@ -326,6 +337,9 @@ class Games extends CI_Controller {
             return;
         }
 
+        $this->load->model('User');
+        $this->User->addUserEvent($userID, $collection->GameID, null, null, $currentlyPlaying);
+       
         // return success
         $result['error'] = false;   
         echo json_encode($result);

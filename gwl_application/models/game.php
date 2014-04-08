@@ -233,6 +233,11 @@ class Game extends CI_Model {
             // delete collectionPlatform record
             $this->db->where('CollectionID', $row->ID);
             $this->db->delete('collectionPlatform'); 
+
+            // delete userEvents records
+            $this->db->where('GameID', $row->GameID);
+            $this->db->where('UserID', $userID);
+            $this->db->delete('userEvents'); 
         }
     }
 
@@ -351,4 +356,18 @@ class Game extends CI_Model {
 
         return null;
     }
+
+    /*function getLists()
+    {
+        $this->db->select('*');
+        $this->db->from('lists');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+
+        return null;
+    }*/
 }

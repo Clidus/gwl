@@ -40,49 +40,42 @@
 				</a>
 				<div class="media-body">
 					<?php
-						switch($event->ActionID) 
-						{
-							case 1:
-								switch($event->Value)
-					            {
-					                case 1:
-					                    $label = "owns";
-					                    $style = "success";
-					                    break;
-					                case 2:
-					                    $label = "wants";
-					                    $style = "warning";
-					                    break;
-					                case 3:
-					                    $label = "borrowed";
-					                    $style = "info";
-					                    break;
-					                case 4:
-					                    $label = "lent";
-					                    $style = "danger";
-					                    break;
-					                case 5:
-					                    $label = "played";
-					                    $style = "primary";
-					                    break;
-					            }
-					    		echo '<b>' . $event->Username . ' <span class="label label-' . $style . '">' . $label . '</span> <a href="' . $baseUrl . 'game/' . $event->GBID . '">' . $event->Name . '</a></b>';
-					    		
-					    		if(count($event->platforms) > 0) {
-					    			echo " on ";
-					    			$i = 1;
-						    		foreach($event->platforms as $platfrom)
-						    		{
-						    			echo $platfrom->Abbreviation;
-						    			if($i !== count($event->platforms)) {
-										    echo ", ";
-										}
-										$i++;
-						    		}
-						    	}
-					    		echo '<p class="gameDeck">' . $event->Deck . '</p>';
-					    		echo '<p class="datestamp">' . timespan(human_to_unix($event->DateStamp), time()) . ' ago</p>';
-						}
+			    		echo '<p><b>' . $event->Username;
+			    		
+			    		$eventItems = array();
+						if($event->CurrentlyPlaying) array_push($eventItems, ' is playing');
+			    		if($event->ListID != null) array_push($eventItems, ' <span class="label label-' . $event->ListStyle . '">' . $event->ListThirdPerson . '</span>');
+				    	if($event->StatusID != null) array_push($eventItems, ' <span class="label label-' . $event->StatusStyle . '">' . $event->StatusThirdPerson . '</span>');
+				    	$i = 1;
+				    	foreach($eventItems as $item) 
+				    	{
+				    		echo $item;
+			    			if($i === count($eventItems)-1) {
+							    echo " and ";
+							} else if($i < count($eventItems)) {
+							    echo ", ";
+							}
+							$i++;
+				    	}
+				    	
+				    	echo ' <a href="' . $baseUrl . 'game/' . $event->GBID . '">' . $event->Name . '</a></b>';
+			    		
+			    		if(count($event->platforms) > 0) {
+			    			echo " on ";
+			    			$i = 1;
+				    		foreach($event->platforms as $platfrom)
+				    		{
+				    			echo $platfrom->Abbreviation;
+				    			if($i !== count($event->platforms)) {
+								    echo ", ";
+								}
+								$i++;
+				    		}
+				    	}
+
+				    	echo '</p>';
+			    		echo '<p class="gameDeck">' . $event->Deck . '</p>';
+			    		echo '<p class="datestamp">' . timespan(human_to_unix($event->DateStamp), time()) . ' ago</p>';
 					?>
 				</div>
 			</div>
