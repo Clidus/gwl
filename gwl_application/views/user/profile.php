@@ -42,24 +42,23 @@
 					<?php
 			    		echo '<p><b>' . $event->Username;
 			    		
-			    		$eventItems = array();
-						if($event->CurrentlyPlaying) array_push($eventItems, ' is playing');
-			    		if($event->ListID != null) array_push($eventItems, ' <span class="label label-' . $event->ListStyle . '">' . $event->ListThirdPerson . '</span>');
-				    	if($event->StatusID != null) array_push($eventItems, ' <span class="label label-' . $event->StatusStyle . '">' . $event->StatusThirdPerson . '</span>');
+			    		// events
 				    	$i = 1;
-				    	foreach($eventItems as $item) 
+				    	foreach($event->eventItems as $item) 
 				    	{
 				    		echo $item;
-			    			if($i === count($eventItems)-1) {
+			    			if($i === count($event->eventItems)-1) {
 							    echo " and ";
-							} else if($i < count($eventItems)) {
+							} else if($i < count($event->eventItems)) {
 							    echo ", ";
 							}
 							$i++;
 				    	}
 				    	
+				    	// game name
 				    	echo ' <a href="' . $baseUrl . 'game/' . $event->GBID . '">' . $event->Name . '</a></b>';
 			    		
+			    		// platforms
 			    		if(count($event->platforms) > 0) {
 			    			echo " on ";
 			    			$i = 1;
@@ -75,7 +74,7 @@
 
 				    	echo '</p>';
 			    		echo '<p class="gameDeck">' . $event->Deck . '</p>';
-			    		echo '<p class="datestamp">' . timespan(human_to_unix($event->DateStamp), time()) . ' ago</p>';
+			    		echo '<p class="datestamp">' . $event->DateStampFormatted . '</p>';
 					?>
 				</div>
 			</div>

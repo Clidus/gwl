@@ -155,10 +155,20 @@ class User extends CI_Model {
 
         // loop through events
         $this->load->model('Game');
+        $this->load->model('Time');
         foreach ($events as $event)
         {
+            // build array of events
+            $event->eventItems = array();
+            if($event->CurrentlyPlaying) array_push($event->eventItems, ' is playing');
+            if($event->ListID != null) array_push($event->eventItems, ' <span class="label label-' . $event->ListStyle . '">' . $event->ListThirdPerson . '</span>');
+            if($event->StatusID != null) array_push($event->eventItems, ' <span class="label label-' . $event->StatusStyle . '">' . $event->StatusThirdPerson . '</span>');
+
             // add platforms in collection
             $event->platforms = $this->Game->getGamesPlatformsInCollection($event->GBID, $userID);
+
+            // format date stamp
+            $event->DateStampFormatted = $this->Time->GetDateTimeInFormat($event->DateStamp, $event->DateTimeFormat);
         }
 
         return $events;
