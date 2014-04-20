@@ -50,7 +50,7 @@ class Blog extends CI_Model {
         $this->db->join('users', 'blog.UserID = users.UserID');
         $this->db->order_by("date", "desc"); 
         $this->db->limit($numberOfPosts);
-        return $this->db->get();
+        return $this->db->get()->result();
     }
 
     // get post by URL

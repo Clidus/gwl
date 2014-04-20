@@ -11,8 +11,16 @@ class Blogs extends CI_Controller {
 
 		// get blog posts
 		$this->load->model('Blog');
-		$data['posts'] = $this->Blog->getPosts(10); // get 10 most recent posts
+		$posts = $this->Blog->getPosts(10); // get 10 most recent posts
 
+		// transform markdown to HTML
+        $this->load->library('markdown');
+        foreach($posts as $post)
+        {
+	        $post->Post = $this->markdown->defaultTransform($post->Post);
+        }
+		$data['posts'] = $posts;
+		
 		// load views
 		$this->load->view('templates/header', $data);
 		$this->load->view('blog/home', $data);
@@ -26,6 +34,10 @@ class Blogs extends CI_Controller {
 		$this->load->model('Blog');
 		$post = $this->Blog->getPostByURL($URL); 
 
+		// transform markdown to HTML
+        $this->load->library('markdown');
+        $post->Post = $this->markdown->defaultTransform($post->Post);
+        
 		if($post == null)
 			show_404();
 

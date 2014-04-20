@@ -59,6 +59,10 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 *
 */
 
+.responsiveImage {
+    width: 100%;
+}
+
 .postFooter {
     margin-top: 10px;
 }
@@ -170,10 +174,16 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     font-size: 12px;
 }
 
+.commentProfileImage {
+    width: 32px;
+    height: 32px;
+}
+
 /*
 * admin 
 */
 
-#wysihtml5-textarea {
+#blogPostTextArea {
+    white-space: normal;
     height: 500px;
 }

@@ -3,7 +3,7 @@
 </ul>
 
 <?php
-	foreach($posts->result() as $post)
+	foreach($posts as $post)
 	{
 ?>
 	<h2><a href="<?php echo $baseUrl . "blog/" . $post->URL ?>"><?php echo $post->Title ?></a></h2>

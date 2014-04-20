@@ -7,7 +7,7 @@
 <h2><?php echo $pagetitle ?></h2>
 
 <?php
-  foreach($posts->result() as $post)
+  foreach($posts as $post)
   {
 ?>
   <ul>
