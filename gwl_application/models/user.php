@@ -151,7 +151,7 @@ class User extends CI_Model {
     }
 
     // get list of events by UserID
-    function getUserEvent($userID, $DateTimeFormat) 
+    function getUserEvents($userID, $DateTimeFormat, $offset, $resultsPerPage) 
     {
         $this->db->select('*');
         $this->db->from('userEvents');
@@ -161,6 +161,7 @@ class User extends CI_Model {
         $this->db->join('gameStatuses', 'userEvents.StatusID = gameStatuses.StatusID', 'left');
         $this->db->where('userEvents.UserID', $userID); 
         $this->db->order_by("DateStamp", "desc"); 
+        $this->db->limit($resultsPerPage, $offset);
         $events = $this->db->get()->result();
 
         // loop through events
@@ -210,7 +211,7 @@ class User extends CI_Model {
         $this->db->join('users', 'comments.UserID = users.UserID');
         $this->db->where('comments.LinkID', $eventID); 
         $this->db->where('comments.CommentTypeID', 1); // UserEvents comment
-        $this->db->order_by("DateStamp", "desc"); 
+        $this->db->order_by("DateStamp", "asc"); 
         $comments = $this->db->get()->result();
 
         // loop through events

@@ -3,21 +3,27 @@
 class Users extends CI_Controller {
     
     // view user
-    function view($userID)
+    function view($userID, $page = 1)
     {   
         // get user data
         $this->load->model('User');
         $user = $this->User->getUserByID($userID);
-        $user->ProfileImage = $user->ProfileImage == null ? "gwl_default.jpg" : $user->ProfileImage;
 
         if($user == null)
             show_404();
+
+        $user->ProfileImage = $user->ProfileImage == null ? "gwl_default.jpg" : $user->ProfileImage;
+
+        // paging
+        $resultsPerPage = 20;
+        $offset = ($page-1) * $resultsPerPage;
 
         // page variables
         $this->load->model('Page');
         $data = $this->Page->create($user->Username, "User");
         $data['user'] = $user;
-        $data['events'] = $this->User->getUserEvent($userID, $this->session->userdata('DateTimeFormat'));
+        $data['events'] = $this->User->getUserEvents($userID, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
+        $data['pageNumber'] = $page;
 
         // load views
         $this->load->view('templates/header', $data);
@@ -123,7 +129,8 @@ class Users extends CI_Controller {
         // form validation
         $this->load->library('form_validation');
         $this->form_validation->set_rules('eventID', 'eventID', 'trim|xss_clean');
-        $this->form_validation->set_rules('comment', 'comment', 'trim|xss_clean');
+        $this->form_validation->set_rules('comment', 'comment', 'trim|xss_clean|strip_tags|htmlspecialchars');
+        $this->form_validation->run();
 
         $eventID = $this->input->post('eventID');
         $comment = $this->input->post('comment');
@@ -138,6 +145,13 @@ class Users extends CI_Controller {
 
         $this->load->model('User');
         $this->User->addComment($eventID, $userID, $comment);
+
+        // add new comment (in HTML) to response so it can be added to the current page
+        $this->load->library('markdown');
+        $result['comment'] = $this->markdown->defaultTransform($comment);
+        $result['username'] = $this->session->userdata('Username');
+        $result['profileImage'] = $this->session->userdata('ProfileImage');
+        $result['userID'] = $userID;
 
         // return success
         $result['error'] = false;   

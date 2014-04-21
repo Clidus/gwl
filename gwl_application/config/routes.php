@@ -59,6 +59,7 @@ $route['user/edit'] = 'users/edit';
 $route['user/save'] = 'users/save';
 $route['user/comment'] = 'users/comment';
 $route['user/(:any)'] = 'users/view/$1';
+$route['user/(:any)/(:any)'] = 'users/view/$1/$2';
 
 $route['admin'] = 'admin/home';
 $route['admin/blog/new'] = 'admin/newBlogPost';
