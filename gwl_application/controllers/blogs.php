@@ -17,7 +17,7 @@ class Blogs extends CI_Controller {
         $this->load->library('md');
         foreach($posts as $post)
         {
-	        $post->Post = $this->markdown->defaultTransform($post->Post);
+	        $post->Post = $this->md->defaultTransform($post->Post);
         }
 		$data['posts'] = $posts;
 		
@@ -36,7 +36,7 @@ class Blogs extends CI_Controller {
 
 		// transform markdown to HTML
         $this->load->library('md');
-        $post->Post = $this->markdown->defaultTransform($post->Post);
+        $post->Post = $this->md->defaultTransform($post->Post);
         
 		if($post == null)
 			show_404();

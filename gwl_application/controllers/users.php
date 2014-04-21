@@ -147,8 +147,8 @@ class Users extends CI_Controller {
         $this->User->addComment($eventID, $userID, $comment);
 
         // add new comment (in HTML) to response so it can be added to the current page
-        $this->load->library('markdown');
-        $result['comment'] = $this->markdown->defaultTransform($comment);
+        $this->load->library('md');
+        $result['comment'] = $this->md->defaultTransform($comment);
         $result['username'] = $this->session->userdata('Username');
         $result['profileImage'] = $this->session->userdata('ProfileImage');
         $result['userID'] = $userID;
