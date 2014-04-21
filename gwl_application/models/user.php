@@ -167,7 +167,7 @@ class User extends CI_Model {
         // loop through events
         $this->load->model('Game');
         $this->load->model('Time');
-        $this->load->library('markdown');
+        $this->load->library('md');
         foreach ($events as $event)
         {
             // build array of events
@@ -218,7 +218,7 @@ class User extends CI_Model {
         foreach ($comments as $comment)
         {
             // transform markdown to HTML
-            $comment->Comment = $this->markdown->defaultTransform($comment->Comment);
+            $comment->Comment = $this->md->defaultTransform($comment->Comment);
 
             // format date stamp
             $comment->DateStampFormatted = $this->Time->GetDateTimeInFormat($comment->DateStamp, $DateTimeFormat);

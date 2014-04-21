@@ -14,7 +14,7 @@ class Blogs extends CI_Controller {
 		$posts = $this->Blog->getPosts(10); // get 10 most recent posts
 
 		// transform markdown to HTML
-        $this->load->library('markdown');
+        $this->load->library('md');
         foreach($posts as $post)
         {
 	        $post->Post = $this->markdown->defaultTransform($post->Post);
@@ -35,7 +35,7 @@ class Blogs extends CI_Controller {
 		$post = $this->Blog->getPostByURL($URL); 
 
 		// transform markdown to HTML
-        $this->load->library('markdown');
+        $this->load->library('md');
         $post->Post = $this->markdown->defaultTransform($post->Post);
         
 		if($post == null)
