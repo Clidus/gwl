@@ -1,17 +1,3 @@
-CREATE TABLE IF NOT EXISTS `actions` (
-  `ActionID` int(11) NOT NULL AUTO_INCREMENT,
-  `Action` varchar(50) NOT NULL,
-  PRIMARY KEY (`ActionID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
-
-INSERT INTO `actions` (`ActionID`, `Action`) VALUES
-(1, 'Add game'),
-(2, 'Change list'),
-(3, 'Change status'),
-(4, 'Add platform'),
-(5, 'Remove platform'),
-(6, 'Remove game');
-
 CREATE TABLE IF NOT EXISTS `blog` (
   `PostID` int(11) NOT NULL AUTO_INCREMENT,
   `Title` varchar(100) NOT NULL,
@@ -49,6 +35,25 @@ CREATE TABLE IF NOT EXISTS `collections` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS `comments` (
+  `CommentID` int(11) NOT NULL AUTO_INCREMENT,
+  `Comment` text NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `LinkID` int(11) NOT NULL,
+  `CommentTypeID` int(11) NOT NULL,
+  `DateStamp` datetime NOT NULL,
+  PRIMARY KEY (`CommentID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `commentType` (
+  `CommentTypeID` int(11) NOT NULL AUTO_INCREMENT,
+  `CommentType` varchar(20) NOT NULL,
+  PRIMARY KEY (`CommentTypeID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+INSERT INTO `commentType` (`CommentTypeID`, `CommentType`) VALUES
+(1, 'UserEvents');
+
 CREATE TABLE IF NOT EXISTS `games` (
   `GameID` int(11) NOT NULL AUTO_INCREMENT,
   `GBID` int(11) NOT NULL,
@@ -60,29 +65,33 @@ CREATE TABLE IF NOT EXISTS `games` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `gameStatuses` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) NOT NULL,
-  PRIMARY KEY (`ID`)
+  `StatusID` int(11) NOT NULL AUTO_INCREMENT,
+  `StatusName` varchar(50) NOT NULL,
+  `StatusThirdPerson` varchar(50) NOT NULL,
+  `StatusStyle` varchar(50) NOT NULL,
+  PRIMARY KEY (`StatusID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
-INSERT INTO `gameStatuses` (`ID`, `Name`) VALUES
-(1, 'Unplayed'),
-(2, 'Unfinished'),
-(3, 'Complete'),
-(4, 'Uncompletable');
+INSERT INTO `gameStatuses` (`StatusID`, `StatusName`, `StatusThirdPerson`, `StatusStyle`) VALUES
+(1, 'Unplayed', 'Hasn''t Played', 'default'),
+(2, 'Unfinished', 'Hasn''t Finished', 'warning'),
+(3, 'Complete', 'Completed', 'success'),
+(4, 'Uncompletable', 'Can Never Complete', 'primary');
 
 CREATE TABLE IF NOT EXISTS `lists` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) NOT NULL,
-  PRIMARY KEY (`ID`)
+  `ListID` int(11) NOT NULL AUTO_INCREMENT,
+  `ListName` varchar(50) NOT NULL,
+  `ListThirdPerson` varchar(50) NOT NULL,
+  `ListStyle` varchar(50) NOT NULL,
+  PRIMARY KEY (`ListID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
-INSERT INTO `lists` (`ID`, `Name`) VALUES
-(1, 'Own'),
-(2, 'Want'),
-(3, 'Borrowed'),
-(4, 'Lent'),
-(5, 'Played');
+INSERT INTO `lists` (`ListID`, `ListName`, `ListThirdPerson`, `ListStyle`) VALUES
+(1, 'Own', 'Owns', 'success'),
+(2, 'Want', 'Wants', 'warning'),
+(3, 'Borrowed', 'Borrowed', 'info'),
+(4, 'Lent', 'Lent', 'danger'),
+(5, 'Played', 'Played', 'primary');
 
 CREATE TABLE IF NOT EXISTS `platforms` (
   `PlatformID` int(11) NOT NULL AUTO_INCREMENT,
@@ -97,9 +106,10 @@ CREATE TABLE IF NOT EXISTS `userEvents` (
   `EventID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `GameID` int(11) NOT NULL,
-  `ActionID` int(11) NOT NULL,
-  `Value` text NOT NULL,
+  `ListID` int(11) DEFAULT NULL,
+  `StatusID` int(11) DEFAULT NULL,
   `DateStamp` datetime NOT NULL,
+  `CurrentlyPlaying` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`EventID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
@@ -109,14 +119,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `Password` varbinary(250) NOT NULL,
   `Email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `Admin` tinyint(1) NOT NULL,
-  `ProfileImage` varchar(50) DEFAULT NULL,
+  `ProfileImage` varchar(300) DEFAULT NULL,
   `Bio` text NOT NULL,
+  `DateTimeFormat` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`UserID`,`Username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
-
-// reset database
-DELETE FROM `gwl`.`collections`;
-DELETE FROM `gwl`.`games`;
-DELETE FROM `gwl`.`platforms`;
-DELETE FROM `gwl`.`collectionPlatform`;
-DELETE FROM `gwl`.`userEvents`;
