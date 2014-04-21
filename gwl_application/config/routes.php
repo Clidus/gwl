@@ -57,6 +57,7 @@ $route['game/(:any)'] = 'games/view/$1';
 
 $route['user/edit'] = 'users/edit';
 $route['user/save'] = 'users/save';
+$route['user/comment'] = 'users/comment';
 $route['user/(:any)'] = 'users/view/$1';
 
 $route['admin'] = 'admin/home';

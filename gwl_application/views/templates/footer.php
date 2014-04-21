@@ -12,6 +12,7 @@
   </script>
   <script src="<?php echo $baseUrl ?>js/jquery-2.0.3.min.js"></script>
   <script src="<?php echo $baseUrl ?>bootstrap/js/bootstrap.min.js"></script>
+  <script src="<?php echo $baseUrl ?>/js/global.js"></script>
   <?php 
     if($pagetemplate == "Search") 
     { 
@@ -21,11 +22,18 @@
     { 
       echo "<script src='" . $baseUrl . "js/admin.js'></script>"; 
     } 
+    else if($pagetemplate == "User")
+    {
+      echo "<script src='" . $baseUrl . "js/jquery.autogrow-textarea.js'></script>"; 
+      echo "<script src='" . $baseUrl . "js/profile.js'></script>"; 
+    }
   ?>
   <script>
-    $(document).ready(function() {
+    $(function() {
       <?php
           echo "$('#nav" . $pagetemplate . "').addClass('active');";
+          if($pagetemplate == "User")
+            echo "$('.textAreaAutoGrow').autogrow();";
       ?>
     });
   </script>

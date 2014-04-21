@@ -7,10 +7,12 @@
     <div class="col-sm-8">
         <h2>Search</h2>
         <form role="form-inline" method="post" action="<?php echo $baseUrl ?>search/">
-            <div class="form-group">
+            <div class="input-group">
                 <input type="search" class="form-control" name="query" placeholder="Search" value="<?php echo $searchQuery ?>">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </span>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
         </form>  
         <div class="searchResults">
             <?php

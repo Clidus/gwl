@@ -8,6 +8,7 @@ class Users extends CI_Controller {
         // get user data
         $this->load->model('User');
         $user = $this->User->getUserByID($userID);
+        $user->ProfileImage = $user->ProfileImage == null ? "gwl_default.jpg" : $user->ProfileImage;
 
         if($user == null)
             show_404();
@@ -16,7 +17,7 @@ class Users extends CI_Controller {
         $this->load->model('Page');
         $data = $this->Page->create($user->Username, "User");
         $data['user'] = $user;
-        $data['events'] = $this->User->getUserEvent($userID);
+        $data['events'] = $this->User->getUserEvent($userID, $this->session->userdata('DateTimeFormat'));
 
         // load views
         $this->load->view('templates/header', $data);
@@ -107,6 +108,40 @@ class Users extends CI_Controller {
         $this->load->view('templates/header', $data);
         $this->load->view('user/edit', $data);
         $this->load->view('templates/footer', $data);
+    }
+
+    function returnError($errorMessage)
+    {
+        $result['error'] = true; 
+        $result['errorMessage'] = $errorMessage; 
+        echo json_encode($result);
+    }
+
+    // add comment to event
+    function comment()
+    {
+        // form validation
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('eventID', 'eventID', 'trim|xss_clean');
+        $this->form_validation->set_rules('comment', 'comment', 'trim|xss_clean');
+
+        $eventID = $this->input->post('eventID');
+        $comment = $this->input->post('comment');
+        $userID = $this->session->userdata('UserID');
+
+        // check that user is logged in
+        if($userID <= 0)
+        {
+            $this->returnError("You've been logged out. Please login and try again.");
+            return;
+        }
+
+        $this->load->model('User');
+        $this->User->addComment($eventID, $userID, $comment);
+
+        // return success
+        $result['error'] = false;   
+        echo json_encode($result);
     }
 }
 ?>

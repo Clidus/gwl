@@ -12,7 +12,6 @@
         <!-- CSS -->
         <link href="<?php echo $baseUrl ?>bootstrap/css/bootstrap.css" rel="stylesheet">
         <link href="<?php echo $baseUrl ?>css/stylesheet.css" rel="stylesheet">
-        <link href="<?php echo $baseUrl ?>css/wysihtml5.css" rel="stylesheet">
     </head>
     <body>
       <!-- navbar -->

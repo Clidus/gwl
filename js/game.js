@@ -63,12 +63,6 @@ $(document).ready(function() {
     });
 });
 
-/* display error modal */
-function showErrorModal(error) {
-    $('#errorModalMessage').html(error);
-    $('#errorModal').modal();
-}
-
 /* add/update game status in collection */
 function addGame(giantbombID, listID, reloadPage) {
     $('#gameButton' + giantbombID).addClass('disabled').html('Saving...');

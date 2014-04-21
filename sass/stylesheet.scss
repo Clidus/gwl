@@ -166,7 +166,6 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 .datestamp {
     color: $grey;
     font-size: 10px;
-    float: right;
 }
 
 .gameDeck {
@@ -179,11 +178,23 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     height: 32px;
 }
 
+.eventComment {
+    padding: 0 10px;
+}
+
+.eventCommentDisplay {
+    margin: 10px 0;
+    font-size: 12px;
+}
+
+.eventComment img {
+    width: 100%;
+}
+
 /*
 * admin 
 */
 
 #blogPostTextArea {
-    white-space: normal;
     height: 500px;
 }

@@ -17,6 +17,7 @@ class Page extends CI_Model {
         $data['sessionUserID'] = $this->session->userdata('UserID');
         $data['sessionUsername'] = $this->session->userdata('Username');
         $data['sessionAdmin'] = $this->session->userdata('Admin');
+        $data['sessionProfileImage'] = $this->session->userdata('ProfileImage');
 
         return $data; 
     }

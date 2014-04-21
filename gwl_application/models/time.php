@@ -14,6 +14,7 @@ class Time extends CI_Model {
         switch($format)
         {
             // Swatch Internet Time
+            case null:
             case 1:
                 return date_format(date_create($datestamp), 'jS F, Y') . ' @' . date("B", human_to_unix($datestamp)) . ' .beats';
             // Time since

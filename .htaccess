@@ -1,5 +1,5 @@
 RewriteEngine on
-RewriteCond $1 !^(index\.php|images|js|css|bootstrap|wysihtml5|uploads|robots\.txt)
+RewriteCond $1 !^(index\.php|images|js|css|bootstrap|uploads|robots\.txt)
 RewriteRule ^(.*)$ /index.php/$1 [L]
 
 #RewriteBase /~josh/gwl/

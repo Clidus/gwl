@@ -70,7 +70,9 @@ class User extends CI_Model {
             $newdata = array(
                 'UserID' => $row->UserID,
                 'Username' => $row->Username,
-                'Admin' => $row->Admin
+                'Admin' => $row->Admin,
+                'DateTimeFormat' => $row->DateTimeFormat,
+                'ProfileImage' => $row->ProfileImage == null ? "gwl_default.jpg" : $row->ProfileImage
             );
             $this->session->set_userdata($newdata);
             
@@ -107,8 +109,15 @@ class User extends CI_Model {
     // update user profile image
     function updateProfileImage($userID, $profileImage)
     {
+        // update database
         $this->db->where('UserID', $userID); 
         $this->db->update('users', array('ProfileImage' => $profileImage)); 
+
+        // update session
+        $newdata = array(
+            'ProfileImage' => $profileImage
+        );
+        $this->session->set_userdata($newdata);
     }
 
     // record new user event
@@ -141,7 +150,8 @@ class User extends CI_Model {
         }
     }
 
-    function getUserEvent($userID) 
+    // get list of events by UserID
+    function getUserEvent($userID, $DateTimeFormat) 
     {
         $this->db->select('*');
         $this->db->from('userEvents');
@@ -156,6 +166,7 @@ class User extends CI_Model {
         // loop through events
         $this->load->model('Game');
         $this->load->model('Time');
+        $this->load->library('markdown');
         foreach ($events as $event)
         {
             // build array of events
@@ -166,11 +177,52 @@ class User extends CI_Model {
 
             // add platforms in collection
             $event->platforms = $this->Game->getGamesPlatformsInCollection($event->GBID, $userID);
+            
+            // get comments
+            $event->comments = $this->getCommentsForEvent($event->EventID, $DateTimeFormat);
 
             // format date stamp
-            $event->DateStampFormatted = $this->Time->GetDateTimeInFormat($event->DateStamp, $event->DateTimeFormat);
+            $event->DateStampFormatted = $this->Time->GetDateTimeInFormat($event->DateStamp, $DateTimeFormat);
         }
 
         return $events;
+    }
+
+    // add comment to event
+    function addComment($eventID, $userID, $comment)
+    {
+        $data = array(
+           'Comment' => $comment,
+           'UserID' => $userID,
+           'LinkID' => $eventID,
+           'CommentTypeID' => 1,
+           'DateStamp' => date("Y-m-d H:i:s")
+        );
+
+        return $this->db->insert('comments', $data); 
+    }
+
+    // get comments for event
+    function getCommentsForEvent($eventID, $DateTimeFormat) 
+    {
+        $this->db->select('*');
+        $this->db->from('comments');
+        $this->db->join('users', 'comments.UserID = users.UserID');
+        $this->db->where('comments.LinkID', $eventID); 
+        $this->db->where('comments.CommentTypeID', 1); // UserEvents comment
+        $this->db->order_by("DateStamp", "desc"); 
+        $comments = $this->db->get()->result();
+
+        // loop through events
+        foreach ($comments as $comment)
+        {
+            // transform markdown to HTML
+            $comment->Comment = $this->markdown->defaultTransform($comment->Comment);
+
+            // format date stamp
+            $comment->DateStampFormatted = $this->Time->GetDateTimeInFormat($comment->DateStamp, $DateTimeFormat);
+        }
+
+        return $comments;
     }
 }

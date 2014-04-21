@@ -8,9 +8,11 @@ This software uses the following software and services, for which we are thankfu
 
 * [Giant Bomb API](http://www.giantbomb.com/api/)
 * [CodeIgniter](http://ellislab.com/codeigniter)
-* [Bootstrap](http://getbootstrap.com/)
 * [PHP Markdown](http://michelf.ca/projects/php-markdown/)
 * [Markdown library for CodeIgniter](http://blog.gauntface.co.uk/2014/03/17/codeigniter-markdown-libraries-hell/)
+* [Bootstrap](http://getbootstrap.com/)
+* [jQuery](http://jquery.com/)
+* [jQuery autogrow textarea](https://github.com/jaz303/jquery-grab-bag)
 
 ## Licensing
 
