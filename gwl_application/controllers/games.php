@@ -2,6 +2,38 @@
 
 class Games extends CI_Controller {
     
+    // view game
+    function view($gbID, $page = 1)
+    {   
+        // lookup game
+        $this->load->model('Game');
+        $game = $this->Game->getGameByID($gbID, $this->session->userdata('UserID'));
+
+        if($game == null)
+            show_404();
+
+        // paging
+        $resultsPerPage = 20;
+        $offset = ($page-1) * $resultsPerPage;
+
+        // page variables
+        $this->load->model('Page');
+        $data = $this->Page->create($game->name, "Game");
+        $data['game'] = $game;
+
+        // get event feed
+        $this->load->model('User');
+        $data['events'] = $this->User->getUserEvents(null, $gbID, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
+        $data['pageNumber'] = $page;
+
+        // load views
+        $this->load->view('templates/header', $data);
+        $this->load->view('games/header', $data);
+        $this->load->view('control/events', $data);
+        $this->load->view('games/footer', $data);
+        $this->load->view('templates/footer', $data);
+    }
+
     function returnError($errorMessage)
     {
         $result['error'] = true; 
@@ -343,27 +375,6 @@ class Games extends CI_Controller {
         // return success
         $result['error'] = false;   
         echo json_encode($result);
-    }
-
-    // view game
-    function view($gbID)
-    {   
-        // lookup game
-        $this->load->model('Game');
-        $game = $this->Game->getGameByID($gbID, $this->session->userdata('UserID'));
-
-        if($game == null)
-            show_404();
-
-        // page variables
-        $this->load->model('Page');
-        $data = $this->Page->create($game->name, "Search");
-        $data['game'] = $game;
-
-        // load views
-        $this->load->view('templates/header', $data);
-        $this->load->view('games', $data);
-        $this->load->view('templates/footer', $data);
     }
 }
 ?>

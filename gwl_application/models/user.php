@@ -151,7 +151,7 @@ class User extends CI_Model {
     }
 
     // get list of events by UserID
-    function getUserEvents($userID, $DateTimeFormat, $offset, $resultsPerPage) 
+    function getUserEvents($userID, $gbID, $DateTimeFormat, $offset, $resultsPerPage) 
     {
         $this->db->select('*');
         $this->db->from('userEvents');
@@ -159,7 +159,8 @@ class User extends CI_Model {
         $this->db->join('users', 'userEvents.UserID = users.UserID');
         $this->db->join('lists', 'userEvents.ListID = lists.ListID', 'left');
         $this->db->join('gameStatuses', 'userEvents.StatusID = gameStatuses.StatusID', 'left');
-        $this->db->where('userEvents.UserID', $userID); 
+        if($userID != null) $this->db->where('userEvents.UserID', $userID); 
+        if($gbID != null) $this->db->where('games.GBID', $gbID); 
         $this->db->order_by("DateStamp", "desc"); 
         $this->db->limit($resultsPerPage, $offset);
         $events = $this->db->get()->result();
@@ -177,7 +178,7 @@ class User extends CI_Model {
             if($event->StatusID != null) array_push($event->eventItems, ' <span class="label label-' . $event->StatusStyle . '">' . $event->StatusThirdPerson . '</span>');
 
             // add platforms in collection
-            $event->platforms = $this->Game->getGamesPlatformsInCollection($event->GBID, $userID);
+            $event->platforms = $this->Game->getGamesPlatformsInCollection($event->GBID, $event->UserID);
             
             // get comments
             $event->comments = $this->getCommentsForEvent($event->EventID, $DateTimeFormat);

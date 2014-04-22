@@ -22,12 +22,16 @@ class Users extends CI_Controller {
         $this->load->model('Page');
         $data = $this->Page->create($user->Username, "User");
         $data['user'] = $user;
-        $data['events'] = $this->User->getUserEvents($userID, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
+
+        // get event feed
+        $data['events'] = $this->User->getUserEvents($userID, null, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
         $data['pageNumber'] = $page;
 
         // load views
         $this->load->view('templates/header', $data);
-        $this->load->view('user/profile', $data);
+        $this->load->view('user/profile/header', $data);
+        $this->load->view('control/events', $data);
+        $this->load->view('user/profile/footer', $data);
         $this->load->view('templates/footer', $data);
     }
 

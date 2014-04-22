@@ -146,7 +146,7 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 */
 
 .profileTabs {
-    margin-bottom: 20px;
+    margin: 10px 0 20px 0;
 }
 
 .largeProfileImage {
@@ -205,4 +205,15 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 
 #blogPostTextArea {
     height: 500px;
+}
+
+@media (max-width: 350px) {
+    /*
+    * profile
+    */
+
+    .eventImage {
+        width: 32px;
+        height: 32px;
+    }
 }

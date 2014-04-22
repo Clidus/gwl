@@ -14,7 +14,7 @@
   <script src="<?php echo $baseUrl ?>bootstrap/js/bootstrap.min.js"></script>
   <script src="<?php echo $baseUrl ?>/js/global.js"></script>
   <?php 
-    if($pagetemplate == "Search") 
+    if($pagetemplate == "Search" || $pagetemplate == "Game") 
     { 
       echo "<script src='" . $baseUrl . "js/game.js'></script>"; 
     }
@@ -25,7 +25,10 @@
     else if($pagetemplate == "User")
     {
       echo "<script src='" . $baseUrl . "js/jquery.autogrow-textarea.js'></script>"; 
-      echo "<script src='" . $baseUrl . "js/profile.js'></script>"; 
+    }
+    if($pagetemplate == "User" || $pagetemplate == "Game")
+    {
+      echo "<script src='" . $baseUrl . "js/comments.js'></script>"; 
     }
   ?>
   <script>

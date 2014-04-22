@@ -97,13 +97,3 @@
         <?php } ?> 
     </div>
     <div class="col-sm-8">   
-        <div class="panel panel-default"> 
-            <?php if($sessionUserID > 0 && $game->listID > 0) { ?>
-                
-             <?php } ?>
-            <div class='panel-footer'>
-
-            </div>
-        </div>
-    </div>
-</div>
