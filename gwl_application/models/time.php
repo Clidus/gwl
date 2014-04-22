@@ -17,17 +17,20 @@ class Time extends CI_Model {
             case null:
             case 1:
                 return date_format(date_create($datestamp), 'jS F, Y') . ' @' . date("B", human_to_unix($datestamp)) . ' .beats';
-            // Time since
+            // Unix time
             case 2:
+                return human_to_unix($datestamp);
+            // Time since
+            case 3:
                 return timespan(human_to_unix($datestamp), time()) . ' ago';
             // Database
-            case 3:
+            case 4:
                 return $datestamp;
             // English
-            case 4:
+            case 5:
                 return date_format(date_create($datestamp), 'jS F, Y, g:i a');
             // American
-            case 5:
+            case 6:
                 return date_format(date_create($datestamp), 'F jS, Y, g:i a');
             
         }
