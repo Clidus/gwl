@@ -90,6 +90,38 @@ class User extends CI_Model {
         $this->session->sess_destroy();
     }
 
+    // update user profile
+    function updateProfile($userID, $email, $username, $dateFormat, $bio)
+    {
+        // check is user exists
+        $query = $this->db->get_where('users', array('Username' => $username, 'UserID !=' => $userID));
+        if ($query->num_rows() > 0)
+        {
+            $this->errorMessage = 'Sorry duder. This username is already taken. Bad luck!';
+            return false;
+        }
+
+        // add user to db
+        $data = array(
+           'Username' => $username,
+           'Email' => $email,
+           'DateTimeFormat' => $dateFormat,
+           'Bio' => $bio
+        );
+
+        $this->db->where('UserID', $userID);
+        $this->db->update('users', $data); 
+
+        // update session
+        $sessionData = array(
+            'Username' => $username,
+            'DateTimeFormat' => $dateFormat,
+        );
+        $this->session->set_userdata($sessionData);
+
+        return true;
+    }
+
     // get user by ID
     function getUserByID($userID)
     {
@@ -109,14 +141,15 @@ class User extends CI_Model {
     // update user profile image
     function updateProfileImage($userID, $profileImage)
     {
-        // update database
-        $this->db->where('UserID', $userID); 
-        $this->db->update('users', array('ProfileImage' => $profileImage)); 
-
-        // update session
         $newdata = array(
             'ProfileImage' => $profileImage
         );
+
+        // update database
+        $this->db->where('UserID', $userID); 
+        $this->db->update('users', $newdata); 
+
+        // update session
         $this->session->set_userdata($newdata);
     }
 

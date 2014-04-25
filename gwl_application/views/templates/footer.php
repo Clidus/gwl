@@ -22,12 +22,9 @@
     { 
       echo "<script src='" . $baseUrl . "js/admin.js'></script>"; 
     } 
-    else if($pagetemplate == "User")
-    {
-      echo "<script src='" . $baseUrl . "js/jquery.autogrow-textarea.js'></script>"; 
-    }
     if($pagetemplate == "User" || $pagetemplate == "Game")
     {
+      echo "<script src='" . $baseUrl . "js/jquery.autogrow-textarea.js'></script>"; 
       echo "<script src='" . $baseUrl . "js/comments.js'></script>"; 
     }
   ?>
@@ -35,8 +32,10 @@
     $(function() {
       <?php
           echo "$('#nav" . $pagetemplate . "').addClass('active');";
-          if($pagetemplate == "User")
+          if($pagetemplate == "User" || $pagetemplate == "Game")
             echo "$('.textAreaAutoGrow').autogrow();";
+          if($pagetemplate == "Settings") 
+            echo "$('#dateFormat').val('" . $user->DateTimeFormat . "');";
       ?>
     });
   </script>

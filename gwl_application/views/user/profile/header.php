@@ -25,7 +25,7 @@
 			<?php 
 				if($sessionUserID != null && $sessionUserID == $user->UserID) 
 				{
-					echo "<li><a href='" . $baseUrl . "user/edit'>Settings</a></li>";
+					echo "<li><a href='" . $baseUrl . "user/settings'>Settings</a></li>";
 				} 
 			?>
 		</ul>  

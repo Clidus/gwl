@@ -35,8 +35,67 @@ class Users extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
+    // register user
+    function settings()
+    {
+        // get logged in user
+        $userID = $this->session->userdata('UserID');
+
+        // if not logged in, 404
+        if($userID == null)
+            show_404();
+
+        // get user data
+        $this->load->model('User');
+        $user = $this->User->getUserByID($userID);
+
+        if($user == null)
+            show_404();
+
+        $this->load->helper(array('form'));
+        $this->load->library('form_validation');
+
+        // form validation
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|strip_tags|htmlspecialchars');
+        $this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean|strip_tags|htmlspecialchars');
+        $this->form_validation->set_rules('dateFormat', 'Date Format', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('bio', 'Date Format', 'trim|xss_clean|strip_tags|htmlspecialchars');
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
+
+        // page variables 
+        $this->load->model('Page');
+        $data = $this->Page->create($user->Username, "Settings");
+        $data['errorMessage'] = '';
+
+        // validation failed
+        if ($this->form_validation->run())
+        {
+            // update user
+            $newUsername = $this->input->post('username');
+            $newEmail = $this->input->post('email');
+            $newDateFormat = $this->input->post('dateFormat');
+            $newBio = $this->input->post('bio');
+            if(!$this->User->updateProfile($userID, $newEmail, $newUsername, $newDateFormat, $newBio)) {
+                // failed, return error
+                $data['errorMessage'] = $this->User->errorMessage;
+            } else {
+                $user->Username = $newUsername;
+                $user->Email = $newEmail;
+                $user->DateTimeFormat = $newDateFormat;
+                $user->Bio = $newBio;
+            }
+        }
+
+        $data['user'] = $user;
+
+        // load views
+        $this->load->view('templates/header', $data);
+        $this->load->view('user/settings', $data);
+        $this->load->view('templates/footer', $data);
+    }
+
     // edit profile
-    function edit()
+    /*function settings()
     {   
         // load form helper
         $this->load->helper(array('form'));
@@ -63,9 +122,9 @@ class Users extends CI_Controller {
 
         // load views
         $this->load->view('templates/header', $data);
-        $this->load->view('user/edit', $data);
+        $this->load->view('user/settings', $data);
         $this->load->view('templates/footer', $data);
-    }
+    }*/
 
     // saving edit profile
     function save()
