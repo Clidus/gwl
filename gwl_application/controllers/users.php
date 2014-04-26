@@ -35,7 +35,7 @@ class Users extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
-    // register user
+    // user settings page
     function settings()
     {
         // get logged in user
@@ -94,12 +94,9 @@ class Users extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
-    // edit profile
-    /*function settings()
-    {   
-        // load form helper
-        $this->load->helper(array('form'));
-
+    // user profile image upload page
+    function image()
+    {
         // get logged in user
         $userID = $this->session->userdata('UserID');
 
@@ -114,30 +111,43 @@ class Users extends CI_Controller {
         if($user == null)
             show_404();
 
-        // page variables
+        $this->load->helper(array('form'));
+
+        // page variables 
         $this->load->model('Page');
-        $data = $this->Page->create($user->Username, "User");
+        $data = $this->Page->create($user->Username, "ImageUpload");
+        $data['errorMessage'] = '';
         $data['user'] = $user;
-        $data['error'] = '';
 
         // load views
         $this->load->view('templates/header', $data);
-        $this->load->view('user/settings', $data);
+        $this->load->view('user/image', $data);
         $this->load->view('templates/footer', $data);
-    }*/
+    }
 
-    // saving edit profile
-    function save()
-    {   
-        // load user model
-        $this->load->model('User');
-
+    // upload profile image
+    function imageUpload()
+    {
         // get logged in user
         $userID = $this->session->userdata('UserID');
 
         // if not logged in, 404
         if($userID == null)
             show_404();
+
+        // get user data
+        $this->load->model('User');
+        $user = $this->User->getUserByID($userID);
+
+        if($user == null)
+            show_404();
+
+        $this->load->helper(array('form'));
+
+        // page variables 
+        $this->load->model('Page');
+        $data = $this->Page->create($user->Username, "ImageUpload");
+        $data['errorMessage'] = '';
 
         // configure file upload
         $config['upload_path'] = './uploads/';
@@ -152,30 +162,21 @@ class Users extends CI_Controller {
         {
             // if successfull, save image file name
             $uploadData = $this->upload->data();
-            $error = '';
+            $profileImage = $uploadData["file_name"];
 
-            $this->User->updateProfileImage($userID, $uploadData["file_name"]);
+            $this->User->updateProfileImage($userID, $profileImage);
+            $user->ProfileImage = $profileImage;
         }
         else
         {
-            $error = $this->upload->display_errors();
+            $data['errorMessage'] = $this->upload->display_errors();
         }
 
-        // load form helper
-        $this->load->helper(array('form'));
-
-        // get user data
-        $user = $this->User->getUserByID($userID);
-
-        // page variables
-        $this->load->model('Page');
-        $data = $this->Page->create($user->Username, "User");
         $data['user'] = $user;
-        $data['error'] = $error;
 
         // load views
         $this->load->view('templates/header', $data);
-        $this->load->view('user/edit', $data);
+        $this->load->view('user/image', $data);
         $this->load->view('templates/footer', $data);
     }
 

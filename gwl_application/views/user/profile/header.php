@@ -17,9 +17,7 @@
 				echo "<div class='userBio'>" . $user->Bio . "</div>";
 			}
 		?>
-	</div>
-	<div class="col-sm-8"> 
-		<ul class="nav nav-tabs profileTabs">
+		<ul class="nav nav-pills nav-stacked">
 			<li class="active"><a href="">Feed</a></li>
 			<li><a href="">Collection</a></li>
 			<?php 
@@ -28,4 +26,6 @@
 					echo "<li><a href='" . $baseUrl . "user/settings'>Settings</a></li>";
 				} 
 			?>
-		</ul>  
+		</ul>
+	</div>
+	<div class="col-sm-8"> 

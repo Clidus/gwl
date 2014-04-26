@@ -90,6 +90,22 @@ class User extends CI_Model {
         $this->session->sess_destroy();
     }
 
+    // get user by ID
+    function getUserByID($userID)
+    {
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where('UserID', $userID); 
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1)
+        {
+            return $query->first_row();
+        }
+
+        return null;
+    }
+
     // update user profile
     function updateProfile($userID, $email, $username, $dateFormat, $bio)
     {
@@ -120,22 +136,6 @@ class User extends CI_Model {
         $this->session->set_userdata($sessionData);
 
         return true;
-    }
-
-    // get user by ID
-    function getUserByID($userID)
-    {
-        $this->db->select('*');
-        $this->db->from('users');
-        $this->db->where('UserID', $userID); 
-        $query = $this->db->get();
-
-        if($query->num_rows() == 1)
-        {
-            return $query->first_row();
-        }
-
-        return null;
     }
 
     // update user profile image
