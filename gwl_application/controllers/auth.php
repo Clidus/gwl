@@ -73,7 +73,7 @@ class Auth extends CI_Controller {
 		{
 			// register user
 			$this->load->model('User');
-			if($this->User->login($this->input->post('username'), $this->input->post('password'), false)) {
+			if($this->User->login($this->input->post('username'), $this->input->post('password'))) {
 				// success, send to homepage
 				header("location: " . base_url());
 			} else {

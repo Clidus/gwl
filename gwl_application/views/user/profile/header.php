@@ -17,7 +17,7 @@
 				echo "<div class='userBio'>" . $user->Bio . "</div>";
 			}
 		?>
-		<ul class="nav nav-pills nav-stacked">
+		<ul class="nav nav-pills nav-stacked profileNav">
 			<li class="active"><a href="">Feed</a></li>
 			<li><a href="">Collection</a></li>
 			<?php 

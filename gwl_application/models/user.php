@@ -13,8 +13,7 @@ class User extends CI_Model {
     // hash password
     function hashPassword($password)
     {
-        $salt = $this->config->item('password_salt');
-        return hash("sha256", $password . $salt);
+        return password_hash($password, PASSWORD_BCRYPT);
     }
     
     // register user
@@ -41,7 +40,7 @@ class User extends CI_Model {
         // if added successfully 
         if($this->db->insert('users', $data)) {
             // login user
-            if($this->login($username, $hashPassword, true)) {
+            if($this->login($username, $password)) {
                 // success
                 return true;
             } else {
@@ -57,29 +56,34 @@ class User extends CI_Model {
     }
 
     // login user
-    function login($username, $password, $passwordIsHashed)
+    function login($username, $password)
     {
-        $hashPassword = $passwordIsHashed ? $password : $this->hashPassword($password);
-
         // check login is correct
-        $query = $this->db->get_where('users', array('Username' => $username, 'Password' => $hashPassword));
+        $query = $this->db->get_where('users', array('Username' => $username));
         if ($query->num_rows() == 1)
         {
+            // get user record returned
+            $user = $query->first_row();
+
+            // verify password
+            if(!password_verify($password , $user->Password))
+                // error, incorrect password
+                return false;
+
             // create session
-            $row = $query->first_row();
             $newdata = array(
-                'UserID' => $row->UserID,
-                'Username' => $row->Username,
-                'Admin' => $row->Admin,
-                'DateTimeFormat' => $row->DateTimeFormat,
-                'ProfileImage' => $row->ProfileImage == null ? "gwl_default.jpg" : $row->ProfileImage
+                'UserID' => $user->UserID,
+                'Username' => $user->Username,
+                'Admin' => $user->Admin,
+                'DateTimeFormat' => $user->DateTimeFormat,
+                'ProfileImage' => $user->ProfileImage == null ? "gwl_default.jpg" : $user->ProfileImage
             );
             $this->session->set_userdata($newdata);
             
             // success
             return true;
         } else {
-            // error, incorrect login details
+            // error, incorrect username
             return false;
         }
     }
@@ -100,7 +104,9 @@ class User extends CI_Model {
 
         if($query->num_rows() == 1)
         {
-            return $query->first_row();
+            $user = $query->first_row();
+            $user->ProfileImage = $user->ProfileImage == null ? "gwl_default.jpg" : $user->ProfileImage;
+            return $user;
         }
 
         return null;
@@ -151,6 +157,36 @@ class User extends CI_Model {
 
         // update session
         $this->session->set_userdata($newdata);
+    }
+
+    // change password
+    function changePassword($userID, $oldPassword, $newPassword)
+    {
+        // get user
+        $user = $this->getUserByID($userID);
+        if ($user != null)
+        {
+            // verify password
+            if(!password_verify($oldPassword , $user->Password))
+            {
+                // error, incorrect password
+                $this->errorMessage = 'Old password is incorrect. Please try again.';
+                return false;
+            }
+
+            // add user to db
+            $data = array(
+               'Password' => $this->hashPassword($newPassword)
+            );
+
+            $this->db->where('UserID', $userID);
+            $this->db->update('users', $data); 
+
+            return true;
+        } else {
+            $this->errorMessage = 'Something strange happened! Please check you are logged in and try again.';
+            return false;
+        }
     }
 
     // record new user event

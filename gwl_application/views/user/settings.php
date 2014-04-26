@@ -18,7 +18,7 @@
 				echo "<div class='userBio'>" . $user->Bio . "</div>";
 			}
 		?>
-		<ul class="nav nav-pills nav-stacked">
+		<ul class="nav nav-pills nav-stacked profileNav">
 			<li><a href="<?php echo $baseUrl . "user/" . $sessionUserID ?>">Feed</a></li>
 			<li><a href="">Collection</a></li>
 			<li class="active"><a href="<?php echo $baseUrl ?>user/settings">Settings</a></li>

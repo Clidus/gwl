@@ -12,8 +12,6 @@ class Users extends CI_Controller {
         if($user == null)
             show_404();
 
-        $user->ProfileImage = $user->ProfileImage == null ? "gwl_default.jpg" : $user->ProfileImage;
-
         // paging
         $resultsPerPage = 20;
         $offset = ($page-1) * $resultsPerPage;
@@ -75,6 +73,7 @@ class Users extends CI_Controller {
             $newEmail = $this->input->post('email');
             $newDateFormat = $this->input->post('dateFormat');
             $newBio = $this->input->post('bio');
+
             if(!$this->User->updateProfile($userID, $newEmail, $newUsername, $newDateFormat, $newBio)) {
                 // failed, return error
                 $data['errorMessage'] = $this->User->errorMessage;
@@ -180,6 +179,60 @@ class Users extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
+    // change password page
+    function password()
+    {
+        // get logged in user
+        $userID = $this->session->userdata('UserID');
+
+        // if not logged in, 404
+        if($userID == null)
+            show_404();
+
+        // get user data
+        $this->load->model('User');
+        $user = $this->User->getUserByID($userID);
+
+        if($user == null)
+            show_404();
+
+        $this->load->helper(array('form'));
+        $this->load->library('form_validation');
+
+        // form validation
+        $this->form_validation->set_rules('oldPassword', 'Old Password', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('newPassword', 'New Password', 'trim|required|xss_clean|matches[confirmNewPassword]');
+        $this->form_validation->set_rules('confirmNewPassword', 'Confirm New Password', 'trim|required|xss_clean');
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
+
+        // page variables 
+        $this->load->model('Page');
+        $data = $this->Page->create($user->Username, "Password");
+        $data['errorMessage'] = '';
+        $data['success'] = false;
+
+        // validation failed
+        if ($this->form_validation->run())
+        {
+            // update user
+            $oldPassword = $this->input->post('oldPassword');
+            $newPassword = $this->input->post('newPassword');
+
+            if($this->User->changePassword($userID, $oldPassword, $newPassword)) 
+                $data['success'] = true;
+            else
+                // failed, return error
+                $data['errorMessage'] = $this->User->errorMessage;
+        }
+
+        $data['user'] = $user;
+
+        // load views
+        $this->load->view('templates/header', $data);
+        $this->load->view('user/password', $data);
+        $this->load->view('templates/footer', $data);
+    }
+
     function returnError($errorMessage)
     {
         $result['error'] = true; 
@@ -204,6 +257,13 @@ class Users extends CI_Controller {
         if($userID <= 0)
         {
             $this->returnError("You've been logged out. Please login and try again.");
+            return;
+        }
+
+        // check event id is valid
+        if($eventID <= 0)
+        {
+            $this->returnError("This event doesnt seem to exist. Please refresh and try again.");
             return;
         }
 

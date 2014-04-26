@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `userEvents` (
 CREATE TABLE IF NOT EXISTS `users` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
   `Username` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `Password` varbinary(250) NOT NULL,
+  `Password` char(60) NOT NULL,
   `Email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `Admin` tinyint(1) NOT NULL,
   `ProfileImage` varchar(300) DEFAULT NULL,

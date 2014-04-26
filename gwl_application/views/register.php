@@ -11,6 +11,10 @@
     } 
 ?>
 
+<div class="alert alert-warning">
+    Please use a unique, strong password for this site. We recommend <a href="https://lastpass.com/" target="_blank">LastPass</a>.
+</div>
+
 <?php echo form_open('register'); ?>
     <div class="form-group">
         <label for="emailInput">Email</label>
