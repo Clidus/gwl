@@ -7,25 +7,40 @@
 
 <div class="row">
 	<div class="col-sm-4">
-		<?php 
-			if($user->ProfileImage != null) 
-			{
-				echo "<img src='" . $baseUrl . '/uploads/' . $user->ProfileImage . "' class='largeProfileImage gameBoxArt' />";
-			}
+		<img src="<?php echo $baseUrl . '/uploads/' . $user->ProfileImage ?>" class="largeProfileImage gameBoxArt" />
+		<ul class="nav nav-pills nav-stacked profileNav">
+			<li id="navFeed"><a href="<?php echo $baseUrl . "user/" . $user->UserID ?>">Feed</a></li>
+			<li id="navCollection"><a href="<?php echo $baseUrl . "user/" . $user->UserID ?>/collection">Collection</a></li>
+			<?php 
+				if($sessionUserID != null && $sessionUserID == $user->UserID) 
+				{
+					echo "<li id='navSettings'><a href='" . $baseUrl . "user/settings'>Settings</a></li>";
+				} 
+			?>
+		</ul>
+		<?php
 			if($user->Bio != null) 
 			{
 				echo "<div class='userBio'>" . $user->Bio . "</div>";
 			}
-		?>
-		<ul class="nav nav-pills nav-stacked profileNav">
-			<li class="active"><a href="">Feed</a></li>
-			<li><a href="">Collection</a></li>
-			<?php 
-				if($sessionUserID != null && $sessionUserID == $user->UserID) 
+			if($currentlyPlaying != null)
+			{
+				echo "<p><b>Currently Playing:</b></p>";
+				foreach($currentlyPlaying as $currentlyPlayingGame)
 				{
-					echo "<li><a href='" . $baseUrl . "user/settings'>Settings</a></li>";
-				} 
-			?>
-		</ul>
+					echo '
+						<div class="currentlyPlaying clearfix">
+							<div class="pull-left">
+								<a href="' . $baseUrl . 'game/' . $currentlyPlayingGame->GBID . '">
+									<img src="' . $currentlyPlayingGame->ImageSmall . '" class="tinyIconImage gameBoxArt" />
+								</a>
+							</div>
+							<div class="media-body currentlyPlayingTitle">
+								<a href="' . $baseUrl . 'game/' . $currentlyPlayingGame->GBID . '">' . $currentlyPlayingGame->Name . '</a>
+							</div>
+						</div>';
+				}
+			}
+		?>
 	</div>
 	<div class="col-sm-8"> 

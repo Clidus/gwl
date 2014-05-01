@@ -53,6 +53,14 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     margin-right: 0px;
 }
 
+/* 
+* bootstrap progress bar override 
+*/
+
+.progress-bar {
+    padding-top: 2px;
+}
+
 /*
 *
 * blog
@@ -177,12 +185,12 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     font-size: 12px;
 }
 
-.commentProfileImage {
+.tinyIconImage {
     width: 32px;
     height: 32px;
 }
 
-.eventComment {
+.eventComment, .currentlyPlayingTitle {
     padding: 0 10px;
 }
 
@@ -201,6 +209,43 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 
 .eventDetail {
     margin-bottom: 10px;
+}
+
+/*
+* collection 
+*/
+
+.collectionStats {
+    text-align: center;
+}
+
+.collectionStats span {
+    font-size: 5vw;
+}
+
+.filters {
+    padding-left: 10px;
+}
+
+.filters li {
+    list-style-type: none;
+}
+
+.filters label {
+    font-weight: normal;
+}
+
+.currentlyPlaying {
+    margin-bottom: 10px;
+}
+
+.collectionItem {
+    margin-bottom: 5px;
+    padding: 8px 10px;
+}
+
+#gameCollectionViewMore {
+    margin: 10px 0;
 }
 
 /*

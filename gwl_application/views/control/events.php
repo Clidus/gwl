@@ -6,7 +6,7 @@
 	}
 	else if(count($events) == 0)
 	{
-		echo "<div class='alert alert-warning'>Looks like this duder hasn't done anything yet!</div>";
+		echo "<div class='alert alert-warning'>Looks like nothing has happened yet!</div>";
 	} else {
 		// loop through user events
     	foreach ($events as $event)
@@ -97,16 +97,16 @@
 
 							// display comment
 							echo '
-							<div class="clearfix eventCommentDisplay">
-								<div class="pull-left">
-									<img src="' . $baseUrl . 'uploads/' . $comment->ProfileImage . '" class="commentProfileImage gameBoxArt" />
-								</div>
-								<div class="media-body eventComment">
-									<a href="' . $baseUrl . 'user/' . $comment->UserID . '">' . $comment->Username . '</a></b> 
-									' . $comment->Comment . '
-									<span class="datestamp pull-right">' . $comment->DateStampFormatted . '</span>
-								</div>
-							</div>';
+								<div class="clearfix eventCommentDisplay">
+									<div class="pull-left">
+										<img src="' . $baseUrl . 'uploads/' . $comment->ProfileImage . '" class="tinyIconImage gameBoxArt" />
+									</div>
+									<div class="media-body eventComment">
+										<a href="' . $baseUrl . 'user/' . $comment->UserID . '">' . $comment->Username . '</a></b> 
+										' . $comment->Comment . '
+										<span class="datestamp pull-right">' . $comment->DateStampFormatted . '</span>
+									</div>
+								</div>';
 						}
 
 						// if logged in, show comment post box
@@ -115,13 +115,12 @@
 							echo '
 								<div id="newComment' . $event->EventID . '"></div>
 								<div class="pull-left">
-									<img src="' . $baseUrl . 'uploads/' . $sessionProfileImage . '" class="commentProfileImage gameBoxArt" />
+									<img src="' . $baseUrl . 'uploads/' . $sessionProfileImage . '" class="tinyIconImage gameBoxArt" />
 								</div>
 								<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $event->EventID . ');">Post</button>
 								<div class="media-body">
 									<textarea id="commentField' . $event->EventID . '" rows="1" placeholder="Say something..." class="form-control textAreaAutoGrow" name="post"></textarea>
-								</div>
-							';
+								</div>';
 						} 
 					?>
 				</div>

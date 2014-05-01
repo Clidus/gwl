@@ -254,6 +254,9 @@ class User extends CI_Model {
 
             // format date stamp
             $event->DateStampFormatted = $this->Time->GetDateTimeInFormat($event->DateStamp, $DateTimeFormat);
+
+            // default profile image
+            $event->ProfileImage = $event->ProfileImage == null ? "gwl_default.jpg" : $event->ProfileImage;
         }
 
         return $events;
@@ -292,6 +295,9 @@ class User extends CI_Model {
 
             // format date stamp
             $comment->DateStampFormatted = $this->Time->GetDateTimeInFormat($comment->DateStamp, $DateTimeFormat);
+
+            // default profile image
+            $comment->ProfileImage = $comment->ProfileImage == null ? "gwl_default.jpg" : $comment->ProfileImage;
         }
 
         return $comments;

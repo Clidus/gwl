@@ -20,7 +20,7 @@ function postComment(eventID) {
                 var newComment;
                 newComment = '<div class="clearfix eventCommentDisplay">';
                 newComment += '     <div class="pull-left">';
-                newComment += '         <img src="' + baseUrl + 'uploads/' + data.profileImage + '" class="commentProfileImage gameBoxArt" />';
+                newComment += '         <img src="' + baseUrl + 'uploads/' + data.profileImage + '" class="tinyIconImage gameBoxArt" />';
                 newComment += '     </div>';
                 newComment += '     <div class="media-body eventComment">';
                 newComment += '         <a href="' + baseUrl + 'user/' + data.userID + '">' + data.username + '</a></b>' + data.comment;

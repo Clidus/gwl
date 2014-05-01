@@ -2,6 +2,13 @@
 
 class Users extends CI_Controller {
     
+    function returnError($errorMessage)
+    {
+        $result['error'] = true; 
+        $result['errorMessage'] = $errorMessage; 
+        echo json_encode($result);
+    }
+
     // view user
     function view($userID, $page = 1)
     {   
@@ -25,12 +32,81 @@ class Users extends CI_Controller {
         $data['events'] = $this->User->getUserEvents($userID, null, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
         $data['pageNumber'] = $page;
 
+        // get games currently playing
+        $this->load->model('Game');
+        $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
+
         // load views
         $this->load->view('templates/header', $data);
         $this->load->view('user/profile/header', $data);
         $this->load->view('control/events', $data);
         $this->load->view('user/profile/footer', $data);
         $this->load->view('templates/footer', $data);
+    }
+
+    // view user collection
+    function collection($userID)
+    {   
+        // get user data
+        $this->load->model('User');
+        $user = $this->User->getUserByID($userID);
+
+        if($user == null)
+            show_404();
+
+        // page variables
+        $this->load->model('Page');
+        $data = $this->Page->create($user->Username, "Collection");
+        $data['user'] = $user;
+
+        // get game collection stats
+        $this->load->model('Game');
+        $data['stats'] = $this->Game->getCollectionStats($userID);
+
+        // get platforms for filtering
+        $data['platforms'] = $this->Game->getPlatformsInCollection($userID);
+
+        // get games currently playing
+        $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
+
+        // load views
+        $this->load->view('templates/header', $data);
+        $this->load->view('user/profile/header', $data);
+        $this->load->view('user/collection', $data);
+        $this->load->view('templates/footer', $data);
+    }
+
+    function getCollection()
+    {
+        // form validation
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('userID', 'userID', 'trim|xss_clean');
+        $this->form_validation->set_rules('page', 'page', 'trim|xss_clean');
+        $this->form_validation->set_rules('filters', 'filters', 'xss_clean');
+        $this->form_validation->run();
+
+        $userID = $this->input->post('userID');
+        $page = $this->input->post('page');
+        $filters = json_decode($this->input->post('filters'));
+
+        // check that user is VALID
+        if($userID <= 0)
+        {
+            $this->returnError("Not a valid UserID buddy.");
+            return;
+        }
+
+        // paging
+        $resultsPerPage = 30;
+        $offset = ($page-1) * $resultsPerPage;
+
+        // get collection
+        $this->load->model('Game');
+        $result['collection'] = $this->Game->getCollection($userID, $filters, $offset, $resultsPerPage);
+
+        // return success
+        $result['error'] = false;   
+        echo json_encode($result);
     }
 
     // user settings page
@@ -87,8 +163,13 @@ class Users extends CI_Controller {
 
         $data['user'] = $user;
 
+        // get games currently playing
+        $this->load->model('Game');
+        $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
+
         // load views
         $this->load->view('templates/header', $data);
+        $this->load->view('user/profile/header', $data);
         $this->load->view('user/settings', $data);
         $this->load->view('templates/footer', $data);
     }
@@ -118,8 +199,13 @@ class Users extends CI_Controller {
         $data['errorMessage'] = '';
         $data['user'] = $user;
 
+        // get games currently playing
+        $this->load->model('Game');
+        $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
+
         // load views
         $this->load->view('templates/header', $data);
+        $this->load->view('user/profile/header', $data);
         $this->load->view('user/image', $data);
         $this->load->view('templates/footer', $data);
     }
@@ -173,8 +259,13 @@ class Users extends CI_Controller {
 
         $data['user'] = $user;
 
+        // get games currently playing
+        $this->load->model('Game');
+        $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
+
         // load views
         $this->load->view('templates/header', $data);
+        $this->load->view('user/profile/header', $data);
         $this->load->view('user/image', $data);
         $this->load->view('templates/footer', $data);
     }
@@ -227,17 +318,15 @@ class Users extends CI_Controller {
 
         $data['user'] = $user;
 
+        // get games currently playing
+        $this->load->model('Game');
+        $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
+
         // load views
         $this->load->view('templates/header', $data);
+        $this->load->view('user/profile/header', $data);
         $this->load->view('user/password', $data);
         $this->load->view('templates/footer', $data);
-    }
-
-    function returnError($errorMessage)
-    {
-        $result['error'] = true; 
-        $result['errorMessage'] = $errorMessage; 
-        echo json_encode($result);
     }
 
     // add comment to event

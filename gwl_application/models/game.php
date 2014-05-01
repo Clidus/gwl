@@ -151,15 +151,69 @@ class Game extends CI_Model {
         return $query->num_rows() > 0 ? true : false;
     }
 
+    function getReleaseDate($game)
+    {
+        // original release date
+        if($game->original_release_date != null)
+        {
+            return $game->original_release_date;
+        } else {
+            // expected release date
+            if($game->expected_release_year != null)
+            {
+                // year
+                $releaseYear = $game->expected_release_year;
+
+                // month (assume end of year if unknown)
+                $releaseMonth =  ($game->expected_release_month != null ? $game->expected_release_month : "12");
+
+                // day (assume end of month if unknown)
+                if($game->expected_release_day != null) {
+                    $releaseDay = $game->expected_release_day;
+                } else {
+                    switch($releaseMonth) {
+                        case "01":
+                        case "03":
+                        case "05":
+                        case "07":
+                        case "08":
+                        case "10":
+                        case "12":
+                            $releaseDay = "31";
+                            break;
+                        case "02":
+                            $releaseDay = "28";
+                            break;
+                        case "04":
+                        case "06":
+                        case "09":
+                        case "11":
+                            $releaseDay = "30";
+                            break;
+                    }
+                }
+
+                return $releaseYear . "-" . $releaseMonth . "-" . $releaseDay;
+            // unknown release date
+            } else {
+                // if completly unknwon, set to five years in the future
+                return (date("Y")+5) . "-12-31";
+            }
+        }
+    }
+
     // add game to database
     function addGame($game)
     {
+        $releaseDate = $this->getReleaseDate($game);
+
         $data = array(
            'GBID' => $game->id,
            'Name' => $game->name,
            'Image' => is_object($game->image) ? $game->image->small_url : null,
            'ImageSmall' => is_object($game->image) ? $game->image->icon_url : null,
            'Deck' => $game->deck,
+           'ReleaseDate' => $releaseDate
         );
 
         return $this->db->insert('games', $data); 
@@ -213,8 +267,6 @@ class Game extends CI_Model {
     // remove game from users collection
     function removeFromCollection($GBID, $userID)
     {
-        // get GameID from GBID
-
         $this->db->select('*');
         $this->db->from('collections');
         $this->db->join('games', 'collections.GameID = games.GameID');
@@ -241,6 +293,7 @@ class Game extends CI_Model {
         }
     }
 
+    // add platform to game in collection
     function addPlatform($collectionID, $platformGBID)
     {
         // get PlatformID from GBID
@@ -258,6 +311,7 @@ class Game extends CI_Model {
         }
     }
 
+    // remove platform to game in collection
     function removePlatform($collectionID, $platformGBID)
     {
         // get PlatformID from GBID
@@ -272,6 +326,7 @@ class Game extends CI_Model {
         }
     }
 
+    // get platforms game is on in collection
     function getGamesPlatformsInCollection($GBID, $userID)
     {
         $this->db->select('platforms.GBID, platforms.Name, platforms.Abbreviation');
@@ -291,6 +346,7 @@ class Game extends CI_Model {
         return null;
     }
 
+    // check if game is on platform in collection
     function isGameOnPlatformInCollection($collectionID, $platformGBID)
     {
         $this->db->select('*');
@@ -305,6 +361,7 @@ class Game extends CI_Model {
         return $query->num_rows() > 0 ? true : false;
     }
 
+    // update currently playing, hours played and date completed for game
     function updateProgression($collectionID, $currentlyPlaying, $hoursPlayed, $dateCompleted)
     {
         if($hoursPlayed == '') $hoursPlayed = null;
@@ -326,7 +383,7 @@ class Game extends CI_Model {
             return null;
     }
 
-
+    // get list
     function getListDetails($listID)
     {
         $this->db->select('*');
@@ -342,6 +399,7 @@ class Game extends CI_Model {
         return null;
     }
 
+    // get played status
     function getStatusDetails($statusID)
     {
         $this->db->select('*');
@@ -357,17 +415,138 @@ class Game extends CI_Model {
         return null;
     }
 
-    /*function getLists()
+    // get collection stats for user
+    function getCollectionStats($userID)
     {
-        $this->db->select('*');
-        $this->db->from('lists');
+        $this->db->select('count(*) AS Games');
+        //$this->db->select('(select count(*) from collections WHERE UserID = c.UserID AND StatusID = 3) AS Completed');
+        $this->db->select('SUM(CASE WHEN (StatusID = 3 OR StatusID = 4) THEN 1 ELSE 0 END) AS Completed');
+        $this->db->select('SUM(CASE WHEN (StatusID = 1 OR StatusID = 2) AND ListID != 2 THEN 1 ELSE 0 END) AS Backlog');
+        $this->db->select('SUM(CASE WHEN ListID = 2 THEN 1 ELSE 0 END) AS Want');
+        $this->db->from('collections AS c');
+        $this->db->where('UserID', $userID); 
         $query = $this->db->get();
 
+        if($query->num_rows() > 0)
+        {
+            $stats = $query->first_row();
+            if($stats->Completed == null) $stats->Completed = 0;
+            if($stats->Backlog == null) $stats->Backlog = 0;
+            if($stats->Want == null) $stats->Want = 0;
+            $stats->PercentComplete = $stats->Games == 0 ? 0 : round((($stats->Completed/$stats->Games) * 100), 0);
+            return $stats;
+        }
+
+        return null;
+    }
+
+    // get users collection
+    function getCollection($userID, $filters, $offset, $resultsPerPage)
+    {
+        $this->db->select('ImageSmall, GBID, Name, ListStyle, ListName, StatusStyle, StatusName');
+        $this->db->from('collections');
+        $this->db->join('lists', 'collections.ListID = lists.ListID');
+        $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID');
+        $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID', 'left');
+        $this->db->join('games', 'collections.GameID = games.GameID');
+        $this->db->where('collections.UserID', $userID); 
+        
+        // filter out listID's
+        if(count($filters->lists) > 0) 
+            $this->db->where_not_in('collections.ListID', $filters->lists);
+
+        // filter out statusID's
+        if(count($filters->statuses) > 0) 
+            $this->db->where_not_in('collections.StatusID', $filters->statuses);
+        
+        // filter out platformID's
+        if(count($filters->platforms) > 0 && !$filters->includeNoPlatforms) 
+            $this->db->where_not_in('collectionPlatform.PlatformID', $filters->platforms);
+        // filter out platformID's, but include games with no platform
+        else if(count($filters->platforms) > 0 && $filters->includeNoPlatforms) 
+            $this->db->where("(`collectionPlatform`.`PlatformID` NOT IN (" . implode(",", $filters->platforms) . ") OR `collectionPlatform`.`PlatformID` IS NULL)");
+        // filter out games with no platform
+        else if(!$filters->includeNoPlatforms)
+            $this->db->where("(`collectionPlatform`.`PlatformID` IS NOT NULL)"); 
+        
+        // group by game to remove deuplicates produced by platforms
+        $this->db->group_by("collections.GameID");
+        
+        // order by
+        switch($filters->orderBy)
+        {
+            case "releaseDateAsc":
+                $this->db->order_by("games.ReleaseDate", "asc");
+                break;
+            case "releaseDateDesc":
+                $this->db->order_by("games.ReleaseDate", "desc");
+                break;
+            case "nameAsc":
+                $this->db->order_by("games.Name", "asc");
+                break;
+            case "nameDesc":
+                $this->db->order_by("games.Name", "desc");
+                break;
+            case "hoursPlayedAsc":
+                $this->db->order_by("collections.HoursPlayed", "asc");
+                break;
+            case "hoursPlayedDesc":
+                $this->db->order_by("collections.HoursPlayed", "desc");
+                break;
+        }
+
+
+        if($filters->orderBy == "name")
+            $this->db->order_by("games.Name", "asc");
+        else if($filters->orderBy == "hoursPlayed")
+            $this->db->order_by("collections.HoursPlayed", "desc");
+        
+        // paging
+        $this->db->limit($resultsPerPage, $offset);
+
+        // get results
+        $games = $this->db->get()->result();
+        
+        foreach ($games as $game)
+        {
+            $game->Platforms = $this->getGamesPlatformsInCollection($game->GBID, $userID);
+        }
+
+        return $games;
+    }
+
+    // get users collection
+    function getCurrentlyPlaying($userID)
+    {
+        $this->db->select('*');
+        $this->db->from('collections');
+        $this->db->join('games', 'collections.GameID = games.GameID');
+        $this->db->where('collections.UserID', $userID); 
+        $this->db->where('collections.CurrentlyPlaying', 1); 
+        $this->db->order_by("games.Name", "asc");
+
+        // get results
+        $query = $this->db->get();
         if($query->num_rows() > 0)
         {
             return $query->result();
         }
 
         return null;
-    }*/
+    }
+
+    // get platforms in collection
+    function getPlatformsInCollection($userID)
+    {
+        $this->db->select('platforms.PlatformID, platforms.Abbreviation, count(*) as Games');
+        $this->db->from('collections');
+        $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID', 'left');
+        $this->db->join('platforms', 'collectionPlatform.PlatformID = platforms.PlatformID', 'left');
+        $this->db->where('collections.UserID', $userID); 
+        $this->db->group_by("platforms.PlatformID");
+        $this->db->order_by("Games", "desc"); 
+        $query = $this->db->get();
+
+        return $query->result();
+    }
 }
