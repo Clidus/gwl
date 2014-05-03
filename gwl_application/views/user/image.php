@@ -12,7 +12,7 @@
 		?>
 
 		<div class="alert alert-info">
-			Please make all images 100MB or less, 1000x1000 or less and a GIF, JPG or PNG. Thanks!
+			Please make all images 2MB or less, 1000x1000 or less and a GIF, JPG or PNG. Thanks!
 		</div>
 
 		<?php echo form_open_multipart('user/settings/image/upload'); ?>

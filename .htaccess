@@ -1,7 +1,11 @@
+# try the second variation if the first doesnt work in your local enviroment
 RewriteEngine on
+
+# variation 1
 RewriteCond $1 !^(index\.php|images|js|css|bootstrap|uploads|robots\.txt)
 RewriteRule ^(.*)$ /index.php/$1 [L]
 
+# variation 2
 #RewriteBase /~josh/gwl/
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d

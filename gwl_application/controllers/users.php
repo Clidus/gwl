@@ -237,7 +237,7 @@ class Users extends CI_Controller {
         // configure file upload
         $config['upload_path'] = './uploads/';
         $config['allowed_types'] = 'gif|jpg|png';
-        $config['max_size'] = '100';
+        $config['max_size'] = '2048';
         $config['max_width']  = '1000';
         $config['max_height']  = '1000';
         $this->load->library('upload', $config);

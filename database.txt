@@ -1,4 +1,7 @@
-CREATE TABLE IF NOT EXISTS `blog` (
+# Dump of table blog
+# ------------------------------------------------------------
+
+CREATE TABLE `blog` (
   `PostID` int(11) NOT NULL AUTO_INCREMENT,
   `Title` varchar(100) NOT NULL,
   `URL` varchar(100) NOT NULL,
@@ -6,9 +9,14 @@ CREATE TABLE IF NOT EXISTS `blog` (
   `UserID` int(11) NOT NULL,
   `Date` date NOT NULL,
   PRIMARY KEY (`PostID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `ci_sessions` (
+
+
+# Dump of table ci_sessions
+# ------------------------------------------------------------
+
+CREATE TABLE `ci_sessions` (
   `session_id` varchar(40) NOT NULL DEFAULT '0',
   `ip_address` varchar(45) NOT NULL DEFAULT '0',
   `user_agent` varchar(120) NOT NULL,
@@ -18,12 +26,22 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
   KEY `last_activity_idx` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `collectionPlatform` (
+
+
+# Dump of table collectionPlatform
+# ------------------------------------------------------------
+
+CREATE TABLE `collectionPlatform` (
   `CollectionID` int(11) NOT NULL,
   `PlatformID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `collections` (
+
+
+# Dump of table collections
+# ------------------------------------------------------------
+
+CREATE TABLE `collections` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `GameID` int(11) NOT NULL,
@@ -33,9 +51,14 @@ CREATE TABLE IF NOT EXISTS `collections` (
   `HoursPlayed` int(11) DEFAULT NULL,
   `CurrentlyPlaying` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `comments` (
+
+
+# Dump of table comments
+# ------------------------------------------------------------
+
+CREATE TABLE `comments` (
   `CommentID` int(11) NOT NULL AUTO_INCREMENT,
   `Comment` text NOT NULL,
   `UserID` int(11) NOT NULL,
@@ -43,66 +66,81 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `CommentTypeID` int(11) NOT NULL,
   `DateStamp` datetime NOT NULL,
   PRIMARY KEY (`CommentID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `commentType` (
+
+
+# Dump of table commentType
+# ------------------------------------------------------------
+
+CREATE TABLE `commentType` (
   `CommentTypeID` int(11) NOT NULL AUTO_INCREMENT,
   `CommentType` varchar(20) NOT NULL,
   PRIMARY KEY (`CommentTypeID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `commentType` (`CommentTypeID`, `CommentType`) VALUES
-(1, 'UserEvents');
 
-CREATE TABLE IF NOT EXISTS `games` (
+
+# Dump of table games
+# ------------------------------------------------------------
+
+CREATE TABLE `games` (
   `GameID` int(11) NOT NULL AUTO_INCREMENT,
   `GBID` int(11) NOT NULL,
   `Name` varchar(300) NOT NULL,
   `Image` varchar(300) DEFAULT NULL,
   `ImageSmall` varchar(300) DEFAULT NULL,
   `Deck` text NOT NULL,
+  `ReleaseDate` date DEFAULT NULL,
   PRIMARY KEY (`GameID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `gameStatuses` (
+
+
+# Dump of table gameStatuses
+# ------------------------------------------------------------
+
+CREATE TABLE `gameStatuses` (
   `StatusID` int(11) NOT NULL AUTO_INCREMENT,
   `StatusName` varchar(50) NOT NULL,
   `StatusThirdPerson` varchar(50) NOT NULL,
   `StatusStyle` varchar(50) NOT NULL,
   PRIMARY KEY (`StatusID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `gameStatuses` (`StatusID`, `StatusName`, `StatusThirdPerson`, `StatusStyle`) VALUES
-(1, 'Unplayed', 'Hasn''t Played', 'default'),
-(2, 'Unfinished', 'Hasn''t Finished', 'warning'),
-(3, 'Complete', 'Completed', 'success'),
-(4, 'Uncompletable', 'Can Never Complete', 'primary');
 
-CREATE TABLE IF NOT EXISTS `lists` (
+
+# Dump of table lists
+# ------------------------------------------------------------
+
+CREATE TABLE `lists` (
   `ListID` int(11) NOT NULL AUTO_INCREMENT,
   `ListName` varchar(50) NOT NULL,
   `ListThirdPerson` varchar(50) NOT NULL,
   `ListStyle` varchar(50) NOT NULL,
   PRIMARY KEY (`ListID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `lists` (`ListID`, `ListName`, `ListThirdPerson`, `ListStyle`) VALUES
-(1, 'Own', 'Owns', 'success'),
-(2, 'Want', 'Wants', 'warning'),
-(3, 'Borrowed', 'Borrowed', 'info'),
-(4, 'Lent', 'Lent', 'danger'),
-(5, 'Played', 'Played', 'primary');
 
-CREATE TABLE IF NOT EXISTS `platforms` (
+
+# Dump of table platforms
+# ------------------------------------------------------------
+
+CREATE TABLE `platforms` (
   `PlatformID` int(11) NOT NULL AUTO_INCREMENT,
   `GBID` int(11) NOT NULL,
   `Name` varchar(300) NOT NULL,
   `Abbreviation` varchar(50) NOT NULL,
   `API_Detail` varchar(50) NOT NULL,
   PRIMARY KEY (`PlatformID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `userEvents` (
+
+
+# Dump of table userEvents
+# ------------------------------------------------------------
+
+CREATE TABLE `userEvents` (
   `EventID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `GameID` int(11) NOT NULL,
@@ -111,9 +149,14 @@ CREATE TABLE IF NOT EXISTS `userEvents` (
   `DateStamp` datetime NOT NULL,
   `CurrentlyPlaying` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`EventID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `users` (
+
+
+# Dump of table users
+# ------------------------------------------------------------
+
+CREATE TABLE `users` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
   `Username` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `Password` char(60) NOT NULL,
@@ -123,4 +166,25 @@ CREATE TABLE IF NOT EXISTS `users` (
   `Bio` text NOT NULL,
   `DateTimeFormat` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`UserID`,`Username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+# Default data
+# ------------------------------------------------------------
+
+INSERT INTO `commentType` (`CommentTypeID`, `CommentType`) VALUES
+(1, 'UserEvents');
+
+INSERT INTO `gameStatuses` (`StatusID`, `StatusName`, `StatusThirdPerson`, `StatusStyle`) VALUES
+(1, 'Unplayed', 'Hasn''t Played', 'default'),
+(2, 'Unfinished', 'Hasn''t Finished', 'warning'),
+(3, 'Complete', 'Completed', 'success'),
+(4, 'Uncompletable', 'Can Never Complete', 'primary');
+
+INSERT INTO `lists` (`ListID`, `ListName`, `ListThirdPerson`, `ListStyle`) VALUES
+(1, 'Own', 'Owns', 'success'),
+(2, 'Want', 'Wants', 'warning'),
+(3, 'Borrowed', 'Borrowed', 'info'),
+(4, 'Lent', 'Lent', 'danger'),
+(5, 'Played', 'Played', 'primary');
