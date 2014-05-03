@@ -30,5 +30,5 @@ Installation:
 
 ## License
 
-* Copyright 2012 [Joshua Marketis](http://www.clidus.com)
+* Copyright 2014 [Joshua Marketis](http://www.clidus.com)
 * Distributed under the [MIT License](http://creativecommons.org/licenses/MIT/)
