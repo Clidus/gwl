@@ -5,7 +5,7 @@
 </ul>
 
 <h2><?php echo $post->Title ?></h2>
-<p>By <?php echo $post->Username ?></p>
+<p>By <a href="<?php echo $baseUrl . 'user/' . $post->UserID; ?>"><?php echo $post->Username ?></a></p>
 
 <div class="clearfix">
 	<?php echo $post->Post ?>
