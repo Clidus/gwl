@@ -7,7 +7,7 @@ class Blogs extends CI_Controller {
 	{
 		// page variables
 		$this->load->model('Page');
-		$data = $this->Page->create("Home", "Home");
+		$data = $this->Page->create("Blog", "Blog");
 
 		// get blog posts
 		$this->load->model('Blog');

@@ -1,3 +1,4 @@
+$jumboron: #eeeeee;
 $grey: #898f9c;
 
 body {
@@ -62,9 +63,19 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 }
 
 /*
-*
+* homepage
+*/
+
+#homepageJumbotron {
+    background: $jumboron url('/images/watermark.png') no-repeat right;
+}
+
+#homepageJumbotron .btn {
+    margin-top: 10px;
+}
+
+/*
 * blog
-*
 */
 
 .responsiveImage {

@@ -31,6 +31,7 @@
               <div class="navbar-collapse collapse">
                   <ul class="nav navbar-nav">
                       <li id="navHome"><a href="<?php echo $baseUrl ?>">Home</a></li>
+                      <li id="navBlog"><a href="<?php echo $baseUrl ?>blog">Blog</a></li> 
                       <li id="navSearch"><a href="<?php echo $baseUrl ?>search">Search</a></li>  
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
