@@ -6,12 +6,8 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
-	<p><b>Version 0.1.1 - 2014-02-15</b></p>
+	<p><b>Version 0.1.0 - 2014-05-03</b></p>
 	<ul>
-		<li>Blog permalinks.</li>
-	</ul>
-	<p><b>Version 0.1.0 - 2014-02-09</b></p>
-	<ul>
-		<li>Alpha release. Blog homepage.</li>
+		<li>Alpha release.</li>
 	</ul>
 </div>

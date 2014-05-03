@@ -6,7 +6,10 @@
 	<?php if($sessionUserID == null) { ?>
 		<h1>Gaming with Lemons</h1>
 		<p>Open source video game collection, wishlist and backlog tracker.</p>
-		<p><a class="btn btn-lg btn-success" href="<?php echo $baseUrl ?>register">Join the Alpha &raquo;</a></p>
+		<p>
+			<a class="btn btn-lg btn-primary" href="https://www.youtube.com/watch?v=CVQPpz-aYAQ">Watch the Demo &raquo;</a>
+			<a class="btn btn-lg btn-success" href="<?php echo $baseUrl ?>register">Join the Alpha &raquo;</a>
+		</p>
 	<?php } else { ?>
 		<h1>Welcome to the Alpha</h1>
 		<p>Get started by searching for some games.</p>
