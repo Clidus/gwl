@@ -11,8 +11,8 @@ class Auth extends CI_Controller {
 		// form validation
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|matches[conpassword]');
-		$this->form_validation->set_rules('conpassword', 'Confirm Password', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[conpassword]');
+		$this->form_validation->set_rules('conpassword', 'Confirm Password', 'trim|required');
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
 
 		// page variables 
@@ -53,7 +53,7 @@ class Auth extends CI_Controller {
 
 		// form validation
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
 
 		// page variables 

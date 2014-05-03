@@ -236,7 +236,7 @@ class Users extends CI_Controller {
 
         // configure file upload
         $config['upload_path'] = './uploads/';
-        $config['allowed_types'] = 'gif|jpg|png';
+        $config['allowed_types'] = 'gif|jpg|jpeg|png';
         $config['max_size'] = '2048';
         $config['max_width']  = '1000';
         $config['max_height']  = '1000';
@@ -291,9 +291,9 @@ class Users extends CI_Controller {
         $this->load->library('form_validation');
 
         // form validation
-        $this->form_validation->set_rules('oldPassword', 'Old Password', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('newPassword', 'New Password', 'trim|required|xss_clean|matches[confirmNewPassword]');
-        $this->form_validation->set_rules('confirmNewPassword', 'Confirm New Password', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('oldPassword', 'Old Password', 'trim|required');
+        $this->form_validation->set_rules('newPassword', 'New Password', 'trim|required|matches[confirmNewPassword]');
+        $this->form_validation->set_rules('confirmNewPassword', 'Confirm New Password', 'trim|required');
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
 
         // page variables 
