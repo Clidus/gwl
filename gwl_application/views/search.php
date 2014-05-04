@@ -121,7 +121,7 @@
             <span class='btn btn-success collectionStatusBadge media-object'>Own</span> 
           </a>
           <div class="media-body">
-            You own the game. It's sitting right over there, on your shelf. You're pretty please with yourself.
+            You own the game. It's sitting right over there, on your shelf. You're pretty pleased with yourself.
           </div>
         </div>
 

@@ -90,7 +90,7 @@ CREATE TABLE `games` (
   `Name` varchar(300) NOT NULL,
   `Image` varchar(300) DEFAULT NULL,
   `ImageSmall` varchar(300) DEFAULT NULL,
-  `Deck` text NOT NULL,
+  `Deck` text,
   `ReleaseDate` date DEFAULT NULL,
   PRIMARY KEY (`GameID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

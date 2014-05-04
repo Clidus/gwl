@@ -15,7 +15,7 @@
 		<p>Get started by searching for some games.</p>
 		<p>
 			<a class="btn btn-lg btn-primary" href="<?php echo $baseUrl ?>search">Start adding games &raquo;</a>
-			<a class="btn btn-lg btn-info" href="<?php echo $baseUrl ?>user/<?php echo $sessionUserID; ?>">View your collection &raquo;</a>
+			<a class="btn btn-lg btn-info" href="<?php echo $baseUrl . 'user/' . $sessionUserID . '/collection'; ?>">View your collection &raquo;</a>
 		</p>
 	<?php } ?>
 </div>
@@ -25,7 +25,7 @@
 		<div class="thumbnail">
 			<img src="<?php echo $baseUrl ?>images/Lemongrab.png">
 		</div>
-		<h2>Made For Real People</h2>
+		<h2>For Real People</h2>
 		<p>Designed with real people in mind. Own games on multiple platforms, add games efficiently from a search result, view your collection on desktop and mobile.</p>
 	</div>
 	<div class="col-md-4">
