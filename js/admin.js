@@ -9,7 +9,7 @@ function deleteBlogPost(ID) {
         },
         success : function(data){
             if (data.error === true) {
-                showErrorModal(data.errorMessage);
+                showErrorModal(data.errorMessage,false,false);
             } else {
                 window.location = baseUrl + 'admin/blog/edit';
             }

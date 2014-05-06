@@ -1,6 +1,12 @@
 <?php
 
+
 class Games extends CI_Controller {
+    
+    public function __construct(){ 
+      parent::__construct();
+      $this->lang->load('errors');
+    }
     
     // view game
     function view($gbID, $page = 1)
@@ -34,10 +40,12 @@ class Games extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
-    function returnError($errorMessage)
+    function returnError($errorMessage,$errorProgressURL,$errorProgressCTA)
     {
         $result['error'] = true; 
-        $result['errorMessage'] = $errorMessage; 
+        $result['errorMessage'] = $errorMessage;
+        $result['errorProgressURL'] = $errorProgressURL; 
+        $result['errorProgressCTA'] = $errorProgressCTA; 
         echo json_encode($result);
     }
 
@@ -56,7 +64,7 @@ class Games extends CI_Controller {
         // check that user is logged in
         if($userID <= 0)
         {
-            $this->returnError("You've been logged out. Please login and try again.");
+            $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
             return;
         }
 
@@ -69,7 +77,7 @@ class Games extends CI_Controller {
         // if API returned nothing
         if($game == null)
         {
-            $this->returnError("Shit sticks! The Giant Bomb API may be down. Please try again.");
+            $this->returnError($this->lang->line('error_giantbomb_down'),false,false);
             return;
         }
 
@@ -80,7 +88,7 @@ class Games extends CI_Controller {
             if(!$this->Game->addGame($game))
             {
                 // insert failed
-                $this->returnError("We were unable to add this game to your collection. Please try again.");
+                $this->returnError($this->lang->line('error_game_cant_add'),false,false);
                 return;
             }
         }
@@ -160,7 +168,7 @@ class Games extends CI_Controller {
         // check that user is logged in
         if($userID <= 0)
         {
-            $this->returnError("You've been logged out. Please login and try again.");
+            $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
             return;
         }
 
@@ -177,7 +185,7 @@ class Games extends CI_Controller {
             $this->Game->updateStatus($GBID, $userID, $statusID);
         } else {
             // return error
-            $this->returnError("You haven't added this game to your collection. How did you get here?");
+            $this->returnError($this->lang->line('error_game_not_added'), false, false);
             return;
         }
 
@@ -208,7 +216,7 @@ class Games extends CI_Controller {
         // check that user is logged in
         if($userID <= 0)
         {
-            $this->returnError("You've been logged out. Please login and try again.");
+            $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
             return;
         }
 
@@ -237,7 +245,7 @@ class Games extends CI_Controller {
         // check that user is logged in
         if($userID <= 0)
         {
-            $this->returnError("You've been logged out. Please login and try again.");
+            $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
             return;
         }
 
@@ -250,7 +258,7 @@ class Games extends CI_Controller {
         // if game is not in collection
         if($collection == null)
         {
-            $this->returnError("You haven't added this game to your collection. You probably need to do that first kido.");
+            $this->returnError("You haven't added this game to your collection. You probably need to do that first kido.", false, false);
             return;
         }
         
@@ -269,7 +277,7 @@ class Games extends CI_Controller {
                 // if API returned nothing
                 if($platform == null)
                 {
-                    $this->returnError("Shit sticks! The Giant Bomb API may be down. Please try again.");
+                    $this->returnError($this->lang->line('error_giantbomb_down'), false, false);
                     return;
                 }
 
@@ -304,7 +312,7 @@ class Games extends CI_Controller {
         // check that user is logged in
         if($userID <= 0)
         {
-            $this->returnError("You've been logged out. Please login and try again.");
+            $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
             return;
         }
 
@@ -317,7 +325,7 @@ class Games extends CI_Controller {
         // if game is not in collection
         if($collection == null)
         {
-            $this->returnError("You haven't added this game to your collection. You probably need to do that first kido.");
+            $this->returnError($this->lang->line('error_game_not_added'), false, false);
             return;
         }
         
@@ -348,7 +356,7 @@ class Games extends CI_Controller {
         // check that user is logged in
         if($userID <= 0)
         {
-            $this->returnError("You've been logged out. Please login and try again.");
+            $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
             return;
         }
 
@@ -365,7 +373,7 @@ class Games extends CI_Controller {
             $this->Game->updateProgression($collection->ID, $currentlyPlaying, $hoursPlayed, $dateCompleted);
         } else {
             // return error
-            $this->returnError("You haven't added this game to your collection. How did you get here?");
+            $this->returnError($this->lang->line('error_game_not_added'),false,false);
             return;
         }
 
