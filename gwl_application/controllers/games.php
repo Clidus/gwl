@@ -185,7 +185,7 @@ class Games extends CI_Controller {
             $this->Game->updateStatus($GBID, $userID, $statusID);
         } else {
             // return error
-            $this->returnError("You haven't added this game to your collection. How did you get here?", false, false);
+            $this->returnError($this->lang->line('error_game_not_added'), false, false);
             return;
         }
 
