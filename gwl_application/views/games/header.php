@@ -7,7 +7,7 @@
         <h4 class="modal-title" id="myModalLabel">This is serious business duder.</h4>
       </div>
       <div class="modal-body">
-        Are you sure you want to remove this game from your collection? If you have sold it, consider changing it's status to "Played".
+        Are you sure you want to remove this game from your collection? If you have sold it, consider changing its status to "Played".
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
