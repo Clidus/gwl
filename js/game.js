@@ -1,6 +1,8 @@
 $(document).ready(function() {
+
     /* platform checkbox change */
     $(":checkbox").change(function(){
+    
         // get the game and platform id out of the checkbox id
         match = this.id.match("platform_([0-9]+)_([0-9]+)");
         // if ids found and checkbox checked
@@ -22,7 +24,7 @@ $(document).ready(function() {
                         if (data.error === true) {
                             $(checkbox).prop('disabled', false); // enable checkbox
                             $(checkbox).prop('checked', false); // reset to unchecked as add failed
-                            showErrorModal(data.errorMessage);
+                            showErrorModal(data.errorMessage, data.errorProgressURL, data.errorProgressCTA);
                         } else {
                             $(checkbox).prop('disabled', false); // enable checkbox
                         }
