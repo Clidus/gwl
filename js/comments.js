@@ -1,7 +1,7 @@
 function postComment(eventID) {
     var comment = $('#commentField' + eventID).val();
     if(comment == "") {
-        showErrorModal('You need to type something duder!');
+        showErrorModal('You need to type something duder!',false,false);
         return;
     }
 
