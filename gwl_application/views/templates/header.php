@@ -59,7 +59,7 @@
               </div>
               <div class="modal-body" id="errorModalMessage"></div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Okie doke</button>
+                <a href="#" class="btn btn-success" data-dismiss="modal" id="errorModalDismiss">Okie doke</a>
               </div>
             </div>
           </div>
