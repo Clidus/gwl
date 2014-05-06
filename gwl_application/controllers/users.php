@@ -1,11 +1,13 @@
 <?php
 
 class Users extends CI_Controller {
-    
-    function returnError($errorMessage)
+
+    function returnError($errorMessage,$errorProgressURL,$errorProgressCTA)
     {
         $result['error'] = true; 
-        $result['errorMessage'] = $errorMessage; 
+        $result['errorMessage'] = $errorMessage;
+        $result['errorProgressURL'] = $errorProgressURL; 
+        $result['errorProgressCTA'] = $errorProgressCTA; 
         echo json_encode($result);
     }
 
@@ -92,7 +94,7 @@ class Users extends CI_Controller {
         // check that user is VALID
         if($userID <= 0)
         {
-            $this->returnError("Not a valid UserID buddy.");
+            $this->returnError($this->lang->line('error_user_invalid_id'),false,false);
             return;
         }
 
@@ -345,14 +347,14 @@ class Users extends CI_Controller {
         // check that user is logged in
         if($userID <= 0)
         {
-            $this->returnError("You've been logged out. Please login and try again.");
+            $this->returnError($this->lang->line('error_logged_out'),false,false);
             return;
         }
 
         // check event id is valid
         if($eventID <= 0)
         {
-            $this->returnError("This event doesnt seem to exist. Please refresh and try again.");
+            $this->returnError($this->lang->line('error_event_invalid'),false,false);
             return;
         }
 
