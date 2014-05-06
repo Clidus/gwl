@@ -238,7 +238,7 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     padding-left: 10px;
 }
 
-.filters li {
+.filters li { 
     list-style-type: none;
 }
 
@@ -257,6 +257,11 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 
 #gameCollectionViewMore {
     margin: 10px 0;
+}
+
+// Add a not-allowed cursor to read only inputs so that they appear the same as disabled inputers
+input[readonly] {
+    cursor: not-allowed;
 }
 
 /*
