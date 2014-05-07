@@ -161,9 +161,9 @@ CREATE TABLE `users` (
   `Username` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `Password` char(60) NOT NULL,
   `Email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `Admin` tinyint(1) NOT NULL,
+  `Admin` tinyint(1) NOT NULL DEFAULT '0',
   `ProfileImage` varchar(300) DEFAULT NULL,
-  `Bio` text NOT NULL,
+  `Bio` text,
   `DateTimeFormat` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`UserID`,`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
