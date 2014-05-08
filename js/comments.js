@@ -7,7 +7,7 @@ function postComment(eventID) {
 
     $.ajax({
         type : 'POST',
-        url : baseUrl + 'user/comment',
+        url : '/user/comment',
         dataType : 'json',
         data: {
             eventID: eventID,
@@ -20,10 +20,10 @@ function postComment(eventID) {
                 var newComment;
                 newComment = '<div class="clearfix eventCommentDisplay">';
                 newComment += '     <div class="pull-left">';
-                newComment += '         <img src="' + baseUrl + 'uploads/' + data.profileImage + '" class="tinyIconImage gameBoxArt" />';
+                newComment += '         <img src="/uploads/' + data.profileImage + '" class="tinyIconImage gameBoxArt" />';
                 newComment += '     </div>';
                 newComment += '     <div class="media-body eventComment">';
-                newComment += '         <a href="' + baseUrl + 'user/' + data.userID + '">' + data.username + '</a></b>' + data.comment;
+                newComment += '         <a href="/user/' + data.userID + '">' + data.username + '</a></b>' + data.comment;
                 newComment += '         <span class="datestamp pull-right">Just now</span>';
                 newComment += '     </div>';
                 newComment += '</div>';

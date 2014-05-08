@@ -11,7 +11,6 @@ class Page extends CI_Model {
     // create data for page view
     function create($pageTitle, $pageTemplate)
     {
-        $data['baseUrl'] = base_url();
         $data['pagetitle'] = $pageTitle;
         $data['pagetemplate'] = $pageTemplate;
         $data['sessionUserID'] = $this->session->userdata('UserID');

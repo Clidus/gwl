@@ -1,11 +1,11 @@
 <ul class="breadcrumb">
-    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="<?php echo $baseUrl ?>">Home</a></span></li>  
-    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="<?php echo $baseUrl ?>blog">Blog</a></span></li>  
+    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="/">Home</a></span></li>  
+    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="/blog">Blog</a></span></li>  
     <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb" class="active"><span itemprop="title"><?php echo $post->Title ?></span></li>   
 </ul>
 
 <h2><?php echo $post->Title ?></h2>
-<p>By <a href="<?php echo $baseUrl . 'user/' . $post->UserID; ?>"><?php echo $post->Username ?></a></p>
+<p>By <a href="/user/<?php echo $post->UserID; ?>"><?php echo $post->Username ?></a></p>
 
 <div class="clearfix">
 	<?php echo $post->Post ?>

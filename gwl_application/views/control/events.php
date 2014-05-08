@@ -18,7 +18,7 @@
 						// user profile
 						if(isset($user))
 						{
-							$eventUrl = $baseUrl . 'game/' . $event->GBID;
+							$eventUrl = '/game/' . $event->GBID;
 							$eventImage = $event->ImageSmall;
 							$eventUserName = $event->Username;
 							$eventGameName = '<a href="' . $eventUrl . '">' . $event->Name . '</a></b>';
@@ -26,8 +26,8 @@
 						// game page
 						else 
 						{
-							$eventUrl = $baseUrl . 'user/' . $event->UserID;
-							$eventImage = $baseUrl . 'uploads/' . $event->ProfileImage;
+							$eventUrl = '/user/' . $event->UserID;
+							$eventImage = '/uploads/' . $event->ProfileImage;
 							$eventUserName = '<a href="' . $eventUrl . '">' . $event->Username . '</a></b>';
 							$eventGameName = $event->Name;
 						}
@@ -99,10 +99,10 @@
 							echo '
 								<div class="clearfix eventCommentDisplay">
 									<div class="pull-left">
-										<img src="' . $baseUrl . 'uploads/' . $comment->ProfileImage . '" class="tinyIconImage gameBoxArt" />
+										<img src="/uploads/' . $comment->ProfileImage . '" class="tinyIconImage gameBoxArt" />
 									</div>
 									<div class="media-body eventComment">
-										<a href="' . $baseUrl . 'user/' . $comment->UserID . '">' . $comment->Username . '</a></b> 
+										<a href="/user/' . $comment->UserID . '">' . $comment->Username . '</a></b> 
 										' . $comment->Comment . '
 										<span class="datestamp pull-right">' . $comment->DateStampFormatted . '</span>
 									</div>
@@ -115,7 +115,7 @@
 							echo '
 								<div id="newComment' . $event->EventID . '"></div>
 								<div class="pull-left">
-									<img src="' . $baseUrl . 'uploads/' . $sessionProfileImage . '" class="tinyIconImage gameBoxArt" />
+									<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage gameBoxArt" />
 								</div>
 								<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $event->EventID . ');">Post</button>
 								<div class="media-body">
@@ -130,10 +130,10 @@
 
 		// user profile
 		if(isset($user))
-			$url = $baseUrl . 'user/' . $user->UserID . '/';
+			$url = '/user/' . $user->UserID . '/';
 		// game page
 		else
-			$url = $baseUrl . 'game/' . $game->id . '/';
+			$url = '/game/' . $game->id . '/';
 
 		echo '<ul class="pager">';
 		if($pageNumber > 1) echo '<li class="previous"><a href="' . $url . ($pageNumber-1) . '">&larr; Newer</a></li>';

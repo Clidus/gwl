@@ -1,5 +1,5 @@
 <ul class="breadcrumb">
-    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="<?php echo $baseUrl ?>">Home</a></span></li>       
+    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="/">Home</a></span></li>       
     <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb" class="active"><span itemprop="title"><?php echo $user->Username ?></span></li>
 </ul>
 
@@ -7,14 +7,14 @@
 
 <div class="row">
 	<div class="col-sm-4">
-		<img src="<?php echo $baseUrl . '/uploads/' . $user->ProfileImage ?>" class="largeProfileImage gameBoxArt" />
+		<img src="/uploads/<?php echo $user->ProfileImage ?>" class="largeProfileImage gameBoxArt" />
 		<ul class="nav nav-pills nav-stacked profileNav">
-			<li id="navFeed"><a href="<?php echo $baseUrl . "user/" . $user->UserID ?>">Feed</a></li>
-			<li id="navCollection"><a href="<?php echo $baseUrl . "user/" . $user->UserID ?>/collection">Collection</a></li>
+			<li id="navFeed"><a href="/user/<?php echo $user->UserID ?>">Feed</a></li>
+			<li id="navCollection"><a href="/user/<?php echo $user->UserID ?>/collection">Collection</a></li>
 			<?php 
 				if($sessionUserID != null && $sessionUserID == $user->UserID) 
 				{
-					echo "<li id='navSettings'><a href='" . $baseUrl . "user/settings'>Settings</a></li>";
+					echo "<li id='navSettings'><a href='/user/settings'>Settings</a></li>";
 				} 
 			?>
 		</ul>
@@ -31,12 +31,12 @@
 					echo '
 						<div class="currentlyPlaying clearfix">
 							<div class="pull-left">
-								<a href="' . $baseUrl . 'game/' . $currentlyPlayingGame->GBID . '">
+								<a href="/game/' . $currentlyPlayingGame->GBID . '">
 									<img src="' . $currentlyPlayingGame->ImageSmall . '" class="tinyIconImage gameBoxArt" />
 								</a>
 							</div>
 							<div class="media-body currentlyPlayingTitle">
-								<a href="' . $baseUrl . 'game/' . $currentlyPlayingGame->GBID . '">' . $currentlyPlayingGame->Name . '</a>
+								<a href="/game/' . $currentlyPlayingGame->GBID . '">' . $currentlyPlayingGame->Name . '</a>
 							</div>
 						</div>';
 				}

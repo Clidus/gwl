@@ -68,7 +68,7 @@ function viewMoreGames() {
 function loadCollection() {
     $.ajax({
         type : 'POST',
-        url : baseUrl + 'user/getCollection',
+        url : '/user/getCollection',
         dataType : 'json',
         data: {
             userID: UserID,
@@ -89,7 +89,7 @@ function loadCollection() {
                         gameCollection += '         <img src="' + collection[i].ImageSmall + '" class="tinyIconImage gameBoxArt" />';
                         gameCollection += '     </div>';
                         gameCollection += '     <div class="media-body eventComment">';
-                        gameCollection += '         <a href="' + baseUrl + 'game/' + collection[i].GBID + '">' + collection[i].Name + '</a></b>';
+                        gameCollection += '         <a href="/game/' + collection[i].GBID + '">' + collection[i].Name + '</a></b>';
                         
                         // display list of platforms
                         var platforms = collection[i].Platforms;

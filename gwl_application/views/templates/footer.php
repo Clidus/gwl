@@ -9,32 +9,31 @@
   <!-- Javascript-->
   <script>
     <?php 
-      echo "var baseUrl = '" . $baseUrl . "';";
       if($pagetemplate == "Collection") {
         echo "var UserID = " . $user->UserID . ";";
       } 
     ?>
   </script>
-  <script src="<?php echo $baseUrl ?>js/jquery-2.0.3.min.js"></script>
-  <script src="<?php echo $baseUrl ?>bootstrap/js/bootstrap.min.js"></script>
-  <script src="<?php echo $baseUrl ?>/js/global.js"></script>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/js/global.js"></script>
   <?php 
     if($pagetemplate == "Search" || $pagetemplate == "Game") 
     { 
-      echo "<script src='" . $baseUrl . "js/game.js'></script>"; 
+      echo "<script src='/js/game.js'></script>"; 
     }
     else if($pagetemplate == "Admin") 
     { 
-      echo "<script src='" . $baseUrl . "js/admin.js'></script>"; 
+      echo "<script src='/js/admin.js'></script>"; 
     } 
     else if($pagetemplate == "Collection") 
     { 
-      echo "<script src='" . $baseUrl . "js/collection.js'></script>"; 
+      echo "<script src='/js/collection.js'></script>"; 
     } 
     if($pagetemplate == "User" || $pagetemplate == "Game")
     {
-      echo "<script src='" . $baseUrl . "js/jquery.autogrow-textarea.js'></script>"; 
-      echo "<script src='" . $baseUrl . "js/comments.js'></script>"; 
+      echo "<script src='/js/jquery.autogrow-textarea.js'></script>"; 
+      echo "<script src='/js/comments.js'></script>"; 
     }
   ?>
   <script>

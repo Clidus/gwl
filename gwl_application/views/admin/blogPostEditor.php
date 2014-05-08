@@ -1,8 +1,8 @@
 <ul class="breadcrumb">
-    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="<?php echo $baseUrl ?>">Home</a></span></li>   
-    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="<?php echo $baseUrl ?>index.php/admin">Admin</a></span></li>    
+    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="/">Home</a></span></li>   
+    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="/admin">Admin</a></span></li>    
     <?php if($post->PostID > 0) { ?>
-    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="<?php echo $baseUrl ?>index.php/admin/blog/edit">Edit Blog Post</a></span></li>    
+    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="/admin/blog/edit">Edit Blog Post</a></span></li>    
     <?php } ?>
     <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb" class="active"><span itemprop="title"><?php echo $pagetitle ?></span></li>
 </ul>
@@ -16,7 +16,7 @@
 		echo validation_errors(); 
 	}
 ?>
-<form action="<?php echo $baseUrl ?>index.php/admin/blog/<?php echo $formType ?>" method="post" accept-charset="utf-8" role="form">
+<form action="/admin/blog/<?php echo $formType ?>" method="post" accept-charset="utf-8" role="form">
 	<div class="form-group"> 
 	    <label for="title">Title</label>
 	    <input class="form-control" type="text" name="title" value="<?php echo $post->Title ?>">

@@ -1,6 +1,6 @@
 <ul class="breadcrumb">
-    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="<?php echo $baseUrl ?>">Home</a></span></li>   
-    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="<?php echo $baseUrl ?>index.php/admin">Admin</a></span></li>    
+    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="/">Home</a></span></li>   
+    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="/admin">Admin</a></span></li>    
     <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb" class="active"><span itemprop="title"><?php echo $pagetitle ?></span></li>
 </ul>
 
@@ -11,7 +11,7 @@
   {
 ?>
   <ul>
-    <li><a href="<?php echo $baseUrl . "admin/blog/edit/" . $post->PostID ?>"><?php echo $post->Title ?></a></li>
+    <li><a href="/admin/blog/edit/<?php echo $post->PostID ?>"><?php echo $post->Title ?></a></li>
   </ul>
 <?php
   }

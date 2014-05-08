@@ -1,7 +1,7 @@
  		<ul class="nav nav-tabs profileTabs">
-			<li class="active"><a href="<?php echo $baseUrl ?>user/settings">Profile</a></li>
-			<li><a href="<?php echo $baseUrl ?>user/settings/image">Image</a></li>
-			<li><a href="<?php echo $baseUrl ?>user/settings/password">Password</a></li>
+			<li class="active"><a href="/user/settings">Profile</a></li>
+			<li><a href="/user/settings/image">Image</a></li>
+			<li><a href="/user/settings/password">Password</a></li>
 		</ul>
 
 		<?php 

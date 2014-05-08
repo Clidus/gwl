@@ -1,12 +1,12 @@
 <ul class="breadcrumb">
-    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="<?php echo $baseUrl ?>">Home</a></span></li>       
+    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title"><a href="/">Home</a></span></li>       
     <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb" class="active"><span itemprop="title"><?php echo $pagetitle ?></span></li>
 </ul>
 
 <div class="row">
     <div class="col-sm-8">
         <h2>Search</h2>
-        <form role="form-inline" method="post" action="<?php echo $baseUrl ?>search/">
+        <form role="form-inline" method="post" action="/search/">
             <div class="input-group">
                 <input type="search" class="form-control" name="query" placeholder="Search" value="<?php echo $searchQuery ?>">
                 <span class="input-group-btn">
@@ -25,11 +25,11 @@
                             ?>
 
                             <div class="clearfix">    
-                                <a href='<?php echo $baseUrl . "game/" . $game->id ?>'>
+                                <a href='/game/<?php echo $game->id ?>'>
                                     <img class="media-object pull-left gameBoxArt searchResultImage" src="<?php if(is_object($game->image)) echo $game->image->small_url; ?>">
                                 </a>    
                                 <div class="pull-left searchResultBody">  
-                                    <h4><?php echo "<a href='" . $baseUrl . "game/" . $game->id . "'>" . $game->name . "</a>" ?></h4>
+                                    <h4><?php echo "<a href='/game/" . $game->id . "'>" . $game->name . "</a>" ?></h4>
                                     <div class="panel panel-default"> 
                                         <div class="panel-body">
                                             <p><?php echo $game->deck; ?></p>   
@@ -87,7 +87,7 @@
                         echo '<ul class="pagination">';
                         if($searchPage-1 > 0)
                         {
-                            echo "<li><a href='" . $baseUrl . "search/" . $searchQuery . "/" . ($searchPage-1) . "/'>«</a></li>";    
+                            echo "<li><a href='/search/" . $searchQuery . "/" . ($searchPage-1) . "/'>«</a></li>";    
                         }
                         $i = 0;
                         while($i < $numberOfPages)
@@ -98,11 +98,11 @@
                             } else {                  
                                 echo "<li>";
                             }     
-                            echo "<a href='" . $baseUrl . "search/" . $searchQuery . "/" . $i . "/'>" . $i . "</a></li>";                                                                                           
+                            echo "<a href='/search/" . $searchQuery . "/" . $i . "/'>" . $i . "</a></li>";                                                                                           
                         }
                         if($searchPage+1 <= $numberOfPages)
                         {
-                            echo "<li><a href='" . $baseUrl . "search/" . $searchQuery . "/" . ($searchPage+1) . "/'>»</a></li>";    
+                            echo "<li><a href='/search/" . $searchQuery . "/" . ($searchPage+1) . "/'>»</a></li>";    
                         }
                         echo '</ul>';
                     } else {

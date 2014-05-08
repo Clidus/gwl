@@ -14,7 +14,7 @@ $(document).ready(function() {
                 // add platform
                 $.ajax({
                     type : 'POST',
-                    url : baseUrl + 'games/addPlatform',
+                    url : '/games/addPlatform',
                     dataType : 'json',
                     data: {
                         gbID: match[1],
@@ -39,7 +39,7 @@ $(document).ready(function() {
                 // remove platform
                 $.ajax({
                     type : 'POST',
-                    url : baseUrl + 'games/removePlatform',
+                    url : '/games/removePlatform',
                     dataType : 'json',
                     data: {
                         gbID: match[1],
@@ -70,7 +70,7 @@ function addGame(giantbombID, listID, reloadPage) {
     $('#gameButton' + giantbombID).addClass('disabled').html('Saving...');
     $.ajax({
         type : 'POST',
-        url : baseUrl + 'games/add',
+        url : '/games/add',
         dataType : 'json',
         data: {
             gbID: giantbombID,
@@ -108,7 +108,7 @@ function changeStatus(giantbombID, statusID) {
     $('#statusButton' + giantbombID).addClass('disabled').html('Saving...');
     $.ajax({
         type : 'POST',
-        url : baseUrl + 'games/changeStatus',
+        url : '/games/changeStatus',
         dataType : 'json',
         data: {
             gbID: giantbombID,
@@ -138,7 +138,7 @@ function removeFromCollection(giantbombID) {
     $('#removeGameButton' + giantbombID).addClass('disabled').html('Removing...');
     $.ajax({
         type : 'POST',
-        url : baseUrl + 'games/remove',
+        url : '/games/remove',
         dataType : 'json',
         data: {
             gbID: giantbombID
@@ -163,7 +163,7 @@ function saveProgression(giantbombID) {
     $('#progressionSaveButton').addClass('disabled').html('Saving...');
     $.ajax({
         type : 'POST',
-        url : baseUrl + 'games/saveProgression',
+        url : '/games/saveProgression',
         dataType : 'json',
         data: {
             gbID: giantbombID,
