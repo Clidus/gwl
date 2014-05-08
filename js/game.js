@@ -88,7 +88,7 @@ function addGame(giantbombID, listID, reloadPage) {
                     // display collection status button
                     $('#inCollectionControls' + giantbombID).removeClass("hidden");
                     // enable platform checkboxes
-                    $('#platforms' + giantbombID).find('input[type=checkbox]').prop('disabled', false);
+                    $('#platforms' + giantbombID).find('input[type=checkbox]').prop('readonly', false);
                     // if a platform was auto-selected, update checkbox
                     if(data.autoSelectPlatform != null)
                     {

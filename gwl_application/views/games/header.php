@@ -65,7 +65,7 @@
                     {
                         echo "<label><input id='platform_" . $game->id . "_" . $platform->id . "' type='checkbox'";
                         if($platform->inCollection) echo " checked";
-                        if($game->listID == 0) echo " disabled";
+                        if($game->listID == 0) echo " readonly";
                         echo "> <span class='label label-info'>" . $platform->name . "</span></label> ";  
                     }
                     echo "</div>";  
