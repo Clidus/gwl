@@ -1,7 +1,7 @@
 		<div class="row collectionStats">
 			<div class="col-xs-3">
-				<span><?php echo $stats->Games; ?></span>
-				<p>Games</p>
+				<span><?php echo $stats->Collection; ?></span>
+				<p>Collection</p>
 			</div>
 			<div class="col-xs-3">
 				<span><?php echo $stats->Completed; ?></span>
