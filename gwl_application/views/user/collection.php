@@ -25,6 +25,7 @@
 
 		<div class="row">
 			<div class="col-sm-8">
+				<a class="btn btn-success btn-fullWidth" href="/search">Add Games &raquo;</a>
 				<div id="gameCollection"></div>
 				<div id="gameCollectionViewMore"></div>
 			</div>

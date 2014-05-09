@@ -140,11 +140,6 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     font-size: 12px;
 }
 
-.removeFromCollectionButton {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
 .progressionSaveButton{
     width: 100%;
 }
@@ -281,4 +276,13 @@ input[readonly] {
         width: 32px;
         height: 32px;
     }
+}
+
+/*
+* general
+*/
+
+.btn-fullWidth {
+    width: 100%;
+    margin-bottom: 10px;
 }

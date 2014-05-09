@@ -123,7 +123,7 @@ function loadCollection() {
 
                 if(collection.length > 0) {
                     if(collection.length == 30) {
-                        $('#gameCollectionViewMore').html("<a class='handPointer' onclick='viewMoreGames()''>View more</a>");
+                        $('#gameCollectionViewMore').html("<a class='btn btn-default btn-fullWidth' onclick='viewMoreGames()''>View More</a>");
                     } else {
                         $('#gameCollectionViewMore').html("");
                     }

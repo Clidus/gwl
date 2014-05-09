@@ -93,7 +93,7 @@
                     <a onclick="javascript:saveProgression(<?php echo $game->id ?>);" class='btn btn-success progressionSaveButton' id='progressionSaveButton'>Save</a>                
                 </div>
             </div>
-            <a onclick='javascript:showRemoveGameWarning(<?php echo $game->id; ?>);' class='btn btn-danger removeFromCollectionButton'>Remove from Collection</a>
+            <a onclick='javascript:showRemoveGameWarning(<?php echo $game->id; ?>);' class='btn btn-danger btn-fullWidth'>Remove from Collection</a>
         <?php } ?> 
     </div>
     <div class="col-sm-8">   
