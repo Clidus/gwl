@@ -87,10 +87,10 @@ CREATE TABLE `commentType` (
 CREATE TABLE `games` (
   `GameID` int(11) NOT NULL AUTO_INCREMENT,
   `GBID` int(11) NOT NULL,
-  `Name` varchar(300) NOT NULL,
+  `Name` varchar(300) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `Image` varchar(300) DEFAULT NULL,
   `ImageSmall` varchar(300) DEFAULT NULL,
-  `Deck` text,
+  `Deck` text CHARACTER SET utf8,
   `ReleaseDate` date DEFAULT NULL,
   PRIMARY KEY (`GameID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
