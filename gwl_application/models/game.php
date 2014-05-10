@@ -549,4 +549,32 @@ class Game extends CI_Model {
 
         return $query->result();
     }
+
+    // get lists in collection
+    function getListsInCollection($userID)
+    {
+        $this->db->select('lists.ListID, lists.ListName, count(*) as Games');
+        $this->db->from('collections');
+        $this->db->join('lists', 'collections.ListID = lists.ListID');
+        $this->db->where('collections.UserID', $userID); 
+        $this->db->group_by("lists.ListID");
+        $this->db->order_by("Games", "desc"); 
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+
+    // get statuses in collection
+    function getStatusesInCollection($userID)
+    {
+        $this->db->select('gameStatuses.StatusID, gameStatuses.StatusName, count(*) as Games');
+        $this->db->from('collections');
+        $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID');
+        $this->db->where('collections.UserID', $userID); 
+        $this->db->group_by("gameStatuses.StatusID");
+        $this->db->order_by("Games", "desc"); 
+        $query = $this->db->get();
+
+        return $query->result();
+    }
 }

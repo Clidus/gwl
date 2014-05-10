@@ -64,8 +64,10 @@ class Users extends CI_Controller {
         // get game collection stats
         $this->load->model('Game');
 
-        // get platforms for filtering
+        // get platforms, lists and statuses for filtering
         $data['platforms'] = $this->Game->getPlatformsInCollection($userID);
+        $data['lists'] = $this->Game->getListsInCollection($userID);
+        $data['statuses'] = $this->Game->getStatusesInCollection($userID);
 
         // get games currently playing
         $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);

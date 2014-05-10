@@ -72,64 +72,32 @@
 
 				<b>List</b>
 				<ul class="filters">
-					<li>
-						<label>
-							<input id="filter_list_1" type="checkbox" checked> 
-							Own
-						</label>
-					</li>
-					<li>
-						<label>
-							<input id="filter_list_2" type="checkbox" checked> 
-							Want
-						</label>
-					</li>
-					<li>
-						<label>
-							<input id="filter_list_3" type="checkbox" checked> 
-							Borrowed
-						</label>
-					</li>
-					<li>
-						<label>
-							<input id="filter_list_4" type="checkbox" checked> 
-							Lent
-						</label>
-					</li>
-					<li>
-						<label>
-							<input id="filter_list_5" type="checkbox" checked> 
-							Played
-						</label>
-					</li>
+					<?php
+						foreach($lists as $list)
+						{
+							echo "<li>
+									<label>
+										<input id='filter_list_" . $list->ListID . "' type='checkbox' checked> " 
+										. $list->ListName . " (" . $list->Games . ")" . 
+									"</label>
+								</li>";
+						}
+					?>
 				</ul>
 
 				<b>Completion</b>
 				<ul class="filters">
-					<li>
-						<label>
-							<input id="filter_status_1" type="checkbox" checked> 
-							Unplayed
-						</label>
-					</li>
-					<li>
-						<label>
-							<input id="filter_status_2" type="checkbox" checked> 
-							Unfinished
-						</label>
-					</li>
-					<li>
-						<label>
-							<input id="filter_status_3" type="checkbox" checked> 
-							Complete
-						</label>
-					</li>
-					<li>
-						<label>
-							<input id="filter_status_4" type="checkbox" checked> 
-							Uncompletable
-						</label>
-					</li>
+					<?php
+						foreach($statuses as $status)
+						{
+							echo "<li>
+									<label>
+										<input id='filter_status_" . $status->StatusID . "' type='checkbox' checked> " 
+										. $status->StatusName . " (" . $status->Games . ")" . 
+									"</label>
+								</li>";
+						}
+					?>
 				</ul>
 
 				<b>Platforms</b>
