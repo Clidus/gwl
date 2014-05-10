@@ -116,6 +116,14 @@ function loadCollection() {
                     }
                 }
 
+                // display collection stats
+                $('#collectionCount').html(data.stats.Collection);
+                $('#completeCount').html(data.stats.Completed);
+                $('#backlogCount').html(data.stats.Backlog);
+                $('#wantCount').html(data.stats.Want);
+                $('#completionPercentage').width(data.stats.PercentComplete + "%");
+                $('#completionPercentageLabel').html(data.stats.PercentComplete);
+
                 if(currentPage == 1)
                     $('#gameCollection').html(gameCollection);
                 else

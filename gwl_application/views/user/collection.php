@@ -1,25 +1,25 @@
 		<div class="row collectionStats">
 			<div class="col-xs-3">
-				<span><?php echo $stats->Collection; ?></span>
+				<span id="collectionCount"></span>
 				<p>Collection</p>
 			</div>
 			<div class="col-xs-3">
-				<span><?php echo $stats->Completed; ?></span>
+				<span id="completeCount"></span>
 				<p>Completed</p>
 			</div>
 			<div class="col-xs-3">
-				<span><?php echo $stats->Backlog; ?></span>
+				<span id="backlogCount"></span>
 				<p>Backlog</p>
 			</div>
 			<div class="col-xs-3">
-				<span><?php echo $stats->Want; ?></span>
+				<span id="wantCount"></span>
 				<p>Want</p>
 			</div>
 		</div>
 
 		<div class="progress">
-			<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $stats->PercentComplete; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $stats->PercentComplete; ?>%;">
-				<?php echo $stats->PercentComplete; ?>% Complete
+			<div id="completionPercentage" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+				<span id="completionPercentageLabel"></span>% Complete
 			</div>
 		</div>
 

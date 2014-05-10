@@ -415,107 +415,104 @@ class Game extends CI_Model {
         return null;
     }
 
-    // get collection stats for user
-    function getCollectionStats($userID)
+    // get users collection
+    function getCollection($userID, $filters, $offset, $resultsPerPage)
     {
-        // collection: everything not on the want list
-        $this->db->select('SUM(CASE WHEN ListID != 2 THEN 1 ELSE 0 END) AS Collection');
-        // completed: everything completed or uncompletable and not on the want list
-        $this->db->select('SUM(CASE WHEN (StatusID = 3 OR StatusID = 4) AND ListID != 2 THEN 1 ELSE 0 END) AS Completed');
-        // backlog: everything unplayed or unfinished and not on the want list
-        $this->db->select('SUM(CASE WHEN (StatusID = 1 OR StatusID = 2) AND ListID != 2 THEN 1 ELSE 0 END) AS Backlog');
-        // want: everything on the want list
-        $this->db->select('SUM(CASE WHEN ListID = 2 THEN 1 ELSE 0 END) AS Want');
-        $this->db->from('collections AS c');
-        $this->db->where('UserID', $userID); 
-        $query = $this->db->get();
+        // if offset is provided, get list of games
+        if($offset !== null) {
+            $this->db->select('ImageSmall, GBID, Name, ListStyle, ListName, StatusStyle, StatusName');
+        }
+        // if no offset, count number of games in collection
+        else {
+            // collection: everything not on the want list
+            $this->db->select('COUNT(DISTINCT (CASE WHEN collections.ListID != 2 THEN collections.GameID END)) AS Collection');
+            // completed: everything completed or uncompletable and not on the want list
+            $this->db->select('COUNT(DISTINCT (CASE WHEN (collections.StatusID = 3 OR collections.StatusID = 4) AND collections.ListID != 2 THEN collections.GameID END)) AS Completed');
+            // backlog: everything unplayed or unfinished and not on the want list
+            $this->db->select('COUNT(DISTINCT (CASE WHEN (collections.StatusID = 1 OR collections.StatusID = 2) AND collections.ListID != 2 THEN collections.GameID END)) AS Backlog');
+            // want: everything on the want list
+            $this->db->select('COUNT(DISTINCT (CASE WHEN collections.ListID = 2 THEN collections.GameID END)) AS Want');   
+        }
 
-        if($query->num_rows() > 0)
+        $this->db->from('collections');
+
+        if($filters !== null)
         {
-            $stats = $query->first_row();
+            $this->db->join('lists', 'collections.ListID = lists.ListID');
+            $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID');
+            $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID', 'left');
+            $this->db->join('games', 'collections.GameID = games.GameID');
+            $this->db->where('collections.UserID', $userID); 
+        
+            // filter out listID's
+            if(count($filters->lists) > 0) 
+                $this->db->where_not_in('collections.ListID', $filters->lists);
+
+            // filter out statusID's
+            if(count($filters->statuses) > 0) 
+                $this->db->where_not_in('collections.StatusID', $filters->statuses);
+            
+            // filter out platformID's
+            if(count($filters->platforms) > 0 && !$filters->includeNoPlatforms) 
+                $this->db->where_not_in('collectionPlatform.PlatformID', $filters->platforms);
+            // filter out platformID's, but include games with no platform
+            else if(count($filters->platforms) > 0 && $filters->includeNoPlatforms) 
+                $this->db->where("(`collectionPlatform`.`PlatformID` NOT IN (" . implode(",", $filters->platforms) . ") OR `collectionPlatform`.`PlatformID` IS NULL)");
+            // filter out games with no platform
+            else if(!$filters->includeNoPlatforms)
+                $this->db->where("(`collectionPlatform`.`PlatformID` IS NOT NULL)"); 
+        }
+        
+        // only apply group by, order by and limit if getting list of games
+        if($offset !== null) {
+            // group by game to remove deuplicates produced by platforms
+            $this->db->group_by("collections.GameID");
+
+            // order by
+            switch($filters->orderBy)
+            {
+                case "releaseDateAsc":
+                    $this->db->order_by("games.ReleaseDate", "asc");
+                    break;
+                case "releaseDateDesc":
+                    $this->db->order_by("games.ReleaseDate", "desc");
+                    break;
+                case "nameAsc":
+                    $this->db->order_by("games.Name", "asc");
+                    break;
+                case "nameDesc":
+                    $this->db->order_by("games.Name", "desc");
+                    break;
+                case "hoursPlayedAsc":
+                    $this->db->order_by("collections.HoursPlayed", "asc");
+                    break;
+                case "hoursPlayedDesc":
+                    $this->db->order_by("collections.HoursPlayed", "desc");
+                    break;
+            }
+            
+            // paging
+            $this->db->limit($resultsPerPage, $offset);
+
+            // get results
+            $games = $this->db->get()->result();
+            
+            // add platforms to games
+            foreach ($games as $game)
+            {
+                $game->Platforms = $this->getGamesPlatformsInCollection($game->GBID, $userID);
+            }
+
+            return $games;
+        } else {
+            // calculate collection stats
+            $stats = $this->db->get()->first_row();
             if($stats->Completed == null) $stats->Completed = 0;
             if($stats->Backlog == null) $stats->Backlog = 0;
             if($stats->Want == null) $stats->Want = 0;
             $stats->PercentComplete = $stats->Collection == 0 ? 0 : round((($stats->Completed/$stats->Collection) * 100), 0);
             return $stats;
         }
-
-        return null;
-    }
-
-    // get users collection
-    function getCollection($userID, $filters, $offset, $resultsPerPage)
-    {
-        $this->db->select('ImageSmall, GBID, Name, ListStyle, ListName, StatusStyle, StatusName');
-        $this->db->from('collections');
-        $this->db->join('lists', 'collections.ListID = lists.ListID');
-        $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID');
-        $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID', 'left');
-        $this->db->join('games', 'collections.GameID = games.GameID');
-        $this->db->where('collections.UserID', $userID); 
-        
-        // filter out listID's
-        if(count($filters->lists) > 0) 
-            $this->db->where_not_in('collections.ListID', $filters->lists);
-
-        // filter out statusID's
-        if(count($filters->statuses) > 0) 
-            $this->db->where_not_in('collections.StatusID', $filters->statuses);
-        
-        // filter out platformID's
-        if(count($filters->platforms) > 0 && !$filters->includeNoPlatforms) 
-            $this->db->where_not_in('collectionPlatform.PlatformID', $filters->platforms);
-        // filter out platformID's, but include games with no platform
-        else if(count($filters->platforms) > 0 && $filters->includeNoPlatforms) 
-            $this->db->where("(`collectionPlatform`.`PlatformID` NOT IN (" . implode(",", $filters->platforms) . ") OR `collectionPlatform`.`PlatformID` IS NULL)");
-        // filter out games with no platform
-        else if(!$filters->includeNoPlatforms)
-            $this->db->where("(`collectionPlatform`.`PlatformID` IS NOT NULL)"); 
-        
-        // group by game to remove deuplicates produced by platforms
-        $this->db->group_by("collections.GameID");
-        
-        // order by
-        switch($filters->orderBy)
-        {
-            case "releaseDateAsc":
-                $this->db->order_by("games.ReleaseDate", "asc");
-                break;
-            case "releaseDateDesc":
-                $this->db->order_by("games.ReleaseDate", "desc");
-                break;
-            case "nameAsc":
-                $this->db->order_by("games.Name", "asc");
-                break;
-            case "nameDesc":
-                $this->db->order_by("games.Name", "desc");
-                break;
-            case "hoursPlayedAsc":
-                $this->db->order_by("collections.HoursPlayed", "asc");
-                break;
-            case "hoursPlayedDesc":
-                $this->db->order_by("collections.HoursPlayed", "desc");
-                break;
-        }
-
-
-        if($filters->orderBy == "name")
-            $this->db->order_by("games.Name", "asc");
-        else if($filters->orderBy == "hoursPlayed")
-            $this->db->order_by("collections.HoursPlayed", "desc");
-        
-        // paging
-        $this->db->limit($resultsPerPage, $offset);
-
-        // get results
-        $games = $this->db->get()->result();
-        
-        foreach ($games as $game)
-        {
-            $game->Platforms = $this->getGamesPlatformsInCollection($game->GBID, $userID);
-        }
-
-        return $games;
     }
 
     // get users collection

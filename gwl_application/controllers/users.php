@@ -63,7 +63,6 @@ class Users extends CI_Controller {
 
         // get game collection stats
         $this->load->model('Game');
-        $data['stats'] = $this->Game->getCollectionStats($userID);
 
         // get platforms for filtering
         $data['platforms'] = $this->Game->getPlatformsInCollection($userID);
@@ -105,6 +104,7 @@ class Users extends CI_Controller {
         // get collection
         $this->load->model('Game');
         $result['collection'] = $this->Game->getCollection($userID, $filters, $offset, $resultsPerPage);
+        $result['stats'] = $this->Game->getCollection($userID, $filters, null, null);
 
         // return success
         $result['error'] = false;   
