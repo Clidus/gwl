@@ -11,7 +11,7 @@
         
         <!-- CSS -->
         <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
-        <link href="/css/stylesheet.css" rel="stylesheet">
+        <link href="/css/stylesheet.css?v=1" rel="stylesheet">
     </head>
     <body>
       <!-- navbar -->
