@@ -74,6 +74,24 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     margin-top: 10px;
 }
 
+.userActivity {
+    height: 200px;
+    overflow-y: scroll;
+}
+
+.userActivityItem {
+    padding: 10px;
+}
+
+.userActivityItem div {
+    padding-left: 10px;
+}
+
+.userActivityDateStamp {
+    color: $grey;
+    float: right;
+}
+
 /*
 * blog
 */
@@ -87,9 +105,7 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 }
 
 /*
-*
 * collection
-*
 */
 
 .gameBoxArt {
@@ -99,6 +115,16 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 
 .collectionStatusBadge {
 	width: 85px;
+}
+
+@media (max-width: 770px) {
+    /* homepage */
+    .userActivityDateStamp {
+        color: $grey;
+        float: none;
+        display: block;
+        font-size: 10px;
+    }
 }
 
 /* 

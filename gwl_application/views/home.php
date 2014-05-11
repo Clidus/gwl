@@ -20,6 +20,28 @@
 	<?php } ?>
 </div>
 
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">What's Happening</h3>
+	</div>
+	<div class="panel-body userActivity">
+		<?php 
+			foreach ($events as $event)
+			{
+				echo '
+				<div class="clearfix userActivityItem">
+					<a class="pull-left" href="' . $event->Url . '">
+						<img class="media-object gameBoxArt tinyIconImage" src="' . $event->Image . '" />
+					</a>
+					<div class="media-body clearfix">
+						<b>' . $event->Username . $event->Label . '</b> ' . $event->GameName . '<span class="userActivityDateStamp">' . $event->DateStampFormatted . '</span>
+					</div>
+				</div>';
+			}
+		?>
+	</div>
+</div>
+
 <div class="row">
 	<div class="col-md-4">
 		<div class="thumbnail">

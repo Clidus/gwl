@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = 'pages/view';
+$route['default_controller'] = 'home/view';
 
 $route['blog'] = 'blogs/home';
 $route['blog/(:any)'] = 'blogs/post/$1';

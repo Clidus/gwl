@@ -14,62 +14,13 @@
 ?>
 			<div class="panel panel-default"> 
 				<div class="panel-body media">
-					<?php 
-						// user profile
-						if(isset($user))
-						{
-							$eventUrl = '/game/' . $event->GBID;
-							$eventImage = $event->ImageSmall;
-							$eventUserName = $event->Username;
-							$eventGameName = '<a href="' . $eventUrl . '">' . $event->Name . '</a></b>';
-						}
-						// game page
-						else 
-						{
-							$eventUrl = '/user/' . $event->UserID;
-							$eventImage = '/uploads/' . $event->ProfileImage;
-							$eventUserName = '<a href="' . $eventUrl . '">' . $event->Username . '</a></b>';
-							$eventGameName = $event->Name;
-						}
-					?>
-					<a class='pull-left' href='<?php echo $eventUrl ?>'>
-						<img class='media-object gameBoxArt eventImage' src='<?php echo $eventImage ?>' />
+					
+					<a class='pull-left' href='<?php echo $event->Url ?>'>
+						<img class='media-object gameBoxArt eventImage' src='<?php echo $event->Image ?>' />
 					</a>
 					<div class="media-body clearfix eventDetail">
 						<?php
-							echo '<p><b>' . $eventUserName;
-
-							// events
-							$i = 1;
-							foreach($event->eventItems as $item) 
-							{
-								echo $item;
-								if($i === count($event->eventItems)-1) {
-									echo " and ";
-								} else if($i < count($event->eventItems)) {
-									echo ", ";
-								}
-								$i++;
-							}
-
-							// game name
-							echo ' ' . $eventGameName;
-
-							// platforms
-							if(count($event->platforms) > 0) {
-								echo " on ";
-								$i = 1;
-								foreach($event->platforms as $platfrom)
-								{
-									echo $platfrom->Abbreviation;
-									if($i !== count($event->platforms)) {
-										echo ", ";
-									}
-									$i++;
-								}
-							}
-
-							echo '</p>';
+							echo '<p><b>' . $event->Username . $event->Label . '</b> ' . $event->GameName . $event->PlatformsLabel . '</p>';
 							echo '<p class="gameDeck">' . $event->Deck . '</p>';
 							echo '<p class="datestamp pull-right">' . $event->DateStampFormatted . '</p>';
 						?>

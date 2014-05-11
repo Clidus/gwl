@@ -239,24 +239,76 @@ class User extends CI_Model {
         $this->load->model('Time');
         $this->load->library('md');
         foreach ($events as $event)
-        {
-            // build array of events
-            $event->eventItems = array();
-            if($event->CurrentlyPlaying) array_push($event->eventItems, ' is playing');
-            if($event->ListID != null) array_push($event->eventItems, ' <span class="label label-' . $event->ListStyle . '">' . $event->ListThirdPerson . '</span>');
-            if($event->StatusID != null) array_push($event->eventItems, ' <span class="label label-' . $event->StatusStyle . '">' . $event->StatusThirdPerson . '</span>');
+        {  
+            // default profile image
+            $event->ProfileImage = $event->ProfileImage == null ? "gwl_default.jpg" : $event->ProfileImage;
+
+            // variables for user profile
+            if($userID != null)
+            {
+                $event->Url = '/game/' . $event->GBID;
+                $event->Image = $event->ImageSmall;
+                $event->Username = $event->Username;
+                $event->GameName = '<a href="' . $event->Url . '">' . $event->Name . '</a></b>';
+            }
+            // variables for game page
+            else if($gbID != null)
+            {
+                $event->Url = '/user/' . $event->UserID;
+                $event->Image = '/uploads/' . $event->ProfileImage;
+                $event->Username = '<a href="' . $event->Url . '">' . $event->Username . '</a>';
+                $event->GameName = $event->Name;
+            // variables for homepage feed
+            } else {
+                $event->Url = '/game/' . $event->GBID;
+                $event->Image = $event->ImageSmall;
+                $event->Username = '<a href="/user/' . $event->UserID . '">' . $event->Username . '</a>';
+                $event->GameName = '<a href="' . $event->Url . '">' . $event->Name . '</a></b>';
+            }
+
+            // build event label
+            $event->Label = "";
+
+            // currently playing
+            if($event->CurrentlyPlaying) {
+                $event->Label .= ' is playing';
+                if($event->ListID != null && $event->StatusID != null)
+                    $event->Label .= ", ";
+            }
+            // list
+            if($event->ListID != null) {
+                $event->Label .= ' <span class="label label-' . $event->ListStyle . '">' . $event->ListThirdPerson . '</span>';
+                if($event->StatusID != null)
+                    $event->Label .= " and ";
+            }
+            // status
+            if($event->StatusID != null) {
+                $event->Label .= ' <span class="label label-' . $event->StatusStyle . '">' . $event->StatusThirdPerson . '</span>';
+            }
 
             // add platforms in collection
             $event->platforms = $this->Game->getGamesPlatformsInCollection($event->GBID, $event->UserID);
             
+            // build platforms label
+            $event->PlatformsLabel = "";
+            if(count($event->platforms) > 0) {
+                $event->PlatformsLabel .= " on ";
+                $i = 1;
+                foreach($event->platforms as $platfrom)
+                {
+                    $event->PlatformsLabel .= $platfrom->Abbreviation;
+                    if($i !== count($event->platforms)) {
+                        $event->PlatformsLabel .= ", ";
+                    }
+                    $i++;
+                }
+            }
+
             // get comments
             $event->comments = $this->getCommentsForEvent($event->EventID, $DateTimeFormat);
 
             // format date stamp
             $event->DateStampFormatted = $this->Time->GetDateTimeInFormat($event->DateStamp, $DateTimeFormat);
-
-            // default profile image
-            $event->ProfileImage = $event->ProfileImage == null ? "gwl_default.jpg" : $event->ProfileImage;
         }
 
         return $events;
