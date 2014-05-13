@@ -1,7 +1,3 @@
-<ul class="breadcrumb"> 
-    <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb" class="active"><span itemprop="title">Home</span></li>   
-</ul>
-
 <div class="alert alert-info">
 	<b>Update:</b> <a href="/blog/version-0-2-0">Check out what is new in Version 0.2.0</a>.
 </div>

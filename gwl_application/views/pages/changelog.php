@@ -6,6 +6,10 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.2.1 - 2014-05-13</b></p>
+	<ul>
+		<li><strong>Feature:</strong> Cron job to update game cache.</li>
+	</ul>
 	<p><b><a href="/blog/version-0-2-0">Version 0.2.0 - 2014-05-11</a></b></p>
 	<ul>
 		<li><strong>Feature:</strong> Collection stats now update live as filters are changed. <a href="https://github.com/Clidus/gwl/issues/35">#35</a></li>

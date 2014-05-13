@@ -64,3 +64,7 @@
             </div>
           </div>
         </div>
+
+        <!--<div class="alert alert-danger">
+          <b>Notice:</b> The <a href="https://twitter.com/giantbomb">Giant Bomb</a> API is currently down. You can still access your collections, but search and game pages are currently out of action. :(
+        </div>-->
