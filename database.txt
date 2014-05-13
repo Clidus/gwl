@@ -92,6 +92,7 @@ CREATE TABLE `games` (
   `ImageSmall` varchar(300) DEFAULT NULL,
   `Deck` text CHARACTER SET utf8,
   `ReleaseDate` date DEFAULT NULL,
+  `LastUpdated` date DEFAULT NULL,
   PRIMARY KEY (`GameID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

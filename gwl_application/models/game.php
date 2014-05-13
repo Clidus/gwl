@@ -213,7 +213,8 @@ class Game extends CI_Model {
            'Image' => is_object($game->image) ? $game->image->small_url : null,
            'ImageSmall' => is_object($game->image) ? $game->image->icon_url : null,
            'Deck' => $game->deck,
-           'ReleaseDate' => $releaseDate
+           'ReleaseDate' => $releaseDate,
+           'LastUpdated' => date('Y-m-d')
         );
 
         return $this->db->insert('games', $data); 
@@ -576,5 +577,41 @@ class Game extends CI_Model {
         $query = $this->db->get();
 
         return $query->result();
+    }
+
+    // get game that need updating
+    function getGameToUpdate()
+    {
+        $this->db->select('GBID');
+        $this->db->from('games');
+        $this->db->where('LastUpdated <', Date('Y-m-d', strtotime("-1 days"))); 
+        $this->db->or_where('LastUpdated', null); 
+        $this->db->limit(1, 0);
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1)
+        {
+            return $query->first_row()->GBID;
+        }
+
+        return null;
+    }
+
+    // update game cache
+    function updateGame($game)
+    {
+        $releaseDate = $this->getReleaseDate($game);
+
+        $data = array(
+           'Name' => $game->name,
+           'Image' => is_object($game->image) ? $game->image->small_url : null,
+           'ImageSmall' => is_object($game->image) ? $game->image->icon_url : null,
+           'Deck' => $game->deck,
+           'ReleaseDate' => $releaseDate,
+           'LastUpdated' => date('Y-m-d')
+        );
+
+        $this->db->where('GBID', $game->id);
+        $this->db->update('games', $data); 
     }
 }

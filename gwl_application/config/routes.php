@@ -70,6 +70,8 @@ $route['admin/blog/new'] = 'admin/newBlogPost';
 $route['admin/blog/edit'] = 'admin/blogPostList';
 $route['admin/blog/edit/(:any)'] = 'admin/editBlogPost/$1';
 
+$route['cron/update'] = 'cron/update';
+
 $route['404_override'] = 'pages/view/404';
 
 /* End of file routes.php */
