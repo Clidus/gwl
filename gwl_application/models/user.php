@@ -192,6 +192,10 @@ class User extends CI_Model {
     // record new user event
     function addUserEvent($userID, $gameID, $listID, $statusID, $currentlyPlaying) 
     {
+        // dont record event if only change is no longer currently playing
+        if($listID == null && $statusID == null && $currentlyPlaying === "false")
+            return;
+
         $data = array(
            'UserID' => $userID,
            'GameID' => $gameID,

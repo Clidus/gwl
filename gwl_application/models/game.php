@@ -586,6 +586,7 @@ class Game extends CI_Model {
         $this->db->from('games');
         $this->db->where('LastUpdated <', Date('Y-m-d', strtotime("-1 days"))); 
         $this->db->or_where('LastUpdated', null); 
+        $this->db->order_by("LastUpdated", "asc"); 
         $this->db->limit(1, 0);
         $query = $this->db->get();
 

@@ -1,6 +1,6 @@
-<div class="alert alert-info">
+<!--<div class="alert alert-info">
 	<b>Update:</b> <a href="/blog/version-0-2-0">Check out what is new in Version 0.2.0</a>.
-</div>
+</div>-->
 
 <div class="jumbotron" id="homepageJumbotron">
 	<?php if($sessionUserID == null) { ?>

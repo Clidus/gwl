@@ -6,6 +6,11 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.2.2 - 2014-05-24</b></p>
+	<ul>
+		<li><strong>Bug Fix:</strong> Changing a game to no longer playing would produce a blank event.</li>
+		<li><strong>Bug Fix:</strong> Prioritise old game caches in cron job.</li>
+	</ul>
 	<p><b>Version 0.2.1 - 2014-05-13</b></p>
 	<ul>
 		<li><strong>Feature:</strong> Cron job to update game cache.</li>
