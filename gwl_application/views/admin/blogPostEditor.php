@@ -22,8 +22,16 @@
 	    <input class="form-control" type="text" name="title" value="<?php echo $post->Title ?>">
 	</div>
     <div class="form-group"> 
-		<label for="url">URL</label>
-    	<input class="form-control" type="text" name="url" value="<?php echo $post->URL ?>">
+		<label for="url">Deck</label>
+    	<input class="form-control" type="text" name="deck" value="<?php echo $post->Deck ?>">
+    </div>
+    <div class="form-group"> 
+        <label for="url">URL</label>
+        <input class="form-control" type="text" name="url" value="<?php echo $post->URL ?>">
+    </div>
+    <div class="form-group"> 
+        <label for="url">Image</label>
+        <input class="form-control" type="text" name="image" value="<?php echo $post->Image ?>">
     </div>
     <div class="form-group"> 
     	<textarea id="blogPostTextArea" placeholder="Enter your text ..." class="form-control" name="post"><?php echo $post->Post ?></textarea>

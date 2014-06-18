@@ -46,6 +46,9 @@ class Blogs extends CI_Controller {
 		$data = $this->Page->create($post->Title, "Home");
 		$data['post'] = $post;
 
+		// add meta tags
+		$data['metaTags'] = $this->Page->getBlogMetaTags($post);
+
 		// load views
 		$this->load->view('templates/header', $data);
 		$this->load->view('blog/post', $data);

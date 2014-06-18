@@ -9,26 +9,30 @@ class Blog extends CI_Model {
     }
 
     // add blog post
-    function add($title, $url, $post, $userID)
+    function add($title, $url, $post, $userID, $deck, $image)
     {
         $post = array(
             'Title' => $title,
             'URL' => $url,
             'Post' => $post,
             'UserID' => $userID,
-            'Date' => date('Y-m-d H:i:s')
+            'Date' => date('Y-m-d H:i:s'),
+            'Deck' => $deck,
+            'Image' => $image
         );
 
         return $this->db->insert('blog', $post); 
     }
 
     // update blog post
-    function update($postID, $title, $url, $post)
+    function update($postID, $title, $url, $post, $deck, $image)
     {
         $post = array(
             'Title' => $title,
             'URL' => $url,
-            'Post' => $post
+            'Post' => $post,
+            'Deck' => $deck,
+            'Image' => $image
         );
 
         $this->db->where('PostID', $postID);
@@ -48,7 +52,7 @@ class Blog extends CI_Model {
         $this->db->select('*');
         $this->db->from('blog');
         $this->db->join('users', 'blog.UserID = users.UserID');
-        $this->db->order_by("date", "desc"); 
+        $this->db->order_by("Date desc, PostID desc"); 
         $this->db->limit($numberOfPosts);
         return $this->db->get()->result();
     }

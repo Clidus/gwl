@@ -3,12 +3,12 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
         <link rel="shortcut icon" href="images/favicon.png">
 
         <title><?php echo $pagetitle ?> : Gaming with Lemons</title>
         
+        <?php echo $metaTags ?>
+
         <!-- CSS -->
         <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
         <link href="/css/stylesheet.css?v=1" rel="stylesheet">

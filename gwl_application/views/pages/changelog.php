@@ -6,6 +6,10 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.2.3 - 2014-06-18</b></p>
+	<ul>
+		<li><strong>Change:</strong> Added meta tags to blog posts.</li>
+	</ul>
 	<p><b>Version 0.2.2 - 2014-05-24</b></p>
 	<ul>
 		<li><strong>Bug Fix:</strong> Changing a game to no longer playing would produce a blank event.</li>

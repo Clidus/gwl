@@ -53,6 +53,8 @@ class Admin extends CI_Controller {
 		$this->form_validation->set_rules('title', 'Title', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('url', 'URL', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('post', 'Post', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('deck', 'Deck', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('image', 'Image', 'trim|required|xss_clean');
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
 
 		// page variables
@@ -64,7 +66,7 @@ class Admin extends CI_Controller {
 		if ($this->form_validation->run() == TRUE)
 		{
 			$this->load->model('Blog');
-			$this->Blog->add($this->input->post('title'), $this->input->post('url'), $this->input->post('post'), $data['sessionUserID']);
+			$this->Blog->add($this->input->post('title'), $this->input->post('url'), $this->input->post('post'), $data['sessionUserID'], $this->input->post('deck'), $this->input->post('image'));
 
 			header("location: " . base_url() . "admin/blog/edit");
 		}
@@ -75,6 +77,8 @@ class Admin extends CI_Controller {
 		$post->Title = "";
 		$post->URL = "";
 		$post->Post = "";
+		$post->Deck = "";
+		$post->Image = "";
 		$data['post'] = $post;
 
 		$this->load->view('templates/header', $data);
@@ -96,12 +100,14 @@ class Admin extends CI_Controller {
 		$this->form_validation->set_rules('title', 'Title', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('url', 'URL', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('post', 'Post', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('deck', 'Deck', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('image', 'Image', 'trim|required|xss_clean');
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
 
 		if ($this->form_validation->run() == TRUE)
 		{
 			$this->load->model('Blog');
-			$this->Blog->update($PostID, $this->input->post('title'), $this->input->post('url'), $this->input->post('post'));
+			$this->Blog->update($PostID, $this->input->post('title'), $this->input->post('url'), $this->input->post('post'), $this->input->post('deck'), $this->input->post('image'));
 		}
 		
 		// get blog posts
