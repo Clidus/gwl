@@ -20,6 +20,7 @@ Prerequisites:
 
 * PHP 5.5
 * MySQL
+* [Compass](http://compass-style.org/install/)
 * [Giant Bomb API Key](http://www.giantbomb.com/api/)
 
 Installation:
@@ -27,6 +28,7 @@ Installation:
 * Set "base_url" in gwl_application/config/config.php
 * Set "hostname", "username", "password" and "database" in gwl_application/config/database.php
 * Set "gb_api_key" in gwl_application/config/gwl_config.php
+* Navigate to project root in the terminal and run "compass compile" to build the CSS files. You can also run "compass watch" to have the CSS rebuilt everytime you modify a stylesheet.
 
 ## License
 
