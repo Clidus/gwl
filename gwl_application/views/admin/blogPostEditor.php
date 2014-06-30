@@ -34,6 +34,10 @@
         <input class="form-control" type="text" name="image" value="<?php echo $post->Image ?>">
     </div>
     <div class="form-group"> 
+        <label for="youTube">YouTube</label>
+        <input class="form-control" type="text" name="youTube" value="<?php echo $post->YouTube ?>">
+    </div>
+    <div class="form-group"> 
     	<textarea id="blogPostTextArea" placeholder="Enter your text ..." class="form-control" name="post"><?php echo $post->Post ?></textarea>
     </div>
     <button type="submit" class="btn btn-default">Post</button>

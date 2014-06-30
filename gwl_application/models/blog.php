@@ -9,7 +9,7 @@ class Blog extends CI_Model {
     }
 
     // add blog post
-    function add($title, $url, $post, $userID, $deck, $image)
+    function add($title, $url, $post, $userID, $deck, $image, $youTube)
     {
         $post = array(
             'Title' => $title,
@@ -18,21 +18,23 @@ class Blog extends CI_Model {
             'UserID' => $userID,
             'Date' => date('Y-m-d H:i:s'),
             'Deck' => $deck,
-            'Image' => $image
+            'Image' => $image,
+            'YouTube' => $youTube
         );
 
         return $this->db->insert('blog', $post); 
     }
 
     // update blog post
-    function update($postID, $title, $url, $post, $deck, $image)
+    function update($postID, $title, $url, $post, $deck, $image, $youTube)
     {
         $post = array(
             'Title' => $title,
             'URL' => $url,
             'Post' => $post,
             'Deck' => $deck,
-            'Image' => $image
+            'Image' => $image,
+            'YouTube' => $youTube
         );
 
         $this->db->where('PostID', $postID);

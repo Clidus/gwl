@@ -34,7 +34,7 @@ class Page extends CI_Model {
         <meta property="og:title" content="' . $post->Title . '" /> 
         <meta property="og:type" content="article" /> 
         <meta property="og:url" content=" http://www.gamingwithlemons.com/blog/' . $post->URL . '" />
-        <meta property="og:image" content="' . $post->Image . '" />
+        <meta property="og:image" content="' . base_url() . $post->Image . '" />
         <meta property="og:description" content="' . $post->Deck . '" /> 
         <meta property="og:site_name" content="Gaming with Lemons" /> ';         
     }

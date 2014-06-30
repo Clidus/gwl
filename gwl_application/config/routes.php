@@ -41,6 +41,7 @@
 $route['default_controller'] = 'home/view';
 
 $route['blog'] = 'blogs/home';
+$route['blog/archive'] = 'blogs/archive';
 $route['blog/(:any)'] = 'blogs/post/$1';
 
 $route['changelog'] = 'pages/view/changelog';

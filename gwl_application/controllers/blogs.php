@@ -24,6 +24,7 @@ class Blogs extends CI_Controller {
 		// load views
 		$this->load->view('templates/header', $data);
 		$this->load->view('blog/home', $data);
+		$this->load->view('blog/sidebar', $data);
 		$this->load->view('templates/footer', $data);
 	}
 
@@ -43,8 +44,9 @@ class Blogs extends CI_Controller {
 
 		// page variables
 		$this->load->model('Page');
-		$data = $this->Page->create($post->Title, "Home");
+		$data = $this->Page->create($post->Title, "Blog");
 		$data['post'] = $post;
+		$data['posts'] = $this->Blog->getPosts(10); // get 10 most recent posts
 
 		// add meta tags
 		$data['metaTags'] = $this->Page->getBlogMetaTags($post);
@@ -52,6 +54,25 @@ class Blogs extends CI_Controller {
 		// load views
 		$this->load->view('templates/header', $data);
 		$this->load->view('blog/post', $data);
+		$this->load->view('blog/sidebar', $data);
+		$this->load->view('templates/footer', $data);
+	}
+
+	// blog archive
+	public function archive()
+	{
+		// page variables
+		$this->load->model('Page');
+		$data = $this->Page->create("Blog Archive", "Blog");
+
+		// get blog posts
+		$this->load->model('Blog');
+		$data['posts'] = $this->Blog->getPosts(10); // get 10 most recent posts
+
+		// load views
+		$this->load->view('templates/header', $data);
+		$this->load->view('blog/archive', $data);
+		$this->load->view('blog/sidebar', $data);
 		$this->load->view('templates/footer', $data);
 	}
 }

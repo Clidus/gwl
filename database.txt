@@ -10,6 +10,7 @@ CREATE TABLE `blog` (
   `Date` date NOT NULL,
   `Deck` varchar(155) DEFAULT NULL,
   `Image` varchar(100) DEFAULT NULL,
+  `YouTube` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`PostID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
