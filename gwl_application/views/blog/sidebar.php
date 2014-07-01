@@ -5,7 +5,7 @@
 
 		<h2>Recent Posts</h2>
 		<?php
-			foreach($posts as $post)
+			foreach($recentPosts as $post)
 			{
 		?>
 				<p><a href="/blog/<?php echo $post->URL ?>"><?php echo $post->Title ?></a></p>

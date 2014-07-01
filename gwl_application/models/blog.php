@@ -88,4 +88,25 @@ class Blog extends CI_Model {
         else
             return null;
     }
+
+    // get blog post archive
+    function getMonthlyArchive()
+    {
+        $this->db->select('YEAR(Date) AS Year, MONTH(Date) AS Month');
+        $this->db->from('blog');
+        $this->db->group_by("YEAR(Date), MONTH(Date)"); 
+        $this->db->order_by("YEAR(Date) desc, MONTH(Date) desc"); 
+        return $this->db->get()->result();
+    }
+
+    // get blog posts for a month
+    function getPostsForMonth($year, $month)
+    {
+        $this->db->select('*');
+        $this->db->from('blog');
+        $this->db->where('YEAR(Date)', $year); 
+        $this->db->where('MONTH(Date)', $month); 
+        $this->db->order_by("Date desc, PostID desc"); 
+        return $this->db->get()->result();
+    }
 }

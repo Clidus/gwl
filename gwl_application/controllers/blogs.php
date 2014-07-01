@@ -19,7 +19,7 @@ class Blogs extends CI_Controller {
         {
 	        $post->Post = $this->md->defaultTransform($post->Post);
         }
-		$data['posts'] = $posts;
+		$data['recentPosts'] = $posts;
 		
 		// load views
 		$this->load->view('templates/header', $data);
@@ -35,18 +35,18 @@ class Blogs extends CI_Controller {
 		$this->load->model('Blog');
 		$post = $this->Blog->getPostByURL($URL); 
 
+		if($post == null)
+			show_404();
+
 		// transform markdown to HTML
         $this->load->library('md');
         $post->Post = $this->md->defaultTransform($post->Post);
         
-		if($post == null)
-			show_404();
-
 		// page variables
 		$this->load->model('Page');
 		$data = $this->Page->create($post->Title, "Blog");
 		$data['post'] = $post;
-		$data['posts'] = $this->Blog->getPosts(10); // get 10 most recent posts
+		$data['recentPosts'] = $this->Blog->getPosts(10); // get 10 most recent posts
 
 		// add meta tags
 		$data['metaTags'] = $this->Page->getBlogMetaTags($post);
@@ -67,11 +67,52 @@ class Blogs extends CI_Controller {
 
 		// get blog posts
 		$this->load->model('Blog');
-		$data['posts'] = $this->Blog->getPosts(10); // get 10 most recent posts
+		$data['recentPosts'] = $this->Blog->getPosts(10); // get 10 most recent posts
+		$months = $this->Blog->getMonthlyArchive(); // get monthly archive of blog posts
+
+		// convert month number into month name
+		$this->load->model('Utility');
+		foreach($months as $month)
+		{
+			$month->MonthName = $this->Utility->getMonthName($month->Month);
+		}
+		$data['months'] = $months;
 
 		// load views
 		$this->load->view('templates/header', $data);
 		$this->load->view('blog/archive', $data);
+		$this->load->view('blog/sidebar', $data);
+		$this->load->view('templates/footer', $data);
+	}
+
+	// blog archive for a month
+	public function month($year, $month)
+	{
+		if($month < 1 || $month > 12)
+			show_404();
+
+		// page title
+		$this->load->model('Utility');
+		$title = $this->Utility->getMonthName($month) . " " . $year;
+
+		// page variables
+		$this->load->model('Page');
+		$data = $this->Page->create($title, "Blog");
+
+		// get blog posts
+		$this->load->model('Blog');
+		$data['recentPosts'] = $this->Blog->getPosts(10); // get 10 most recent posts
+		$data['title'] = $title;
+		$posts = $this->Blog->getPostsForMonth($year, $month); // get monthly archive of blog posts
+
+		if($posts == null)
+			show_404();
+
+		$data['posts'] = $posts;
+
+		// load views
+		$this->load->view('templates/header', $data);
+		$this->load->view('blog/month', $data);
 		$this->load->view('blog/sidebar', $data);
 		$this->load->view('templates/footer', $data);
 	}

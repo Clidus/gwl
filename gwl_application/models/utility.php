@@ -18,4 +18,9 @@ class Utility extends CI_Model {
              
         return $result;
     }
+
+    // get month name from number
+    function getMonthName($monthNumber) {
+        return DateTime::createFromFormat('!m', $monthNumber)->format('F');
+    }
 }

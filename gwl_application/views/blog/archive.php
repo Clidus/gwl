@@ -6,16 +6,11 @@
 
 <div class="row">
 	<div class="col-sm-8">
+		<h2>Blog Archive</h2>
 		<?php
-			foreach($posts as $post)
+			foreach($months as $month)
 			{
-		?>
-				<h2><a href="/blog/<?php echo $post->URL ?>"><?php echo $post->Title ?></a></h2>
-
-				<p class="postFooter">Posted by <a href="/user/<?php echo $post->UserID; ?>"><?php echo $post->Username ?></a> on the <?php echo date_format(date_create($post->Date), 'jS F, Y') ?>.</p>
-
-				<hr />
-		<?php
+				echo "<p><a href='/blog/archive/" . $month->Year . "/" . $month->Month . "'>" . $month->MonthName . " " . $month->Year . "</p>";
 			}
 		?>
 	</div>

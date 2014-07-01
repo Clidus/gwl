@@ -6,7 +6,7 @@
 <div class="row">
 	<div class="col-sm-8">
 		<?php
-			foreach($posts as $post)
+			foreach($recentPosts as $post)
 			{
 		?>
 				<h2><a href="/blog/<?php echo $post->URL ?>"><?php echo $post->Title ?></a></h2>
