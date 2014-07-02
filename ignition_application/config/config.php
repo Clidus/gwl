@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://www.gwl.com/';
+$config['base_url']	= '';
 
 /*
 |--------------------------------------------------------------------------
