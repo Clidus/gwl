@@ -68,7 +68,7 @@
 								<div class="pull-left">
 									<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage gameBoxArt" />
 								</div>
-								<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $event->EventID . ');">Post</button>
+								<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $event->EventID . ', 2);">Post</button>
 								<div class="media-body">
 									<textarea id="commentField' . $event->EventID . '" rows="1" placeholder="Say something..." class="form-control textAreaAutoGrow" name="post"></textarea>
 								</div>';

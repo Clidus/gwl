@@ -51,9 +51,11 @@ class Blog extends CI_Model {
     // get recent blog posts
     function getPosts($numberOfPosts)
     {
-        $this->db->select('*');
+        $this->db->select('blog.*, users.*, COUNT(comments.CommentID) AS Comments');
         $this->db->from('blog');
         $this->db->join('users', 'blog.UserID = users.UserID');
+        $this->db->join('comments', 'comments.LinkID = blog.PostID AND comments.CommentTypeID = 1', 'left'); // 1 = Blog Comment
+        $this->db->group_by("PostID"); 
         $this->db->order_by("Date desc, PostID desc"); 
         $this->db->limit($numberOfPosts);
         return $this->db->get()->result();

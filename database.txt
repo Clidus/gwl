@@ -179,7 +179,8 @@ CREATE TABLE `users` (
 # ------------------------------------------------------------
 
 INSERT INTO `commentType` (`CommentTypeID`, `CommentType`) VALUES
-(1, 'UserEvents');
+(1, 'Blog Comment');
+(2, 'User Event Comment');
 
 INSERT INTO `gameStatuses` (`StatusID`, `StatusName`, `StatusThirdPerson`, `StatusStyle`) VALUES
 (1, 'Unplayed', 'Hasn''t Played', 'default'),

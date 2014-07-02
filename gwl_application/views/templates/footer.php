@@ -30,10 +30,10 @@
     { 
       echo "<script src='/js/collection.js?v=1'></script>"; 
     } 
-    if($pagetemplate == "User" || $pagetemplate == "Game")
+    if($pagetemplate == "User" || $pagetemplate == "Game" || $pagetemplate == "BlogPost")
     {
       echo "<script src='/js/jquery.autogrow-textarea.js'></script>"; 
-      echo "<script src='/js/comments.js?v=1'></script>"; 
+      echo "<script src='/js/comments.js?v=2'></script>"; 
     }
   ?>
   <script>

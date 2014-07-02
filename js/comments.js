@@ -1,5 +1,5 @@
-function postComment(eventID) {
-    var comment = $('#commentField' + eventID).val();
+function postComment(linkID, commentTypeID) {
+    var comment = $('#commentField' + linkID).val();
     if(comment == "") {
         showErrorModal('You need to type something duder!',false,false);
         return;
@@ -10,8 +10,9 @@ function postComment(eventID) {
         url : '/user/comment',
         dataType : 'json',
         data: {
-            eventID: eventID,
-            comment: comment
+            linkID: linkID,
+            comment: comment,
+            commentTypeID: commentTypeID
         },
         success : function(data){
             if (data.error === true) {
@@ -27,8 +28,8 @@ function postComment(eventID) {
                 newComment += '         <span class="datestamp pull-right">Just now</span>';
                 newComment += '     </div>';
                 newComment += '</div>';
-                $( "#newComment" + eventID).append(newComment);
-                $('#commentField' + eventID).val("");
+                $( "#newComment" + linkID).append(newComment);
+                $('#commentField' + linkID).val("");
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -37,7 +38,7 @@ function postComment(eventID) {
     });
 }
 
-function showComments(eventID) {
-    $('#hiddenComments' + eventID).removeClass("hidden");
-    $('#hiddenCommentLink' + eventID).addClass("hidden");
+function showComments(linkID) {
+    $('#hiddenComments' + linkID).removeClass("hidden");
+    $('#hiddenCommentLink' + linkID).addClass("hidden");
 }

@@ -13,11 +13,25 @@ class Blogs extends CI_Controller {
 		$this->load->model('Blog');
 		$posts = $this->Blog->getPosts(10); // get 10 most recent posts
 
-		// transform markdown to HTML
         $this->load->library('md');
         foreach($posts as $post)
         {
+        	// transform markdown to HTML
 	        $post->Post = $this->md->defaultTransform($post->Post);
+
+	        // add label for number of comments to posts
+	        switch($post->Comments)
+			{
+				case 0:
+					$post->CommentsLabel = "No Comments";
+					break;
+				case 1:
+					$post->CommentsLabel = "1 Comment";
+					break;
+				default:
+					$post->CommentsLabel = $post->Comments . " Comments";
+					break;
+			} 
         }
 		$data['recentPosts'] = $posts;
 		
@@ -41,10 +55,14 @@ class Blogs extends CI_Controller {
 		// transform markdown to HTML
         $this->load->library('md');
         $post->Post = $this->md->defaultTransform($post->Post);
-        
+
+		// get comments
+		$this->load->model('User');
+        $post->comments = $this->User->getComments($post->PostID, 1, $this->session->userdata('DateTimeFormat')); // 1 = Blog Comment
+
 		// page variables
 		$this->load->model('Page');
-		$data = $this->Page->create($post->Title, "Blog");
+		$data = $this->Page->create($post->Title, "BlogPost");
 		$data['post'] = $post;
 		$data['recentPosts'] = $this->Blog->getPosts(10); // get 10 most recent posts
 

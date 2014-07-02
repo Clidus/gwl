@@ -309,7 +309,7 @@ class User extends CI_Model {
             }
 
             // get comments
-            $event->comments = $this->getCommentsForEvent($event->EventID, $DateTimeFormat);
+            $event->comments = $this->getComments($event->EventID, 2, $DateTimeFormat); // 2 = User Event Comment
 
             // format date stamp
             $event->DateStampFormatted = $this->Time->GetDateTimeInFormat($event->DateStamp, $DateTimeFormat);
@@ -319,31 +319,32 @@ class User extends CI_Model {
     }
 
     // add comment to event
-    function addComment($eventID, $userID, $comment)
+    function addComment($linkID, $commentTypeID, $userID, $comment)
     {
         $data = array(
            'Comment' => $comment,
            'UserID' => $userID,
-           'LinkID' => $eventID,
-           'CommentTypeID' => 1,
+           'LinkID' => $linkID,
+           'CommentTypeID' => $commentTypeID,
            'DateStamp' => date("Y-m-d H:i:s")
         );
 
         return $this->db->insert('comments', $data); 
     }
 
-    // get comments for event
-    function getCommentsForEvent($eventID, $DateTimeFormat) 
+    // get comments
+    function getComments($eventID, $commentTypeID, $DateTimeFormat) 
     {
         $this->db->select('*');
         $this->db->from('comments');
         $this->db->join('users', 'comments.UserID = users.UserID');
         $this->db->where('comments.LinkID', $eventID); 
-        $this->db->where('comments.CommentTypeID', 1); // UserEvents comment
+        $this->db->where('comments.CommentTypeID', $commentTypeID);
         $this->db->order_by("DateStamp", "asc"); 
         $comments = $this->db->get()->result();
 
         // loop through events
+        $this->load->model('Time');
         foreach ($comments as $comment)
         {
             // transform markdown to HTML

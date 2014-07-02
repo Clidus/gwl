@@ -333,16 +333,17 @@ class Users extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
-    // add comment to event
+    // add comment
     function comment()
     {
         // form validation
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('eventID', 'eventID', 'trim|xss_clean');
+        $this->form_validation->set_rules('linkID', 'linkID', 'trim|xss_clean');
+        $this->form_validation->set_rules('commentTypeID', 'commentTypeID', 'trim|xss_clean');
         $this->form_validation->set_rules('comment', 'comment', 'trim|xss_clean|strip_tags|htmlspecialchars');
         $this->form_validation->run();
 
-        $eventID = $this->input->post('eventID');
+        $linkID = $this->input->post('linkID');
         $comment = $this->input->post('comment');
         $userID = $this->session->userdata('UserID');
 
@@ -354,14 +355,14 @@ class Users extends CI_Controller {
         }
 
         // check event id is valid
-        if($eventID <= 0)
+        if($linkID <= 0)
         {
             $this->returnError($this->lang->line('error_event_invalid'),false,false);
             return;
         }
 
         $this->load->model('User');
-        $this->User->addComment($eventID, $userID, $comment);
+        $this->User->addComment($linkID, $this->input->post('commentTypeID'), $userID, $comment);
 
         // add new comment (in HTML) to response so it can be added to the current page
         $this->load->library('md');
