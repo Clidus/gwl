@@ -56,7 +56,7 @@ if (defined('ENVIRONMENT'))
  * as this file.
  *
  */
-	$system_path = 'gwl_system';
+	$system_path = 'ignition_system';
 
 /*
  *---------------------------------------------------------------
@@ -72,7 +72,7 @@ if (defined('ENVIRONMENT'))
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = 'gwl_application';
+	$application_folder = 'ignition_application';
 
 /*
  * --------------------------------------------------------------------
