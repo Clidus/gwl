@@ -11,9 +11,9 @@
           <p>Website built on <a href="" target="_blank">Ignition</a>.</p>
         </div>
         <div class="col-sm-3 socialIcons">
-          <a href="" target="_blank"><img src="images/social/facebook.jpeg" /></a>
-          <a href="" target="_blank"><img src="images/social/twitter.jpeg" /></a>
-          <a href="" target="_blank"><img src="images/social/google.jpeg" /></a>
+          <a href="https://www.facebook.com/gamingwithlemons" target="_blank"><img src="images/social/facebook.jpeg" /></a>
+          <a href="https://twitter.com/gaminglemons" target="_blank"><img src="images/social/twitter.jpeg" /></a>
+          <a href="https://plus.google.com/+Gamingwithlemons" target="_blank"><img src="images/social/google.jpeg" /></a>
           <a href="https://github.com/Clidus/gwl" target="_blank"><img src="images/social/github.jpeg" /></a>
         </div>
       </div>
