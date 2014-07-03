@@ -1,9 +1,23 @@
     <hr>
 
-    <footer>
-      <p>Website created by <a href="http://www.clidus.com/" target="_blank">Joshua Marketis</a>. Logo design by <a href="http://www.drugs4kids.com/" target="_blank">Michael Orson</a>. Video game data provided by the top men at <a href="http://www.giantbomb.com" target="_blank">Giant Bomb</a>.</p>
+    <footer class="footer">
+      <div class="row">
+        <div class="col-sm-4">
+          <p>Created by <a href="http://www.clidus.com/" target="_blank">Joshua Marketis</a>.</p> 
+          <p>Logo design by <a href="http://www.drugs4kids.com/" target="_blank">Michael Orson</a>.</p> 
+        </div>
+        <div class="col-sm-5">
+          <p>Video game data provided by the top men at <a href="http://www.giantbomb.com" target="_blank">Giant Bomb</a>.</p>
+          <p>Website built on <a href="" target="_blank">Ignition</a>.</p>
+        </div>
+        <div class="col-sm-3 socialIcons">
+          <a href="" target="_blank"><img src="images/social/facebook.jpeg" /></a>
+          <a href="" target="_blank"><img src="images/social/twitter.jpeg" /></a>
+          <a href="" target="_blank"><img src="images/social/google.jpeg" /></a>
+          <a href="https://github.com/Clidus/gwl" target="_blank"><img src="images/social/github.jpeg" /></a>
+        </div>
+      </div>
     </footer>
-
   </div>
 
   <!-- Javascript-->
