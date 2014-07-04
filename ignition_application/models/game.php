@@ -427,8 +427,10 @@ class Game extends CI_Model {
         else {
             // collection: everything not on the want list
             $this->db->select('COUNT(DISTINCT (CASE WHEN collections.ListID != 2 THEN collections.GameID END)) AS Collection');
-            // completed: everything completed or uncompletable and not on the want list
-            $this->db->select('COUNT(DISTINCT (CASE WHEN (collections.StatusID = 3 OR collections.StatusID = 4) AND collections.ListID != 2 THEN collections.GameID END)) AS Completed');
+            // completable collection: everything not uncompletable or on the want list
+            $this->db->select('COUNT(DISTINCT (CASE WHEN collections.StatusID != 4 AND collections.ListID != 2 THEN collections.GameID END)) AS CompletableCollection');
+            // completed: everything completed and not on the want list
+            $this->db->select('COUNT(DISTINCT (CASE WHEN collections.StatusID = 3 AND collections.ListID != 2 THEN collections.GameID END)) AS Completed');
             // backlog: everything unplayed or unfinished and not on the want list
             $this->db->select('COUNT(DISTINCT (CASE WHEN (collections.StatusID = 1 OR collections.StatusID = 2) AND collections.ListID != 2 THEN collections.GameID END)) AS Backlog');
             // want: everything on the want list
@@ -511,7 +513,7 @@ class Game extends CI_Model {
             if($stats->Completed == null) $stats->Completed = 0;
             if($stats->Backlog == null) $stats->Backlog = 0;
             if($stats->Want == null) $stats->Want = 0;
-            $stats->PercentComplete = $stats->Collection == 0 ? 0 : round((($stats->Completed/$stats->Collection) * 100), 0);
+            $stats->PercentComplete = $stats->CompletableCollection == 0 ? 0 : round((($stats->Completed/$stats->CompletableCollection) * 100), 0);
             return $stats;
         }
     }
