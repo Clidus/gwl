@@ -278,6 +278,8 @@ class User extends CI_Model {
                 $event->Label .= ' is playing';
                 if($event->ListID != null && $event->StatusID != null)
                     $event->Label .= ", ";
+                else if($event->ListID != null || $event->StatusID != null)
+                    $event->Label .= " and ";
             }
             // list
             if($event->ListID != null) {
