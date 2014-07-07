@@ -16,7 +16,7 @@ class Users extends CI_Controller {
     {   
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID);
+        $user = $this->User->getUserByID($userID, $this->session->userdata('UserID'));
 
         if($user == null)
             show_404();
@@ -51,7 +51,7 @@ class Users extends CI_Controller {
     {   
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID);
+        $user = $this->User->getUserByID($userID, $this->session->userdata('UserID'));
 
         if($user == null)
             show_404();
@@ -125,7 +125,7 @@ class Users extends CI_Controller {
 
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID);
+        $user = $this->User->getUserByID($userID, null);
 
         if($user == null)
             show_404();
@@ -190,7 +190,7 @@ class Users extends CI_Controller {
 
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID);
+        $user = $this->User->getUserByID($userID, null);
 
         if($user == null)
             show_404();
@@ -226,7 +226,7 @@ class Users extends CI_Controller {
 
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID);
+        $user = $this->User->getUserByID($userID, null);
 
         if($user == null)
             show_404();
@@ -286,7 +286,7 @@ class Users extends CI_Controller {
 
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID);
+        $user = $this->User->getUserByID($userID, null);
 
         if($user == null)
             show_404();
@@ -350,7 +350,7 @@ class Users extends CI_Controller {
         // check that user is logged in
         if($userID <= 0)
         {
-            $this->returnError($this->lang->line('error_logged_out'),false,false);
+            $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
             return;
         }
 
@@ -373,6 +373,41 @@ class Users extends CI_Controller {
 
         // return success
         $result['error'] = false;   
+        echo json_encode($result);
+    }
+
+    // follow or unfollow a user
+    function follow()
+    {
+        // form validation
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('followUserID', 'followUserID', 'trim|xss_clean');
+        $this->form_validation->run();
+
+        $followUserID = $this->input->post('followUserID');
+        $userID = $this->session->userdata('UserID');
+
+        
+        // check that user is logged in
+        if($userID <= 0)
+        {
+            $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
+            return;
+        }
+
+        // check following UserID is valid
+        if($followUserID <= 0)
+        {
+            $this->returnError($this->lang->line('error_user_invalid_id'),false,false);
+            return;
+        }
+
+        // follow or unfollow user
+        $this->load->model('User');
+        $result['followingUser'] = $this->User->followUser($userID, $followUserID);
+
+        // return success
+        $result['error'] = false;
         echo json_encode($result);
     }
 }

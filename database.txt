@@ -84,6 +84,19 @@ CREATE TABLE `commentType` (
 
 
 
+
+# Dump of table following
+# ------------------------------------------------------------
+
+CREATE TABLE `following` (
+  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `FollowedByUserID` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
 # Dump of table games
 # ------------------------------------------------------------
 

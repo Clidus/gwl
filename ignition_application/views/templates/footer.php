@@ -44,6 +44,10 @@
     { 
       echo "<script src='/js/collection.js?v=1'></script>"; 
     } 
+    if($pagetemplate == "User" || $pagetemplate == "Collection") 
+    { 
+      echo "<script src='/js/user.js?v=1'></script>"; 
+    } 
     if($pagetemplate == "User" || $pagetemplate == "Game" || $pagetemplate == "BlogPost")
     {
       echo "<script src='/js/jquery.autogrow-textarea.js'></script>"; 

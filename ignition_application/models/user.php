@@ -95,11 +95,12 @@ class User extends CI_Model {
     }
 
     // get user by ID
-    function getUserByID($userID)
+    function getUserByID($userID, $viewedByUserID)
     {
         $this->db->select('*');
         $this->db->from('users');
-        $this->db->where('UserID', $userID); 
+        if($viewedByUserID != null) $this->db->join('following', 'users.UserID = following.ChildUserID AND following.ParentUserID = ' . $viewedByUserID, 'left');
+        $this->db->where('users.UserID', $userID); 
         $query = $this->db->get();
 
         if($query->num_rows() == 1)
@@ -360,5 +361,30 @@ class User extends CI_Model {
         }
 
         return $comments;
+    }
+
+    // follow or unfollow user (parent is following child)
+    // returns true if user is following, false is not following
+    function followUser($parentUserID, $childUserID)
+    {
+        $data = array(
+           'ParentUserID' => $parentUserID,
+           'ChildUserID' => $childUserID
+        );
+
+        // check if user is already following user
+        $query = $this->db->get_where('following', $data);
+        if ($query->num_rows() > 0)
+        {
+            // unfollow user
+            $this->db->delete('following', $data); 
+
+            return false;
+        } else {
+            // follow user
+            $this->db->insert('following', $data); 
+
+            return true;
+        }
     }
 }

@@ -12,6 +12,7 @@
 			<li id="navFeed"><a href="/user/<?php echo $user->UserID ?>">Feed</a></li>
 			<li id="navCollection"><a href="/user/<?php echo $user->UserID ?>/collection">Collection</a></li>
 			<?php 
+				// if logged in and this user
 				if($sessionUserID != null && $sessionUserID == $user->UserID) 
 				{
 					echo "<li id='navSettings'><a href='/user/settings'>Settings</a></li>";
@@ -19,10 +20,26 @@
 			?>
 		</ul>
 		<?php
+			// if logged in and not this user
+			if($sessionUserID != null && $sessionUserID != $user->UserID) 
+			{
+				// user is following user
+				if($user->ChildUserID != null)
+				{
+					$label = "Following";
+					$style = "success";
+				} else {
+					$label = "Follow";
+					$style = "default";
+				}
+				echo '<a onclick="javascript:changeFollowingStatus(' . $user->UserID . ');" id="followButton" class="btn btn-' . $style . ' btn-fullWidth">' . $label . '</a>';
+			} 
+
 			if($user->Bio != null) 
 			{
 				echo "<div class='userBio'>" . $user->Bio . "</div>";
 			}
+
 			if($currentlyPlaying != null)
 			{
 				echo "<p><b>Currently Playing:</b></p>";
