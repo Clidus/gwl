@@ -1,7 +1,7 @@
 function postComment(linkID, commentTypeID) {
     var comment = $('#commentField' + linkID).val();
     if(comment == "") {
-        showErrorModal('You need to type something duder!',false,false);
+        showErrorModal('You need to type something duder!');
         return;
     }
 
@@ -16,7 +16,7 @@ function postComment(linkID, commentTypeID) {
         },
         success : function(data){
             if (data.error === true) {
-                showErrorModal(data.errorMessage);
+                showErrorModal(data.errorMessage, data.errorProgressURL, data.errorProgressCTA);
             } else {
                 var newComment;
                 newComment = '<div class="clearfix eventCommentDisplay">';

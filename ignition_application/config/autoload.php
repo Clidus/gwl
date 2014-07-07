@@ -96,7 +96,7 @@ $autoload['config'] = array('gwl_config');
 |
 */
 
-$autoload['language'] = array();
+$autoload['language'] = array('errors');
 
 
 /*
