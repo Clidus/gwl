@@ -28,7 +28,7 @@ class Games extends CI_Controller {
 
         // get event feed
         $this->load->model('User');
-        $data['events'] = $this->User->getUserEvents(null, $gbID, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
+        $data['events'] = $this->User->getUserEvents(null, $gbID, null, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
         $data['pageNumber'] = $page;
 
         // load views

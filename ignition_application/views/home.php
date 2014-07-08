@@ -30,8 +30,11 @@
 			{
 				echo '
 				<div class="clearfix userActivityItem">
-					<a class="pull-left" href="' . $event->Url . '">
-						<img class="media-object gameBoxArt tinyIconImage" src="' . $event->Image . '" />
+					<a class="pull-left" href="' . $event->UserUrl . '">
+						<img class="media-object gameBoxArt tinyIconImage" src="' . $event->UserImage . '" />
+					</a>
+					<a class="pull-left" href="' . $event->GameUrl . '">
+						<img class="media-object gameBoxArt tinyIconImage" src="' . $event->GameImage . '" />
 					</a>
 					<div class="media-body clearfix">
 						<b>' . $event->Username . $event->Label . '</b> ' . $event->GameName . '<span class="userActivityDateStamp">' . $event->DateStampFormatted . '</span>

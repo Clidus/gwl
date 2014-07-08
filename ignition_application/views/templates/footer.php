@@ -48,7 +48,7 @@
     { 
       echo "<script src='/js/user.js?v=1'></script>"; 
     } 
-    if($pagetemplate == "User" || $pagetemplate == "Game" || $pagetemplate == "BlogPost")
+    if($pagetemplate == "User" || $pagetemplate == "Game" || $pagetemplate == "BlogPost" || $pagetemplate == "UserHome")
     {
       echo "<script src='/js/jquery.autogrow-textarea.js'></script>"; 
       echo "<script src='/js/comments.js?v=2'></script>"; 
@@ -60,6 +60,8 @@
           switch($pagetemplate)
           {
             case "Game":
+            case "BlogPost":
+            case "UserHome":
               echo "$('.textAreaAutoGrow').autogrow();";
               break;
             case "User":

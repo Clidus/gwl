@@ -14,16 +14,19 @@
 ?>
 			<div class="panel panel-default"> 
 				<div class="panel-body media">
-					
-					<a class='pull-left' href='<?php echo $event->Url ?>'>
-						<img class='media-object gameBoxArt eventImage' src='<?php echo $event->Image ?>' />
-					</a>
-					<div class="media-body clearfix eventDetail">
-						<?php
-							echo '<p><b>' . $event->Username . $event->Label . '</b> ' . $event->GameName . $event->PlatformsLabel . '</p>';
-							echo '<p class="gameDeck">' . $event->Deck . '</p>';
-							echo '<p class="datestamp pull-right">' . $event->DateStampFormatted . '</p>';
-						?>
+					<div class="eventDetail">
+						<a class='pull-left' href='<?php echo $event->UserUrl ?>'>
+							<img class='media-object gameBoxArt eventImage pull-left' src='<?php echo $event->UserImage ?>' />
+						</a>
+						<a class='pull-left' href='<?php echo $event->GameUrl ?>'>
+							<img class='media-object gameBoxArt eventImage pull-left' src='<?php echo $event->GameImage ?>' />
+						</a>
+						<div class="media-body clearfix">
+							<?php
+								echo '<p><b>' . $event->Username . $event->Label . '</b> ' . $event->GameName . $event->PlatformsLabel . '</p>';
+								echo '<p class="datestamp pull-right">' . $event->DateStampFormatted . '</p>';
+							?>
+						</div>
 					</div>
 					<?php
 						// comments

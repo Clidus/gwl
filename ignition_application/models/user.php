@@ -225,16 +225,18 @@ class User extends CI_Model {
     }
 
     // get list of events by UserID
-    function getUserEvents($userID, $gbID, $DateTimeFormat, $offset, $resultsPerPage) 
+    function getUserEvents($userID, $gbID, $feedForUserID, $DateTimeFormat, $offset, $resultsPerPage) 
     {
         $this->db->select('*');
         $this->db->from('userEvents');
         $this->db->join('games', 'userEvents.GameID = games.GameID');
         $this->db->join('users', 'userEvents.UserID = users.UserID');
+        if($feedForUserID != null) $this->db->join('following', 'userEvents.UserID = following.ChildUserID', 'left');
         $this->db->join('lists', 'userEvents.ListID = lists.ListID', 'left');
         $this->db->join('gameStatuses', 'userEvents.StatusID = gameStatuses.StatusID', 'left');
-        if($userID != null) $this->db->where('userEvents.UserID', $userID); 
-        if($gbID != null) $this->db->where('games.GBID', $gbID); 
+        if($userID != null) $this->db->where('userEvents.UserID', $userID); // user page
+        if($gbID != null) $this->db->where('games.GBID', $gbID); // game page
+        if($feedForUserID != null) $this->db->where('userEvents.UserID = ' . $feedForUserID . ' OR following.ParentUserID = ' . $feedForUserID); // user feed (following users and self)
         $this->db->order_by("DateStamp", "desc"); 
         $this->db->limit($resultsPerPage, $offset);
         $events = $this->db->get()->result();
@@ -247,29 +249,23 @@ class User extends CI_Model {
         {  
             // default profile image
             $event->ProfileImage = $event->ProfileImage == null ? "gwl_default.jpg" : $event->ProfileImage;
+            $event->GameUrl = '/game/' . $event->GBID;
+            $event->GameImage = $event->ImageSmall;
+            $event->UserUrl = '/user/' . $event->UserID;
+            $event->UserImage = '/uploads/' . $event->ProfileImage;
 
-            // variables for user profile
+            // on user page, dont make username a link
             if($userID != null)
-            {
-                $event->Url = '/game/' . $event->GBID;
-                $event->Image = $event->ImageSmall;
                 $event->Username = $event->Username;
-                $event->GameName = '<a href="' . $event->Url . '">' . $event->Name . '</a></b>';
-            }
-            // variables for game page
-            else if($gbID != null)
-            {
-                $event->Url = '/user/' . $event->UserID;
-                $event->Image = '/uploads/' . $event->ProfileImage;
-                $event->Username = '<a href="' . $event->Url . '">' . $event->Username . '</a>';
+            else
+                $event->Username = '<a href="' . $event->UserUrl . '">' . $event->Username . '</a>';
+
+            // on game page, dont make game name a link
+            if($gbID != null)
                 $event->GameName = $event->Name;
-            // variables for homepage feed
-            } else {
-                $event->Url = '/game/' . $event->GBID;
-                $event->Image = $event->ImageSmall;
-                $event->Username = '<a href="/user/' . $event->UserID . '">' . $event->Username . '</a>';
-                $event->GameName = '<a href="' . $event->Url . '">' . $event->Name . '</a></b>';
-            }
+            else
+                $event->GameName = '<a href="' . $event->GameUrl . '">' . $event->Name . '</a></b>';
+        
 
             // build event label
             $event->Label = "";

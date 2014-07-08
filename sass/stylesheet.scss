@@ -212,8 +212,9 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 }
 
 .eventImage {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
 }
 
 .datestamp {
@@ -229,6 +230,7 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 .tinyIconImage {
     width: 32px;
     height: 32px;
+    margin-right: 10px;
 }
 
 .eventComment, .currentlyPlayingTitle {
@@ -249,7 +251,7 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 }
 
 .eventDetail {
-    margin-bottom: 10px;
+    min-height: 70px;
 }
 
 /*
