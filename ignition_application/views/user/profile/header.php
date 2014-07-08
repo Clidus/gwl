@@ -32,7 +32,7 @@
 					$label = "Follow";
 					$style = "default";
 				}
-				echo '<a onclick="javascript:changeFollowingStatus(' . $user->UserID . ');" id="followButton" class="btn btn-' . $style . ' btn-fullWidth">' . $label . '</a>';
+				echo '<a onclick="javascript:changeFollowingStatus(' . $user->UserID . ');" id="followButton" class="btn btn-' . $style . ' btn-fullWidth"><span class="glyphicon glyphicon-star"></span> ' . $label . '</a>';
 			} 
 
 			if($user->Bio != null) 

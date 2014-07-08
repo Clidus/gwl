@@ -113,6 +113,10 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     text-align: center;
 }
 
+.blogComments {
+    padding: 10px;
+}
+
 /*
 * collection
 */
@@ -211,10 +215,18 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     text-align: center;
 }
 
+.userEvent .media {
+    margin-top: 0px;
+}
+
+.userEvent .panel-body {
+    padding-bottom: 5px;
+}
+
 .eventImage {
-    width: 60px;
-    height: 60px;
-    margin-right: 10px;
+    width: 80px;
+    height: 80px;
+    margin: 1px 10px 0px 3px
 }
 
 .datestamp {
@@ -238,7 +250,7 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 }
 
 .eventCommentDisplay {
-    margin: 10px 0;
+    margin-bottom: 10px;
     font-size: 12px;
 }
 
@@ -248,10 +260,6 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 
 .handPointer {
     cursor: pointer;
-}
-
-.eventDetail {
-    min-height: 70px;
 }
 
 /*

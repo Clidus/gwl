@@ -25,7 +25,7 @@ function changeFollowingStatus(userID) {
                 }
 
                 // enable button and show its new status
-                $('#followButton').html(label).removeClass().addClass("btn btn-" + style + " btn-fullWidth");
+                $('#followButton').html("<span class='glyphicon glyphicon-star'></span> " + label).removeClass().addClass("btn btn-" + style + " btn-fullWidth");
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {

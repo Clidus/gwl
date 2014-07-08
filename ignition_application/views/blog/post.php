@@ -22,7 +22,7 @@
 
 		<p class="postFooter">Posted by <a href="/user/<?php echo $post->UserID; ?>"><?php echo $post->Username ?></a> on the <?php echo date_format(date_create($post->Date), 'jS F, Y') ?>.</p>
 	
-		<div class="media">
+		<div class="panel panel-default panel-footer media">
 			<a name="comments"></a>
 			<?php
 				// comments
@@ -58,12 +58,8 @@
 							<textarea id="commentField' . $post->PostID . '" rows="1" placeholder="Say something..." class="form-control textAreaAutoGrow" name="post"></textarea>
 						</div>';
 				} else {
-					echo '
-						<div class="alert alert-warning">
-							Please <a href="/login">login</a> to post a comment.
-						</div>';
+					echo 'Please <a href="/login">login</a> to post a comment.';
 				}
 			?>
-
 		</div>
 	</div>
