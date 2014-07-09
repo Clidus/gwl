@@ -200,7 +200,7 @@ class User extends CI_Model {
         $data = array(
            'UserID' => $userID,
            'GameID' => $gameID,
-           'DateStamp' => date("Y-m-d H:i:s")
+           'LastUpdated' => date("Y-m-d H:i:s")
         );
 
         if($listID != null) $data['ListID'] = $listID;
@@ -220,8 +220,17 @@ class User extends CI_Model {
             $this->db->where('EventID', $query->first_row()->EventID); 
             return $this->db->update('userEvents', $data); 
         } else {
+            $data['DateStamp'] = date("Y-m-d H:i:s");   // set datestamp only when event is first added
+
             return $this->db->insert('userEvents', $data); 
         }
+    }
+
+    // bump event to the top of the feed by changing the last updated time
+    function bumpUserEvent($eventID)
+    {
+        $this->db->where('EventID', $eventID); 
+        return $this->db->update('userEvents', array('LastUpdated' => date("Y-m-d H:i:s"))); 
     }
 
     // get list of events by UserID
@@ -237,7 +246,7 @@ class User extends CI_Model {
         if($userID != null) $this->db->where('userEvents.UserID', $userID); // user page
         if($gbID != null) $this->db->where('games.GBID', $gbID); // game page
         if($feedForUserID != null) $this->db->where('userEvents.UserID = ' . $feedForUserID . ' OR following.ID IS NOT NULL'); // user feed (following users and self)
-        $this->db->order_by("DateStamp", "desc"); 
+        $this->db->order_by("userEvents.LastUpdated", "desc"); 
         $this->db->limit($resultsPerPage, $offset);
         $events = $this->db->get()->result();
 
@@ -317,7 +326,7 @@ class User extends CI_Model {
         return $events;
     }
 
-    // add comment to event
+    // add comment
     function addComment($linkID, $commentTypeID, $userID, $comment)
     {
         $data = array(
@@ -327,6 +336,9 @@ class User extends CI_Model {
            'CommentTypeID' => $commentTypeID,
            'DateStamp' => date("Y-m-d H:i:s")
         );
+
+        // if a comment for a user event (comment type id = 2) then bump the last updated date stamp of the event
+        if($commentTypeID == 2) $this->bumpUserEvent($linkID);
 
         return $this->db->insert('comments', $data); 
     }
