@@ -32,7 +32,7 @@ class Admin extends CI_Controller {
 
 		// get blog posts
 		$this->load->model('Blog');
-		$data['posts'] = $this->Blog->getPosts(10); // get 10 most recent posts
+		$data['posts'] = $this->Blog->getPosts(100); // get 100 most recent posts
 
 		$this->load->view('templates/header', $data);
 		$this->load->view('admin/blogPostList', $data);
@@ -55,7 +55,6 @@ class Admin extends CI_Controller {
 		$this->form_validation->set_rules('post', 'Post', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('deck', 'Deck', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('image', 'Image', 'trim|xss_clean');
-		$this->form_validation->set_rules('youTube', 'YouTube', 'trim|xss_clean');
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
 
 		// page variables
@@ -67,7 +66,7 @@ class Admin extends CI_Controller {
 		if ($this->form_validation->run() == TRUE)
 		{
 			$this->load->model('Blog');
-			$this->Blog->add($this->input->post('title'), $this->input->post('url'), $this->input->post('post'), $data['sessionUserID'], $this->input->post('deck'), $this->input->post('image'), $this->input->post('youTube'));
+			$this->Blog->add($this->input->post('title'), $this->input->post('url'), $this->input->post('post'), $data['sessionUserID'], $this->input->post('deck'), $this->input->post('image'));
 
 			header("location: " . base_url() . "admin/blog/edit");
 		}
@@ -80,7 +79,6 @@ class Admin extends CI_Controller {
 		$post->Post = "";
 		$post->Deck = "";
 		$post->Image = "";
-		$post->YouTube = "";
 		$data['post'] = $post;
 
 		$this->load->view('templates/header', $data);
@@ -104,13 +102,12 @@ class Admin extends CI_Controller {
 		$this->form_validation->set_rules('post', 'Post', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('deck', 'Deck', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('image', 'Image', 'trim|xss_clean');
-		$this->form_validation->set_rules('youTube', 'YouTube', 'trim|xss_clean');
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
 
 		if ($this->form_validation->run() == TRUE)
 		{
 			$this->load->model('Blog');
-			$this->Blog->update($PostID, $this->input->post('title'), $this->input->post('url'), $this->input->post('post'), $this->input->post('deck'), $this->input->post('image'), $this->input->post('youTube'));
+			$this->Blog->update($PostID, $this->input->post('title'), $this->input->post('url'), $this->input->post('post'), $this->input->post('deck'), $this->input->post('image'));
 		}
 		
 		// get blog posts

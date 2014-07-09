@@ -11,13 +11,14 @@
 		<li><strong>Feature:</strong> You can now follow users. <a href="https://github.com/Clidus/gwl/issues/50">#29</a></li>
 		<li><strong>Feature:</strong> You can see what you and your followers have done recently in a new homepage feed. <a href="https://github.com/Clidus/gwl/issues/50">#29</a></li>
 		<li><strong>Feature:</strong> HTTPS is now supported and enforced. <a href="https://github.com/Clidus/gwl/issues/50">#50</a></li>
-		<li><strong>Feature:</strong> Comments on blog posts. <a href="https://github.com/Clidus/gwl/issues/12">#12</a></li>
-		<li><strong>Feature:</strong> Blog post archive.</li>
+		<li><strong>Feature:</strong> Added comments to blog posts. <a href="https://github.com/Clidus/gwl/issues/12">#12</a></li>
+		<li><strong>Feature:</strong> Added a blog post archive.</li>
+		<li><strong>Feature:</strong> Added YouTube support to markdown using the format ![youtube](l7iVsdRbhnc).</li>
+		<li><strong>Change:</strong> Uncompletable games are no longer included in the completion percentage. <a href="https://github.com/Clidus/gwl/issues/52">#52</a></li>
 		<li><strong>Change:</strong> Making a comment on an event will now bump it to the top of the feed.</li>
 		<li><strong>Change:</strong> New look for events.</li>
 		<li><strong>Change:</strong> New look for the blog.</li>
-		<li><strong>Change:</strong> Uncompletable games are no longer included in the completion percentage. <a href="https://github.com/Clidus/gwl/issues/52">#52</a></li>
-		<li><strong>Change:</strong> New site footer with social links.</li>
+		<li><strong>Change:</strong> New look site footer with social links.</li>
 		<li><strong>Change:</strong> Upgraded bootstrap from v3.0 to v3.2.</li>
 		<li><strong>Bug Fix:</strong> There was a missing "and" when an event contained "is playing" and one status. <a href="https://github.com/Clidus/gwl/issues/51">#51</a></li>
 		<li><strong>Bug Fix:</strong> Some errors returned no message.</li>

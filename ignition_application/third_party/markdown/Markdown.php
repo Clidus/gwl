@@ -138,7 +138,11 @@ class Markdown implements MarkdownInterface {
 	# and pass it through the document gamut.
 	#
 		$this->setup();
-	
+
+		# Clidus: add YouTube support to markdown. Credit: https://aaronparecki.com/articles/2012/09/01/1/some-enhancements-to-markdown
+		$text = preg_replace('|(?<!\\\)!\[youtube]\(([^\)]+)\)|', 
+			'<div class="embed-responsive embed-responsive-16by9 responsiveVideo"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$1" allowfullscreen></iframe></div>', $text);
+
 		# Remove UTF-8 BOM and marker character in input, if present.
 		$text = preg_replace('{^\xEF\xBB\xBF|\x1A}', '', $text);
 

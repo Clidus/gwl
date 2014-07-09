@@ -8,11 +8,7 @@
 	<div class="col-sm-8">
 		<h2><?php echo $post->Title ?></h2>
 		
-		<?php if($post->YouTube != null) { ?>
-			<div class="embed-responsive embed-responsive-16by9 responsiveVideo">
-				<iframe class="embed-responsive-item" src="<?php echo $post->YouTube ?>" allowfullscreen></iframe>
-			</div>
-		<?php } else if($post->Image != null) { ?>
+		<?php if($post->Image != null) { ?>
 			<img src="<?php echo $post->Image ?>" class="responsiveImage" title="<?php echo $post->Title ?>" alt="<?php echo $post->Title ?>" />
 		<?php } ?>
 
