@@ -14,16 +14,23 @@
 ?>
 			<div class="panel panel-default userEvent"> 
 				<div class="panel-body media">
-					<a class='pull-left' href='<?php echo $event->UserUrl ?>'>
-						<img class='media-object gameBoxArt tinyIconImage pull-left' src='<?php echo $event->UserImage ?>' />
-					</a>
-					<div class="media-body clearfix">
-						
-						<a class='pull-left' href='<?php echo $event->GameUrl ?>'>
-							<img class='media-object gameBoxArt eventImage pull-left' src='<?php echo $event->GameImage ?>' />
-						</a>
-						<div class="media-body">
-							<p><b><?php echo $event->Username ?></b> <?php echo '<b>' . $event->Label . '</b> ' . $event->GameName . $event->PlatformsLabel ?></p>
+					<div class="clearfix eventTitle">
+						<div class="pull-left">
+							<a href='<?php echo $event->UserUrl ?>'>
+								<img class='media-object gameBoxArt tinyIconImage' src='<?php echo $event->UserImage ?>' />
+							</a>
+						</div>
+						<div class="media-body eventComment">
+							<b><?php echo $event->Username ?></b> <?php echo '<b>' . $event->Label . '</b> ' . $event->GameName . $event->PlatformsLabel ?>
+						</div>
+					</div>
+					<div class="clearfix eventCommentDisplay">
+						<div class="pull-left">
+							<a href='<?php echo $event->GameUrl ?>'>
+								<img class='media-object gameBoxArt eventImage' src='<?php echo $event->GameImage ?>' />
+							</a>
+						</div>
+						<div class="media-body eventComment">
 							<p class="gameDeck"><?php echo $event->Deck ?></p>
 							<p class="datestamp pull-right"><?php echo $event->DateStampFormatted ?></p>
 						</div>

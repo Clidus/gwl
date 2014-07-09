@@ -130,16 +130,6 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 	width: 85px;
 }
 
-@media (max-width: 770px) {
-    /* homepage */
-    .userActivityDateStamp {
-        color: $grey;
-        float: none;
-        display: block;
-        font-size: 10px;
-    }
-}
-
 /* 
 * search 
 */
@@ -183,17 +173,6 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     width: 100%;
 }
 
-@media (max-width: 480px) {
-    /* search */
-    .searchResultImage, .searchResultBody {
-        margin-left: 0%;
-        width: 100%;  
-    } 
-    .searchResultBody h4 {
-        margin-top: 10px;
-    } 
-}
-
 /*
 * profile
 */
@@ -223,10 +202,13 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     padding-bottom: 5px;
 }
 
+.eventTitle {
+    margin-bottom: 10px;
+}
+
 .eventImage {
     width: 80px;
     height: 80px;
-    margin: 1px 10px 3px 3px
 }
 
 .datestamp {
@@ -235,7 +217,6 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 }
 
 .gameDeck {
-    margin-top: 10px;
     font-size: 12px;
 }
 
@@ -312,17 +293,6 @@ input[readonly] {
     height: 500px;
 }
 
-@media (max-width: 350px) {
-    /*
-    * profile
-    */
-
-    .eventImage {
-        width: 32px;
-        height: 32px;
-    }
-}
-
 /*
 * general
 */
@@ -338,4 +308,33 @@ input[readonly] {
 .btn-fullWidth {
     width: 100%;
     margin-bottom: 10px;
+}
+
+@media (max-width: 770px) {
+    /* homepage */
+    .userActivityDateStamp {
+        color: $grey;
+        float: none;
+        display: block;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* search */
+    .searchResultImage, .searchResultBody {
+        margin-left: 0%;
+        width: 100%;  
+    } 
+    .searchResultBody h4 {
+        margin-top: 10px;
+    } 
+}
+
+@media (max-width: 350px) {
+    /* profile */
+ 
+    .eventTitle {
+        font-size: 12px;
+    }
 }
