@@ -231,12 +231,12 @@ class User extends CI_Model {
         $this->db->from('userEvents');
         $this->db->join('games', 'userEvents.GameID = games.GameID');
         $this->db->join('users', 'userEvents.UserID = users.UserID');
-        if($feedForUserID != null) $this->db->join('following', 'userEvents.UserID = following.ChildUserID', 'left');
+        if($feedForUserID != null) $this->db->join('following', 'userEvents.UserID = following.ChildUserID AND following.ParentUserID = ' . $feedForUserID, 'left');
         $this->db->join('lists', 'userEvents.ListID = lists.ListID', 'left');
         $this->db->join('gameStatuses', 'userEvents.StatusID = gameStatuses.StatusID', 'left');
         if($userID != null) $this->db->where('userEvents.UserID', $userID); // user page
         if($gbID != null) $this->db->where('games.GBID', $gbID); // game page
-        if($feedForUserID != null) $this->db->where('userEvents.UserID = ' . $feedForUserID . ' OR following.ParentUserID = ' . $feedForUserID); // user feed (following users and self)
+        if($feedForUserID != null) $this->db->where('userEvents.UserID = ' . $feedForUserID . ' OR following.ID IS NOT NULL'); // user feed (following users and self)
         $this->db->order_by("DateStamp", "desc"); 
         $this->db->limit($resultsPerPage, $offset);
         $events = $this->db->get()->result();

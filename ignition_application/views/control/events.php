@@ -92,8 +92,11 @@
 		if(isset($user))
 			$url = '/user/' . $user->UserID . '/';
 		// game page
-		else
+		else if(isset($game))
 			$url = '/game/' . $game->id . '/';
+		// homepage
+		else
+			$url = '/feed/';
 
 		echo '<ul class="pager">';
 		if($pageNumber > 1) echo '<li class="previous"><a href="' . $url . ($pageNumber-1) . '">&larr; Newer</a></li>';
