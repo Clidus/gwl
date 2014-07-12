@@ -57,8 +57,8 @@ class Blogs extends CI_Controller {
         $post->Post = $this->md->defaultTransform($post->Post);
 
 		// get comments
-		$this->load->model('User');
-        $post->comments = $this->User->getComments($post->PostID, 1, $this->session->userdata('DateTimeFormat')); // 1 = Blog Comment
+		$this->load->model('Comment');
+        $post->comments = $this->Comment->getComments($post->PostID, 1, $this->session->userdata('DateTimeFormat')); // 1 = Blog Comment
 
 		// page variables
 		$this->load->model('Page');

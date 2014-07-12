@@ -1,5 +1,15 @@
 <?php 
 
+/*
+|--------------------------------------------------------------------------
+| Ignition v0.1 ignitionpowered.co.uk
+|--------------------------------------------------------------------------
+|
+| This class extends the functionality of Ignition. You can add your
+| own custom logic here.
+|
+*/
+
 require_once APPPATH.'/models/ignition/user.php';
 
 class User extends IG_User {
@@ -27,54 +37,6 @@ class User extends IG_User {
         }
 
         return null;
-    }
-    
-    // add comment
-    function addComment($linkID, $commentTypeID, $userID, $comment)
-    {
-        $data = array(
-           'Comment' => $comment,
-           'UserID' => $userID,
-           'LinkID' => $linkID,
-           'CommentTypeID' => $commentTypeID,
-           'DateStamp' => date("Y-m-d H:i:s")
-        );
-
-        // if a comment for a user event (comment type id = 2) then bump the last updated date stamp of the event
-        if($commentTypeID == 2) {
-            $this->load->model('Event');
-            $this->Event->bumpEvent($linkID);
-        }
-
-        return $this->db->insert('comments', $data); 
-    }
-
-    // get comments
-    function getComments($eventID, $commentTypeID, $DateTimeFormat) 
-    {
-        $this->db->select('*');
-        $this->db->from('comments');
-        $this->db->join('users', 'comments.UserID = users.UserID');
-        $this->db->where('comments.LinkID', $eventID); 
-        $this->db->where('comments.CommentTypeID', $commentTypeID);
-        $this->db->order_by("DateStamp", "asc"); 
-        $comments = $this->db->get()->result();
-
-        // loop through events
-        $this->load->model('Time');
-        foreach ($comments as $comment)
-        {
-            // transform markdown to HTML
-            $comment->Comment = $this->md->defaultTransform($comment->Comment);
-
-            // format date stamp
-            $comment->DateStampFormatted = $this->Time->GetDateTimeInFormat($comment->DateStamp, $DateTimeFormat);
-
-            // default profile image
-            $comment->ProfileImage = $comment->ProfileImage == null ? $this->config->item('default_profile_image') : $comment->ProfileImage;
-        }
-
-        return $comments;
     }
 
     // follow or unfollow user (parent is following child)

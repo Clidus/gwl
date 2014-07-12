@@ -135,8 +135,8 @@ class Event extends CI_Model {
             }
 
             // get comments
-            $this->load->model('User');
-            $event->comments = $this->User->getComments($event->EventID, 2, $DateTimeFormat); // 2 = User Event Comment
+            $this->load->model('Comment');
+            $event->comments = $this->Comment->getComments($event->EventID, 2, $DateTimeFormat); // 2 = User Event Comment
 
             // format date stamp
             $event->DateStampFormatted = $this->Time->GetDateTimeInFormat($event->DateStamp, $DateTimeFormat);

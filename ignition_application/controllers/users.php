@@ -345,6 +345,7 @@ class Users extends CI_Controller {
         $this->form_validation->run();
 
         $linkID = $this->input->post('linkID');
+        $commentTypeID = $this->input->post('commentTypeID');
         $comment = $this->input->post('comment');
         $userID = $this->session->userdata('UserID');
 
@@ -362,8 +363,15 @@ class Users extends CI_Controller {
             return;
         }
 
-        $this->load->model('User');
-        $this->User->addComment($linkID, $this->input->post('commentTypeID'), $userID, $comment);
+        // add comment
+        $this->load->model('Comment');
+        $this->Comment->addComment($linkID, $commentTypeID, $userID, $comment);
+
+        // if a comment for an event (comment type id = 2) then bump the last updated date stamp of the event
+        if($commentTypeID == 2) {
+            $this->load->model('Event');
+            $this->Event->bumpEvent($linkID);
+        }
 
         // add new comment (in HTML) to response so it can be added to the current page
         $this->load->library('md');

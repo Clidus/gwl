@@ -2,12 +2,12 @@
 
 /*
 |--------------------------------------------------------------------------
-| Ignition v0.1
+| Ignition v0.1 ignitionpowered.co.uk
 |--------------------------------------------------------------------------
 |
 | This class is a core part of Ignition. It is advised that you extend
-| this class rather than modifying it, unless you do not plan to upgrade
-| to newer versions of Ignition.
+| this class rather than modifying it, unless you wish to contribute
+| to the project.
 |
 */
 
