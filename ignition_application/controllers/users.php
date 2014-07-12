@@ -16,7 +16,7 @@ class Users extends CI_Controller {
     {   
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID, $this->session->userdata('UserID'));
+        $user = $this->User->getUserByIdWithFollowingStatus($userID, $this->session->userdata('UserID'));
 
         if($user == null)
             show_404();
@@ -51,7 +51,7 @@ class Users extends CI_Controller {
     {   
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID, $this->session->userdata('UserID'));
+        $user = $this->User->getUserByIdWithFollowingStatus($userID, $this->session->userdata('UserID'));
 
         if($user == null)
             show_404();
@@ -125,7 +125,7 @@ class Users extends CI_Controller {
 
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID, null);
+        $user = $this->User->getUserByID($userID);
 
         if($user == null)
             show_404();
@@ -190,7 +190,7 @@ class Users extends CI_Controller {
 
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID, null);
+        $user = $this->User->getUserByID($userID);
 
         if($user == null)
             show_404();
@@ -226,7 +226,7 @@ class Users extends CI_Controller {
 
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID, null);
+        $user = $this->User->getUserByID($userID);
 
         if($user == null)
             show_404();
@@ -286,7 +286,7 @@ class Users extends CI_Controller {
 
         // get user data
         $this->load->model('User');
-        $user = $this->User->getUserByID($userID, null);
+        $user = $this->User->getUserByID($userID);
 
         if($user == null)
             show_404();

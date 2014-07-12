@@ -80,7 +80,7 @@ $autoload['helper'] = array('url','date');
 |
 */
 
-$autoload['config'] = array('gwl_config');
+$autoload['config'] = array('ignition_config','gwl_config');
 
 
 /*
