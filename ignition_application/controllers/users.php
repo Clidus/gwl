@@ -31,7 +31,8 @@ class Users extends CI_Controller {
         $data['user'] = $user;
 
         // get event feed
-        $data['events'] = $this->User->getUserEvents($userID, null, null, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
+        $this->load->model('Event');
+        $data['events'] = $this->Event->getEvents($userID, null, null, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
         $data['pageNumber'] = $page;
 
         // get games currently playing

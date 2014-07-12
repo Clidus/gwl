@@ -27,8 +27,8 @@ class Games extends CI_Controller {
         $data['game'] = $game;
 
         // get event feed
-        $this->load->model('User');
-        $data['events'] = $this->User->getUserEvents(null, $gbID, null, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
+        $this->load->model('Event');
+        $data['events'] = $this->Event->getEvents(null, $gbID, null, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
         $data['pageNumber'] = $page;
 
         // load views
@@ -98,8 +98,8 @@ class Games extends CI_Controller {
         // default value for auto selected platform
         $result['autoSelectPlatform'] = null;
 
-        // load user model
-        $this->load->model('User');
+        // load event model
+        $this->load->model('Event');
 
         // if game isnt in collection
         if($collection == null) 
@@ -133,13 +133,13 @@ class Games extends CI_Controller {
             }
 
             // record event
-            $this->User->addUserEvent($userID, $gameID, $listID, null, null);
+            $this->Event->addEvent($userID, $gameID, $listID, null, null);
         // game is in collection, update list
         } else {
             $this->Game->updateList($GBID, $userID, $listID);
 
             // record event
-            $this->User->addUserEvent($userID, $collection->GameID, $listID, null, null);
+            $this->Event->addEvent($userID, $collection->GameID, $listID, null, null);
         }
 
         // get list name and style
@@ -189,8 +189,8 @@ class Games extends CI_Controller {
         }
 
         // record event
-        $this->load->model('User');
-        $this->User->addUserEvent($userID, $collection->GameID, null, $statusID, null);
+        $this->load->model('Event');
+        $this->Event->addEvent($userID, $collection->GameID, null, $statusID, null);
 
         // get status name and style
         $statusData = $this->Game->getStatusDetails($statusID);
@@ -289,8 +289,8 @@ class Games extends CI_Controller {
         }
 
         // record event
-        $this->load->model('User');
-        $this->User->addUserEvent($userID, $collection->GameID, $collection->ListID, null, null);
+        $this->load->model('Event');
+        $this->Event->addEvent($userID, $collection->GameID, $collection->ListID, null, null);
         
         $result['error'] = false; 
         echo json_encode($result);
@@ -376,8 +376,8 @@ class Games extends CI_Controller {
             return;
         }
 
-        $this->load->model('User');
-        $this->User->addUserEvent($userID, $collection->GameID, null, null, $currentlyPlaying);
+        $this->load->model('Event');
+        $this->Event->addEvent($userID, $collection->GameID, null, null, $currentlyPlaying);
        
         // return success
         $result['error'] = false;   

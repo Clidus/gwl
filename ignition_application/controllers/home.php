@@ -6,7 +6,7 @@ class Home extends CI_Controller {
 	public function view($page = 1)
 	{
 		$this->load->model('Page');
-		$this->load->model('User');
+		$this->load->model('Event');
 
 		// if user is logged in
 		if($this->session->userdata('UserID') != null) {
@@ -18,14 +18,14 @@ class Home extends CI_Controller {
 	        $offset = ($page-1) * $resultsPerPage;
 
 			// feed of users you follow
-			$data['events'] = $this->User->getUserEvents(null, null, $this->session->userdata('UserID'), $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
+			$data['events'] = $this->Event->getEvents(null, null, $this->session->userdata('UserID'), $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
 			$data['pageNumber'] = $page;
 		} else {
 			// page variables
 			$data = $this->Page->create("Home", "Home");
 
 			// feed of all site activity
-			$data['events'] = $this->User->getUserEvents(null, null, null, $this->session->userdata('DateTimeFormat'), 0, 30);
+			$data['events'] = $this->Event->getEvents(null, null, null, $this->session->userdata('DateTimeFormat'), 0, 30);
 		}
 
 		// load views
