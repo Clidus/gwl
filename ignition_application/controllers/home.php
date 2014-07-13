@@ -15,7 +15,7 @@ require_once APPPATH.'/controllers/ignition/home.php';
 class Home extends IG_Home {
 	
 	// homepage
-	public function homepage($page = 1)
+	public function view($page = 1)
 	{
 		$this->load->model('Page');
 		$this->load->model('Event');
