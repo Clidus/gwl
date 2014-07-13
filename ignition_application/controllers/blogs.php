@@ -89,10 +89,9 @@ class Blogs extends CI_Controller {
 		$months = $this->Blog->getMonthlyArchive(); // get monthly archive of blog posts
 
 		// convert month number into month name
-		$this->load->model('Utility');
 		foreach($months as $month)
 		{
-			$month->MonthName = $this->Utility->getMonthName($month->Month);
+			$month->MonthName = $this->getMonthName($month->Month);
 		}
 		$data['months'] = $months;
 
@@ -110,8 +109,7 @@ class Blogs extends CI_Controller {
 			show_404();
 
 		// page title
-		$this->load->model('Utility');
-		$title = $this->Utility->getMonthName($month) . " " . $year;
+		$title = $this->getMonthName($month) . " " . $year;
 
 		// page variables
 		$this->load->model('Page');
@@ -134,4 +132,9 @@ class Blogs extends CI_Controller {
 		$this->load->view('blog/sidebar', $data);
 		$this->load->view('templates/footer', $data);
 	}
+
+    // get month name from number
+    function getMonthName($monthNumber) {
+        return DateTime::createFromFormat('!m', $monthNumber)->format('F');
+    }
 }
