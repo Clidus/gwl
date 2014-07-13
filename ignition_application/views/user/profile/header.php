@@ -40,7 +40,7 @@
 				echo "<div class='userBio'>" . $user->Bio . "</div>";
 			}
 
-			if($currentlyPlaying != null)
+			if(isset($currentlyPlaying) && $currentlyPlaying != null)
 			{
 				echo "<p><b>Currently Playing:</b></p>";
 				foreach($currentlyPlaying as $currentlyPlayingGame)
