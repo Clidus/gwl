@@ -1,9 +1,21 @@
 <?php
 
-class Home extends CI_Controller {
+/*
+|--------------------------------------------------------------------------
+| Ignition v0.1 ignitionpowered.co.uk
+|--------------------------------------------------------------------------
+|
+| This class extends the functionality of Ignition. You can add your
+| own custom logic here.
+|
+*/
+
+require_once APPPATH.'/controllers/ignition/home.php';
+
+class Home extends IG_Home {
 	
-	// view static page
-	public function view($page = 1)
+	// homepage
+	public function homepage($page = 1)
 	{
 		$this->load->model('Page');
 		$this->load->model('Event');

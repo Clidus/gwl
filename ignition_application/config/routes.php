@@ -38,8 +38,8 @@
 |
 */
 
-$route['default_controller'] = 'home/view';
-$route['feed/(:num)'] = 'home/view/$1';
+$route['default_controller'] = 'home/homepage';
+$route['feed/(:num)'] = 'home/homepage/$1';
 
 $route['blog'] = 'blogs/home';
 $route['blog/archive'] = 'blogs/archive';
