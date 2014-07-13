@@ -3,23 +3,20 @@
 class Game extends CI_Model {
 
     var $errorMessage = '';
+    var $resultsPerPage = 10;
 
     function __construct()
     {
         // Call the Model constructor
         parent::__construct();
     }
-
-    var $resultsPerPage = 10;
    
     // search Giant Bomb API for games  
     function searchForGame($query, $page, $userID) {  
+        // build API request
         $url = $this->config->item('gb_api_root') . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
-        //echo $url;
-        // giant bomb search API is broken. Filter by game resource instead
-        //$offset = $this->resultsPerPage * ($page-1);
-        //$url = $this->config->item('gb_api_root') . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&limit=" . $this->resultsPerPage . "&offset=" . $offset . "&filter=name:" . urlencode ($query);
-
+      
+        // make API request
         $result = $this->Utility->getData($url);
 
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
@@ -36,8 +33,10 @@ class Game extends CI_Model {
 
     // get game from Giant Bomb API by ID
     public function getGameByID($gbID, $userID) {   
+        // build API request
         $url = $this->config->item('gb_api_root') . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
-        //echo $url;
+
+        // make API request
         $result = $this->Utility->getData($url);
         
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
