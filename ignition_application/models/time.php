@@ -1,38 +1,22 @@
 <?php 
 
-class Time extends CI_Model {
+/*
+|--------------------------------------------------------------------------
+| Ignition v0.1 ignitionpowered.co.uk
+|--------------------------------------------------------------------------
+|
+| This class extends the functionality of Ignition. You can add your
+| own custom logic here.
+|
+*/
+
+require_once APPPATH.'/models/ignition/time.php';
+
+class Time extends IG_Time {
 
     function __construct()
     {
         // Call the Model constructor
         parent::__construct();
-    }
-
-    // return date and time in format selected by user
-    function GetDateTimeInFormat($datestamp, $format)
-    {
-        switch($format)
-        {
-            // Swatch Internet Time
-            case null:
-            case 1:
-                return date_format(date_create($datestamp), 'jS F, Y') . ' @' . date("B", human_to_unix($datestamp)) . ' .beats';
-            // Unix time
-            case 2:
-                return human_to_unix($datestamp);
-            // Time since
-            case 3:
-                return timespan(human_to_unix($datestamp), time()) . ' ago';
-            // Database
-            case 4:
-                return $datestamp;
-            // English
-            case 5:
-                return date_format(date_create($datestamp), 'jS F, Y, g:i a');
-            // American
-            case 6:
-                return date_format(date_create($datestamp), 'F jS, Y, g:i a');
-            
-        }
     }
 }
