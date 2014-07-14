@@ -23,10 +23,8 @@
 			<?php
 				// comments
 				// loop through comments
-				for($i = 0; $i < count($post->comments); $i++)
+				foreach($post->comments as $comment)
 				{
-					$comment = $post->comments[$i];
-
 					// display comment
 					echo '
 						<div class="clearfix eventCommentDisplay">
