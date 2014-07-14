@@ -165,4 +165,3 @@ class Users extends IG_Users {
         echo json_encode($result);
     }
 }
-?>
