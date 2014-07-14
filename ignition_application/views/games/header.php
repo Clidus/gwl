@@ -26,7 +26,7 @@
 
 <div class="row">
     <div class="col-sm-4">
-        <img class="gameBoxArt gamePageBoxArt" src="<?php if(is_object($game->image)) echo $game->image->small_url; ?>">
+        <img class="imageShadow gamePageBoxArt" src="<?php if(is_object($game->image)) echo $game->image->small_url; ?>">
         <div class="panel panel-default"> 
             <div class="panel-body">
               <p><?php echo $game->deck; ?></p>

@@ -26,7 +26,7 @@
 
                             <div class="clearfix">    
                                 <a href='/game/<?php echo $game->id ?>'>
-                                    <img class="media-object pull-left gameBoxArt searchResultImage" src="<?php if(is_object($game->image)) echo $game->image->small_url; ?>">
+                                    <img class="media-object pull-left imageShadow searchResultImage" src="<?php if(is_object($game->image)) echo $game->image->small_url; ?>">
                                 </a>    
                                 <div class="pull-left searchResultBody">  
                                     <h4><?php echo "<a href='/game/" . $game->id . "'>" . $game->name . "</a>" ?></h4>

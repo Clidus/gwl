@@ -7,7 +7,7 @@
 
 <div class="row">
 	<div class="col-sm-4">
-		<img src="/uploads/<?php echo $user->ProfileImage ?>" class="largeProfileImage gameBoxArt" />
+		<img src="/uploads/<?php echo $user->ProfileImage ?>" class="largeProfileImage imageShadow" />
 		<ul class="nav nav-pills nav-stacked profileNav">
 			<li id="navFeed"><a href="/user/<?php echo $user->UserID ?>">Feed</a></li>
 			<li id="navCollection"><a href="/user/<?php echo $user->UserID ?>/collection">Collection</a></li>
@@ -49,7 +49,7 @@
 						<div class="currentlyPlaying clearfix">
 							<div class="pull-left">
 								<a href="/game/' . $currentlyPlayingGame->GBID . '">
-									<img src="' . $currentlyPlayingGame->ImageSmall . '" class="tinyIconImage gameBoxArt" />
+									<img src="' . $currentlyPlayingGame->ImageSmall . '" class="tinyIconImage imageShadow" />
 								</a>
 							</div>
 							<div class="media-body currentlyPlayingTitle">

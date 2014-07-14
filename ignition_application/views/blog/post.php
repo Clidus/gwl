@@ -31,7 +31,7 @@
 					echo '
 						<div class="clearfix eventCommentDisplay">
 							<div class="pull-left">
-								<img src="/uploads/' . $comment->ProfileImage . '" class="tinyIconImage gameBoxArt" />
+								<img src="/uploads/' . $comment->ProfileImage . '" class="tinyIconImage imageShadow" />
 							</div>
 							<div class="media-body eventComment">
 								<a href="/user/' . $comment->UserID . '">' . $comment->Username . '</a></b> 
@@ -47,7 +47,7 @@
 					echo '
 						<div id="newComment' . $post->PostID . '"></div>
 						<div class="pull-left">
-							<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage gameBoxArt" />
+							<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage imageShadow" />
 						</div>
 						<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $post->PostID . ', 1);">Post</button>
 						<div class="media-body">

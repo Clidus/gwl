@@ -22,7 +22,7 @@
 				echo '
 				<div class="clearfix userActivityItem">
 					<a class="pull-left" href="' . $event->GameUrl . '">
-						<img class="media-object gameBoxArt tinyIconImage" src="' . $event->GameImage . '" />
+						<img class="media-object imageShadow tinyIconImage" src="' . $event->GameImage . '" />
 					</a>
 					<div class="media-body clearfix">
 						<b>' . $event->Username . $event->Label . '</b> ' . $event->GameName . '<span class="userActivityDateStamp">' . $event->DateStampFormatted . '</span>

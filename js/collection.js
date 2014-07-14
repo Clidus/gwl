@@ -86,7 +86,7 @@ function loadCollection() {
                     for (i = 0; i < collection.length; ++i) {
                         gameCollection += '<div class="panel panel-default collectionItem media clearfix">';
                         gameCollection += '     <div class="pull-left">';
-                        gameCollection += '         <img src="' + collection[i].ImageSmall + '" class="tinyIconImage gameBoxArt" />';
+                        gameCollection += '         <img src="' + collection[i].ImageSmall + '" class="tinyIconImage imageShadow" />';
                         gameCollection += '     </div>';
                         gameCollection += '     <div class="media-body eventComment">';
                         gameCollection += '         <a href="/game/' + collection[i].GBID + '">' + collection[i].Name + '</a></b>';

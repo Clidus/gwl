@@ -17,7 +17,7 @@
 					<div class="clearfix eventTitle">
 						<div class="pull-left">
 							<a href='<?php echo $event->UserUrl ?>'>
-								<img class='media-object gameBoxArt tinyIconImage' src='<?php echo $event->UserImage ?>' />
+								<img class='media-object imageShadow tinyIconImage' src='<?php echo $event->UserImage ?>' />
 							</a>
 						</div>
 						<div class="media-body eventComment">
@@ -27,7 +27,7 @@
 					<div class="clearfix eventCommentDisplay">
 						<div class="pull-left">
 							<a href='<?php echo $event->GameUrl ?>'>
-								<img class='media-object gameBoxArt eventImage' src='<?php echo $event->GameImage ?>' />
+								<img class='media-object imageShadow eventImage' src='<?php echo $event->GameImage ?>' />
 							</a>
 						</div>
 						<div class="media-body eventComment">
@@ -64,7 +64,7 @@
 						echo '
 							<div class="clearfix eventCommentDisplay">
 								<div class="pull-left">
-									<img src="/uploads/' . $comment->ProfileImage . '" class="tinyIconImage gameBoxArt" />
+									<img src="/uploads/' . $comment->ProfileImage . '" class="tinyIconImage imageShadow" />
 								</div>
 								<div class="media-body eventComment">
 									<a href="/user/' . $comment->UserID . '">' . $comment->Username . '</a></b> 
@@ -80,7 +80,7 @@
 						echo '
 							<div id="newComment' . $event->EventID . '"></div>
 							<div class="pull-left">
-								<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage gameBoxArt" />
+								<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage imageShadow" />
 							</div>
 							<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $event->EventID . ', 2);">Post</button>
 							<div class="media-body">
