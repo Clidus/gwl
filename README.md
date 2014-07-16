@@ -8,6 +8,7 @@ This software uses the following software and services, for which we are thankfu
 
 * [Giant Bomb API](http://www.giantbomb.com/api/)
 * [CodeIgniter](http://ellislab.com/codeigniter)
+* [Ignition](http://www.ignitionpowered.co.uk/)
 * [PHP Markdown](http://michelf.ca/projects/php-markdown/)
 * [Markdown library for CodeIgniter](http://blog.gauntface.co.uk/2014/03/17/codeigniter-markdown-libraries-hell/)
 * [Bootstrap](http://getbootstrap.com/)
@@ -25,9 +26,10 @@ Prerequisites:
 
 Installation:
 
-* Set "base_url" in gwl_application/config/config.php
-* Set "hostname", "username", "password" and "database" in gwl_application/config/database.php
-* Set "gb_api_key" in gwl_application/config/gwl_config.php
+* Create a datebase with the schema in database.txt
+* Set "base_url" in ignition_application/config/config.php
+* Set "hostname", "username", "password" and "database" in ignition_application/config/database.php
+* Set "gb_api_key" in ignition_application/config/gwl_config.php
 * Navigate to project root in the terminal and run "compass compile" to build the CSS files. You can also run "compass watch" to have the CSS rebuilt everytime you modify a stylesheet.
 
 ## License
