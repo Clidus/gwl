@@ -19,7 +19,9 @@
 		<li><strong>Change:</strong> New look for events.</li>
 		<li><strong>Change:</strong> New look for the blog.</li>
 		<li><strong>Change:</strong> New look site footer with social links.</li>
-		<li><strong>Change:</strong> Upgraded bootstrap from v3.0 to v3.2.</li>
+		<li><strong>Change:</strong> Code restructure for the release of <a href="http://www.ignitionpowered.co.uk/">Ignition</a>.</li>
+		<li><strong>Change:</strong> Upgraded CodeIgniter from v2.1.4 to v2.2.0.</li>
+		<li><strong>Change:</strong> Upgraded Bootstrap from v3.0 to v3.2.</li>
 		<li><strong>Bug Fix:</strong> There was a missing "and" when an event contained "is playing" and one status. <a href="https://github.com/Clidus/gwl/issues/51">#51</a></li>
 		<li><strong>Bug Fix:</strong> Some errors returned no message.</li>
 	</ul>
