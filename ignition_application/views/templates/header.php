@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <link rel="shortcut icon" href="images/favicon.png">
+        <link rel="shortcut icon" href="images/favicon.png?v=2">
 
         <title><?php echo $pagetitle ?> : Gaming with Lemons</title>
         
@@ -11,7 +11,7 @@
 
         <!-- CSS -->
         <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
-        <link href="/css/stylesheet.css?v=1" rel="stylesheet">
+        <link href="/css/stylesheet.css?v=2" rel="stylesheet">
     </head>
     <body>
       <!-- navbar -->

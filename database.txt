@@ -89,8 +89,8 @@ CREATE TABLE `commentType` (
 
 CREATE TABLE `following` (
   `ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `UserID` int(11) NOT NULL,
-  `FollowedByUserID` int(11) NOT NULL,
+  `ParentUserID` int(11) NOT NULL,
+  `ChildUserID` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

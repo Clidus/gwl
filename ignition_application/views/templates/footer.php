@@ -30,28 +30,28 @@
   </script>
   <script src="/js/jquery-2.0.3.min.js"></script>
   <script src="/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/js/global.js?v=1"></script>
+  <script src="/js/global.js?v=2"></script>
   <?php 
     if($pagetemplate == "Search" || $pagetemplate == "Game") 
     { 
-      echo "<script src='/js/game.js?v=1'></script>"; 
+      echo "<script src='/js/game.js?v=2'></script>"; 
     }
     else if($pagetemplate == "Admin") 
     { 
-      echo "<script src='/js/admin.js?v=1'></script>"; 
+      echo "<script src='/js/admin.js?v=2'></script>"; 
     } 
     else if($pagetemplate == "Collection") 
     { 
-      echo "<script src='/js/collection.js?v=1'></script>"; 
+      echo "<script src='/js/collection.js?v=2'></script>"; 
     } 
     if($pagetemplate == "User" || $pagetemplate == "Collection") 
     { 
-      echo "<script src='/js/user.js?v=1'></script>"; 
+      echo "<script src='/js/user.js?v=2'></script>"; 
     } 
     if($pagetemplate == "User" || $pagetemplate == "Game" || $pagetemplate == "BlogPost" || $pagetemplate == "UserHome")
     {
       echo "<script src='/js/jquery.autogrow-textarea.js'></script>"; 
-      echo "<script src='/js/comments.js?v=2'></script>"; 
+      echo "<script src='/js/comments.js?v=3'></script>"; 
     }
   ?>
   <script>

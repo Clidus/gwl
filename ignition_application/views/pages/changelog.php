@@ -6,7 +6,7 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
-	<p><b>Version 0.3.0 - Unreleased</b></p>
+	<p><b><a href="/blog/version-0-3">Version 0.3.0 - 2014-07-17</a></b></p>
 	<ul>
 		<li><strong>Feature:</strong> You can now follow users. <a href="https://github.com/Clidus/gwl/issues/50">#29</a></li>
 		<li><strong>Feature:</strong> You can see what you and your followers have done recently in a new homepage feed. <a href="https://github.com/Clidus/gwl/issues/50">#29</a></li>
@@ -19,6 +19,7 @@
 		<li><strong>Change:</strong> New look for events.</li>
 		<li><strong>Change:</strong> New look for the blog.</li>
 		<li><strong>Change:</strong> New look site footer with social links.</li>
+		<li><strong>Change:</strong> New logo.</li>
 		<li><strong>Change:</strong> Code restructure for the release of <a href="http://www.ignitionpowered.co.uk/">Ignition</a>.</li>
 		<li><strong>Change:</strong> Upgraded CodeIgniter from v2.1.4 to v2.2.0.</li>
 		<li><strong>Change:</strong> Upgraded Bootstrap from v3.0 to v3.2.</li>
@@ -38,7 +39,7 @@
 	<ul>
 		<li><strong>Feature:</strong> Cron job to update game cache.</li>
 	</ul>
-	<p><b><a href="/blog/version-0-2-0">Version 0.2.0 - 2014-05-11</a></b></p>
+	<p><b><a href="/blog/version-0-2">Version 0.2.0 - 2014-05-11</a></b></p>
 	<ul>
 		<li><strong>Feature:</strong> Collection stats now update live as filters are changed. <a href="https://github.com/Clidus/gwl/issues/35">#35</a></li>
 		<li><strong>Feature:</strong> List and completion filters now have numbers against them. <a href="https://github.com/Clidus/gwl/issues/35">#35</a></li>
