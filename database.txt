@@ -35,7 +35,8 @@ CREATE TABLE `ci_sessions` (
 
 CREATE TABLE `collectionPlatform` (
   `CollectionID` int(11) NOT NULL,
-  `PlatformID` int(11) NOT NULL
+  `PlatformID` int(11) NOT NULL,
+  UNIQUE KEY `IX_CollectionID_PlatformID` (`CollectionID`,`PlatformID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -52,7 +53,8 @@ CREATE TABLE `collections` (
   `DateComplete` date DEFAULT NULL,
   `HoursPlayed` int(11) DEFAULT NULL,
   `CurrentlyPlaying` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`ID`),
+  KEY `IX_UserID_GameID_ListID_StatusID` (`UserID`,`GameID`,`ListID`,`StatusID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
