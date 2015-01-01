@@ -12,7 +12,7 @@ class Games extends CI_Controller {
     {   
         // lookup game
         $this->load->model('Game');
-        $game = $this->Game->getGameByID($gbID, $this->session->userdata('UserID'));
+        $game = $this->Game->getGameByID($gbID, $this->session->userdata('UserID'), false);
 
         if($game == null)
             show_404();
@@ -71,7 +71,7 @@ class Games extends CI_Controller {
         $this->load->model('Game');
 
         // get game details from Giant Bomb API
-        $game = $this->Game->getGameByID($GBID, null);
+        $game = $this->Game->getGameByID($GBID, null, false);
 
         // if API returned nothing
         if($game == null)

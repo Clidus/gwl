@@ -12,7 +12,8 @@ class Game extends CI_Model {
     }
    
     // search Giant Bomb API for games  
-    function searchForGame($query, $page, $userID) {  
+    function searchForGame($query, $page, $userID) 
+    {  
         // build API request
         $url = $this->config->item('gb_api_root') . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
       
@@ -32,17 +33,23 @@ class Game extends CI_Model {
     }
 
     // get game from Giant Bomb API by ID
-    public function getGameByID($gbID, $userID) {   
+    public function getGameByID($gbID, $userID, $returnCompleteResponse) 
+    {   
         // build API request
         $url = $this->config->item('gb_api_root') . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
-
+        
         // make API request
         $result = $this->Utility->getData($url);
         
-        if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
+        if(is_object($result))
         {
-            // add collection info to game object
-            return $this->addCollectionInfo($result->results, $userID);
+            if($result->error == "OK" && $result->number_of_total_results > 0)
+            {
+                // add collection info to game object
+                $result->results = $this->addCollectionInfo($result->results, $userID);
+            }
+
+            return $returnCompleteResponse ? $result : $result->results;
         } else {
             return null;
         }
@@ -584,8 +591,8 @@ class Game extends CI_Model {
     function getGameToUpdate()
     {
         $this->db->select('GBID');
-        $this->db->from('games');
-        $this->db->where('LastUpdated <', Date('Y-m-d', strtotime("-1 days"))); 
+        $this->db->from('games'); 
+        $this->db->where('(Error IS NULL AND LastUpdated < \'' . Date('Y-m-d', strtotime("-1 days")) . '\')'); 
         $this->db->or_where('LastUpdated', null); 
         $this->db->order_by("LastUpdated", "asc"); 
         $this->db->limit(1, 0);
@@ -614,6 +621,17 @@ class Game extends CI_Model {
         );
 
         $this->db->where('GBID', $game->id);
+        $this->db->update('games', $data); 
+    }
+
+    // failed to get response from GB API, save error in db
+    function saveError($GBID, $error)
+    {
+        $data = array(
+           'Error' => $error
+        );
+
+        $this->db->where('GBID', $GBID);
         $this->db->update('games', $data); 
     }
 }
