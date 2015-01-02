@@ -8,7 +8,7 @@
 <div>
 	<p><b>Version 0.3.1 - 2015-01-02</b></p>
 	<ul>
-		<li><strong>Bug Fix:</strong> Cron job to update game caches got stuck on a game that no longer exists.</li>
+		<li><strong>Bug Fix:</strong> Cron job to update game caches got stuck on a game that no longer exists. <a href="https://github.com/Clidus/gwl/issues/53">#53</a></li>
 	</ul>
 	<p><b><a href="/blog/version-0-3">Version 0.3.0 - 2014-07-17</a></b></p>
 	<ul>
