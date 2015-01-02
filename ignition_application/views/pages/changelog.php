@@ -6,6 +6,10 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.3.1 - 2015-01-02</b></p>
+	<ul>
+		<li><strong>Bug Fix:</strong> Cron job to update game caches got stuck on a game that no longer exists.</li>
+	</ul>
 	<p><b><a href="/blog/version-0-3">Version 0.3.0 - 2014-07-17</a></b></p>
 	<ul>
 		<li><strong>Feature:</strong> You can now follow users. <a href="https://github.com/Clidus/gwl/issues/50">#29</a></li>
