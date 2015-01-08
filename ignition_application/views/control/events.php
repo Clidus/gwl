@@ -79,12 +79,14 @@
 					{
 						echo '
 							<div id="newComment' . $event->EventID . '"></div>
-							<div class="pull-left">
+							<div class="media-left">
 								<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage imageShadow" />
 							</div>
-							<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $event->EventID . ', 2);">Post</button>
-							<div class="media-body">
+							<div class="media-body commentFieldContainer">
 								<textarea id="commentField' . $event->EventID . '" rows="1" placeholder="Say something..." class="form-control textAreaAutoGrow" name="post"></textarea>
+							</div>
+							<div class="media-right">
+								<button type="button" class="btn btn-default" onclick="javascript:postComment(' . $event->EventID . ', 2);">Post</button>
 							</div>';
 					} 
 

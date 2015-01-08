@@ -44,12 +44,14 @@
 				{
 					echo '
 						<div id="newComment' . $post->PostID . '"></div>
-						<div class="pull-left">
+						<div class="media-left">
 							<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage imageShadow" />
 						</div>
-						<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $post->PostID . ', 1);">Post</button>
-						<div class="media-body">
+						<div class="media-body commentFieldContainer">
 							<textarea id="commentField' . $post->PostID . '" rows="1" placeholder="Say something..." class="form-control textAreaAutoGrow" name="post"></textarea>
+						</div>
+						<div class="media-right">
+							<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $post->PostID . ', 1);">Post</button>
 						</div>';
 				} else {
 					echo 'Please <a href="/login">login</a> to post a comment.';
