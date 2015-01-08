@@ -20,7 +20,7 @@ function postComment(linkID, commentTypeID) {
             } else {
                 var newComment;
                 newComment = '<div class="clearfix eventCommentDisplay">';
-                newComment += '     <div class="pull-left">';
+                newComment += '     <div class="media-left">';
                 newComment += '         <img src="/uploads/' + data.profileImage + '" class="tinyIconImage imageShadow" />';
                 newComment += '     </div>';
                 newComment += '     <div class="media-body eventComment">';

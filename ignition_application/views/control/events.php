@@ -25,7 +25,7 @@
 						</div>
 					</div>
 					<div class="clearfix eventCommentDisplay">
-						<div class="pull-left">
+						<div class="media-left">
 							<a href='<?php echo $event->GameUrl ?>'>
 								<img class='media-object imageShadow eventImage' src='<?php echo $event->GameImage ?>' />
 							</a>
@@ -63,7 +63,7 @@
 						// display comment
 						echo '
 							<div class="clearfix eventCommentDisplay">
-								<div class="pull-left">
+								<div class="media-left">
 									<img src="/uploads/' . $comment->ProfileImage . '" class="tinyIconImage imageShadow" />
 								</div>
 								<div class="media-body eventComment">
