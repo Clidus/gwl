@@ -6,6 +6,11 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.3.2 - 2015-01-17</b></p>
+	<ul>
+		<li><strong>Change:</strong> Upgraded Ignition from v0.1 to v0.3.</li>
+		<li><strong>Change:</strong> Upgraded Bootstrap from v3.2 to v3.3.1.</li>
+	</ul>
 	<p><b>Version 0.3.1 - 2015-01-02</b></p>
 	<ul>
 		<li><strong>Bug Fix:</strong> Cron job to update game caches got stuck on a game that no longer exists. <a href="https://github.com/Clidus/gwl/issues/53">#53</a></li>
