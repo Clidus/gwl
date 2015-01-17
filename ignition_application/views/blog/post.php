@@ -47,7 +47,7 @@
 						<div class="media-left">
 							<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage imageShadow" />
 						</div>
-						<div class="media-body commentFieldContainer">
+						<div class="media-body commentFields">
 							<textarea id="commentField' . $post->PostID . '" rows="1" placeholder="Say something..." class="form-control textAreaAutoGrow" name="post"></textarea>
 						</div>
 						<div class="media-right">
