@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Ignition v0.1 ignitionpowered.co.uk
+| Ignition v0.3 ignitionpowered.co.uk
 |--------------------------------------------------------------------------
 |
 | This class is a core part of Ignition. It is advised that you extend
@@ -257,17 +257,29 @@ class IG_Users extends CI_Controller {
         $this->form_validation->set_rules('linkID', 'linkID', 'trim|xss_clean');
         $this->form_validation->set_rules('commentTypeID', 'commentTypeID', 'trim|xss_clean');
         $this->form_validation->set_rules('comment', 'comment', 'trim|xss_clean|strip_tags|htmlspecialchars');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('name', 'Name', 'trim|required|xss_clean');
         $this->form_validation->run();
 
         $linkID = $this->input->post('linkID');
         $commentTypeID = $this->input->post('commentTypeID');
         $comment = $this->input->post('comment');
+        $email = $this->input->post('email');
+        $name = $this->input->post('name');
         $userID = $this->session->userdata('UserID');
+        $registeredUser = true;
 
-        // check that user is logged in
-        if($userID <= 0)
+        // check that user is logged in or has provided anonymous details
+        if($userID <= 0 && $name == null && $email == null)
         {
             $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
+            return;
+        }
+
+        // if anonymous details have been provided, make all fields required 
+        if(($name != null && $email == null) || ($email != null && $name == null)) 
+        {
+            $this->returnError($this->lang->line('error_comment_missing_details'),false,false);
             return;
         }
 
@@ -278,6 +290,18 @@ class IG_Users extends CI_Controller {
             return;
         }
 
+        // create anonymous user
+        if($userID <= 0 && ($email != null && $name != null)) 
+        {
+            $registeredUser = false;
+
+            $this->load->model('User');
+            $userID = $this->User->registerAnonymousUser($email, $name);
+
+            if($userID == null)
+                $this->returnError($this->lang->line('error_comment_failed'),false,false);
+        }
+
         // add comment
         $this->load->model('Comment');
         $this->Comment->addComment($linkID, $commentTypeID, $userID, $comment);
@@ -285,9 +309,10 @@ class IG_Users extends CI_Controller {
         // add new comment (in HTML) to response so it can be added to the current page
         $this->load->library('md');
         $result['comment'] = $this->md->defaultTransform($comment);
-        $result['username'] = $this->session->userdata('Username');
-        $result['profileImage'] = $this->session->userdata('ProfileImage');
+        $result['username'] = $registeredUser ? $this->session->userdata('Username') : $name;
+        $result['profileImage'] = $registeredUser ? $this->session->userdata('ProfileImage') : $this->config->item('default_profile_image');
         $result['userID'] = $userID;
+        $result['registeredUser'] = $registeredUser;
 
         // return success
         $result['error'] = false;   

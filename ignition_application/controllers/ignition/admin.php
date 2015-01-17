@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Ignition v0.1 ignitionpowered.co.uk
+| Ignition v0.3 ignitionpowered.co.uk
 |--------------------------------------------------------------------------
 |
 | This class is a core part of Ignition. It is advised that you extend
@@ -60,36 +60,41 @@ class IG_Admin extends CI_Controller {
 		$this->load->helper(array('form'));
 		$this->load->library('form_validation');
 
-		// form validation
-		$this->form_validation->set_rules('title', 'Title', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('url', 'URL', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('post', 'Post', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('deck', 'Deck', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('image', 'Image', 'trim|xss_clean');
-		$this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
-
 		// page variables
 		$this->load->model('Page');
 		$data = $this->Page->create("New Blog Post", "Admin");
 		$data['formSuccess'] = $this->form_validation->run();
 		$data['formType'] = "new";
 
+		// form validation
+		$this->form_validation->set_rules('title', 'Title', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('post', 'Post', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('deck', 'Deck', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('image', 'Image', 'trim|xss_clean');
+		$this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '<a class="close" data-dismiss="alert" href="#">&times;</a></div>');
+
 		if ($this->form_validation->run() == TRUE)
 		{
-			$this->load->model('Blog');
-			$this->Blog->add($this->input->post('title'), $this->input->post('url'), $this->input->post('post'), $data['sessionUserID'], $this->input->post('deck'), $this->input->post('image'));
+			// try to upload new image
+			$postImage = $this->uploadImage();
+			// if no image uploaded, use value in form
+	        if($postImage == null) $postImage = $this->input->post('image');
 
-			header("location: " . base_url() . "admin/blog/edit");
+	        // add to db
+			$this->load->model('Blog');
+			$title = $this->input->post('title');
+			$postID = $this->Blog->add($title, $this->getUrl($title), $this->input->post('post'), $data['sessionUserID'], $this->input->post('deck'), $postImage);
+
+			header("location: " . base_url() . "admin/blog/edit/" . $postID);
 		}
 
 		// empty post object required (same view used for editing post)
 		$post = new stdClass();
 		$post->PostID = 0;
-		$post->Title = "";
-		$post->URL = "";
-		$post->Post = "";
-		$post->Deck = "";
-		$post->Image = "";
+		$post->Title = $this->input->post('title');
+		$post->Post = $this->input->post('post');
+		$post->Deck = $this->input->post('deck');
+		$post->Image = $this->input->post('image');
 		$data['post'] = $post;
 
 		$this->load->view('templates/header', $data);
@@ -109,7 +114,6 @@ class IG_Admin extends CI_Controller {
 
 		// form validation
 		$this->form_validation->set_rules('title', 'Title', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('url', 'URL', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('post', 'Post', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('deck', 'Deck', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('image', 'Image', 'trim|xss_clean');
@@ -117,20 +121,28 @@ class IG_Admin extends CI_Controller {
 
 		if ($this->form_validation->run() == TRUE)
 		{
+	        // try to upload new image
+			$postImage = $this->uploadImage();
+			// if no image uploaded, use value in form
+	        if($postImage == null) $postImage = $this->input->post('image');
+
+	        // update db
 			$this->load->model('Blog');
-			$this->Blog->update($PostID, $this->input->post('title'), $this->input->post('url'), $this->input->post('post'), $this->input->post('deck'), $this->input->post('image'));
+			$title = $this->input->post('title');
+			$this->Blog->update($PostID, $title, $this->getUrl($title), $this->input->post('post'), $this->input->post('deck'), $postImage);
 		}
 		
 		// get blog posts
 		$this->load->model('Blog');
 		$post = $this->Blog->getPostByID($PostID); 
 
+		// fail if post doesnt exist
 		if($post == null)
 			show_404();
 
 		// page variables
 		$this->load->model('Page');
-		$data = $this->Page->create("Edit " . $post->Title, "Admin");
+		$data = $this->Page->create("Edit \"" . $post->Title . "\"", "Admin");
 		$data['formSuccess'] = $this->form_validation->run();
 		$data['formType'] = "edit/" . $PostID;
 		$data['post'] = $post;
@@ -138,6 +150,34 @@ class IG_Admin extends CI_Controller {
 		$this->load->view('templates/header', $data);
 		$this->load->view('admin/blogPostEditor', $data);
 		$this->load->view('templates/footer', $data);
+	}
+
+	private function uploadImage()
+	{
+		// configure file upload
+        $config['upload_path'] = './images/blog/';
+        $config['allowed_types'] = 'gif|jpg|jpeg|png';
+        $this->load->library('upload', $config);
+
+        // upload file
+        if ($this->upload->do_upload())
+        {
+            // if successfull, return image file name
+            $uploadData = $this->upload->data();
+            return '/images/blog/' . $uploadData["file_name"];
+        }
+	}
+
+	private function getUrl($title)
+	{
+		// build url
+		$url = strtolower($title);							// lowercase
+		$url = preg_replace('/[^a-z0-9]/', ' ', $url);		// remove special characters
+		$url = preg_replace('/ +/', ' ', $url);				// replace multiple spaces with single space
+		$url = trim($url);									// trim leading/tailing space
+		$url = preg_replace('/ /', '-', $url);				// replace spaces with hythen 
+
+		return $url;
 	}
 
 	public function deleteBlogPost()

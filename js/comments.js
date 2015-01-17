@@ -1,5 +1,7 @@
 function postComment(linkID, commentTypeID) {
     var comment = $('#commentField' + linkID).val();
+    var name = $('#nameInput' + linkID).val();
+    var email = $('#emailInput' + linkID).val();
     if(comment == "") {
         showErrorModal('You need to type something duder!');
         return;
@@ -12,7 +14,9 @@ function postComment(linkID, commentTypeID) {
         data: {
             linkID: linkID,
             comment: comment,
-            commentTypeID: commentTypeID
+            commentTypeID: commentTypeID,
+            name: name,
+            email: email
         },
         success : function(data){
             if (data.error === true) {
@@ -24,7 +28,13 @@ function postComment(linkID, commentTypeID) {
                 newComment += '         <img src="/uploads/' + data.profileImage + '" class="tinyIconImage imageShadow" />';
                 newComment += '     </div>';
                 newComment += '     <div class="media-body eventComment">';
-                newComment += '         <a href="/user/' + data.userID + '">' + data.username + '</a></b>' + data.comment;
+                
+                if(data.registeredUser) 
+                    newComment += '         <a href="/user/' + data.userID + '"><b>' + data.username + '</b></a>' + data.comment;
+                else
+                    newComment += '         <b>' + data.username + '</b>' + data.comment;
+
+
                 newComment += '         <span class="datestamp pull-right">Just now</span>';
                 newComment += '     </div>';
                 newComment += '</div>';

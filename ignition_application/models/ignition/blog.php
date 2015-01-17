@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Ignition v0.1 ignitionpowered.co.uk
+| Ignition v0.3 ignitionpowered.co.uk
 |--------------------------------------------------------------------------
 |
 | This class is a core part of Ignition. It is advised that you extend
@@ -32,7 +32,9 @@ class IG_Blog extends CI_Model {
             'Image' => $image
         );
 
-        return $this->db->insert('blog', $post); 
+        $this->db->insert('blog', $post); 
+
+        return $this->db->insert_id(); // return PostID
     }
 
     // update blog post

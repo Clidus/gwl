@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Ignition v0.1 ignitionpowered.co.uk
+| Ignition v0.3 ignitionpowered.co.uk
 |--------------------------------------------------------------------------
 |
 | This class is a core part of Ignition. It is advised that you extend
@@ -34,7 +34,7 @@ class IG_User extends CI_Model {
         $hashPassword = $this->hashPassword($password);
 
         // check is user exists
-        $query = $this->db->get_where('users', array('Username' => $username));
+        $query = $this->db->get_where('users', array('Username' => $username, 'RegisteredUser' => true));
         if ($query->num_rows() > 0)
         {
             $this->errorMessage = 'Sorry duder. This username is already taken. Bad luck!';
@@ -45,7 +45,8 @@ class IG_User extends CI_Model {
         $data = array(
            'Username' => $username,
            'Password' => $hashPassword,
-           'Email' => $email
+           'Email' => $email,
+           'RegisteredUser' => true
         );
 
         // if added successfully 
@@ -66,11 +67,28 @@ class IG_User extends CI_Model {
         }
     }
 
+    // register anonymous user
+    function registerAnonymousUser($email, $username)
+    {
+        // add user to db
+        $data = array(
+           'Username' => $username,
+           'Email' => $email
+        );
+
+        // if added successfully 
+        if($this->db->insert('users', $data)) {
+            return $this->db->insert_id(); // return UserID
+        } else {
+            return null;
+        }
+    }
+
     // login user
     function login($username, $password)
     {
         // check login is correct
-        $query = $this->db->get_where('users', array('Username' => $username));
+        $query = $this->db->get_where('users', array('Username' => $username, 'RegisteredUser' => true));
         if ($query->num_rows() == 1)
         {
             // get user record returned
@@ -111,6 +129,7 @@ class IG_User extends CI_Model {
         $this->db->select('*');
         $this->db->from('users');
         $this->db->where('users.UserID', $userID); 
+        $this->db->where('users.RegisteredUser', true); 
         $query = $this->db->get();
 
         if($query->num_rows() == 1)
@@ -127,7 +146,7 @@ class IG_User extends CI_Model {
     function updateProfile($userID, $email, $username, $dateFormat, $bio)
     {
         // check is user exists
-        $query = $this->db->get_where('users', array('Username' => $username, 'UserID !=' => $userID));
+        $query = $this->db->get_where('users', array('Username' => $username, 'UserID !=' => $userID, 'RegisteredUser' => true));
         if ($query->num_rows() > 0)
         {
             $this->errorMessage = 'Sorry duder. This username is already taken. Bad luck!';

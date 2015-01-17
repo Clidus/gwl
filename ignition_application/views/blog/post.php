@@ -31,31 +31,37 @@
 							<div class="media-left">
 								<img src="/uploads/' . $comment->ProfileImage . '" class="tinyIconImage imageShadow" />
 							</div>
-							<div class="media-body eventComment">
-								<a href="/user/' . $comment->UserID . '">' . $comment->Username . '</a></b> 
-								' . $comment->Comment . '
-								<span class="datestamp pull-right">' . $comment->DateStampFormatted . '</span>
-							</div>
-						</div>';
+							<div class="media-body eventComment">';
+
+								if($comment->RegisteredUser)
+									echo '<a href="/user/' . $comment->UserID . '"><b>' . $comment->Username . '</b></a>';
+								else
+									echo '<b>' . $comment->Username . '</b>';
+
+									echo $comment->Comment . '
+							<span class="datestamp pull-right">' . $comment->DateStampFormatted . '</span>
+						</div>
+					</div>';
 				}
 
-				// if logged in, show comment post box
-				if($sessionUserID != null)
-				{
-					echo '
-						<div id="newComment' . $post->PostID . '"></div>
-						<div class="media-left">
-							<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage imageShadow" />
-						</div>
-						<div class="media-body commentFields">
-							<textarea id="commentField' . $post->PostID . '" rows="1" placeholder="Say something..." class="form-control textAreaAutoGrow" name="post"></textarea>
-						</div>
-						<div class="media-right">
-							<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $post->PostID . ', 1);">Post</button>
-						</div>';
-				} else {
-					echo 'Please <a href="/login">login</a> to post a comment.';
-				}
+				echo '
+					<div id="newComment' . $post->PostID . '"></div>
+					<div class="media-left">
+						<img src="/uploads/' . $sessionProfileImage . '" class="tinyIconImage imageShadow" />
+					</div>
+					<div class="media-body commentFields">';
+
+						if($sessionUserID == null)
+						{
+							echo '<input type="text" class="form-control" maxlength="50" name="name" id="nameInput' . $post->PostID . '" placeholder="Name">
+							<input type="email" class="form-control" maxlength="100" id="emailInput' . $post->PostID . '" name="email" placeholder="Email">';
+						}
+
+						echo '<textarea id="commentField' . $post->PostID . '" rows="1" placeholder="Say something..." class="form-control textAreaAutoGrow" name="post"></textarea>
+					</div>
+					<div class="media-right">
+						<button type="button" class="btn btn-default pull-right" onclick="javascript:postComment(' . $post->PostID . ', 1);">Post</button>
+					</div>';
 			?>
 		</div>
 	</div>

@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Ignition v0.1 ignitionpowered.co.uk
+| Ignition v0.3 ignitionpowered.co.uk
 |--------------------------------------------------------------------------
 |
 | This class is a core part of Ignition. It is advised that you extend
@@ -27,7 +27,7 @@ class IG_Page extends CI_Model {
         $data['sessionUserID'] = $this->session->userdata('UserID');
         $data['sessionUsername'] = $this->session->userdata('Username');
         $data['sessionAdmin'] = $this->session->userdata('Admin');
-        $data['sessionProfileImage'] = $this->session->userdata('ProfileImage');
+        $data['sessionProfileImage'] = $this->session->userdata('ProfileImage') == null ? $this->config->item('default_profile_image') : $this->session->userdata('ProfileImage');
         $data['metaTags'] = null;
 
         return $data; 
