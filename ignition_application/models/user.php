@@ -27,6 +27,7 @@ class User extends IG_User {
         $this->db->from('users');
         if($viewedByUserID != null) $this->db->join('following', 'users.UserID = following.ChildUserID AND following.ParentUserID = ' . $viewedByUserID, 'left');
         $this->db->where('users.UserID', $userID); 
+        $this->db->where('users.RegisteredUser', true); 
         $query = $this->db->get();
 
         if($query->num_rows() == 1)
