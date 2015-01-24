@@ -24,7 +24,7 @@
 					<a class="pull-left" href="' . $event->GameUrl . '">
 						<img class="media-object imageShadow tinyIconImage" src="' . $event->GameImage . '" />
 					</a>
-					<div class="media-body clearfix">
+					<div class="clearfix">
 						<b>' . $event->Username . $event->Label . '</b> ' . $event->GameName . '<span class="userActivityDateStamp">' . $event->DateStampFormatted . '</span>
 					</div>
 				</div>';
