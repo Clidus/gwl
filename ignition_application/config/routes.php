@@ -66,6 +66,7 @@ $route['user/comment'] = 'users/comment';
 $route['user/getCollection'] = 'users/getCollection';
 $route['user/follow'] = 'users/follow';
 $route['user/(:any)/collection'] = 'users/collection/$1';
+$route['user/(:any)/platforms'] = 'users/platforms/$1';
 $route['user/(:any)'] = 'users/view/$1';
 $route['user/(:any)/(:any)'] = 'users/view/$1/$2';
 

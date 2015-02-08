@@ -524,6 +524,47 @@ class Game extends CI_Model {
         }
     }
 
+    // get users collection by platform
+    function getCollectionByPlatform($userID) 
+    {
+        $this->db->select('collectionPlatform.PlatformID');
+        $this->db->select('platforms.Name,');
+        $this->db->select('platforms.ImageSmall,');
+        // collection: everything not on the want list
+        $this->db->select('COUNT(CASE WHEN collections.ListID != 2 THEN collections.GameID END) AS Collection');
+        // completable collection: everything not uncompletable or on the want list
+        $this->db->select('COUNT(CASE WHEN collections.StatusID != 4 AND collections.ListID != 2 THEN collections.GameID END) AS CompletableCollection');
+        // completed: everything completed and not on the want list
+        $this->db->select('COUNT(CASE WHEN collections.StatusID = 3 AND collections.ListID != 2 THEN collections.GameID END) AS Completed');
+        // backlog: everything unplayed or unfinished and not on the want list
+        $this->db->select('COUNT(CASE WHEN (collections.StatusID = 1 OR collections.StatusID = 2) AND collections.ListID != 2 THEN collections.GameID END) AS Backlog');
+        // want: everything on the want list
+        $this->db->select('COUNT(CASE WHEN collections.ListID = 2 THEN collections.GameID END) AS Want');   
+        // percentage complete: (completed / completable collection) * 100
+        $this->db->select('CAST((COUNT(CASE WHEN collections.StatusID = 3 AND collections.ListID != 2 THEN collections.GameID END) / COUNT(CASE WHEN collections.StatusID != 4 AND collections.ListID != 2 THEN collections.GameID END)) * 100 AS UNSIGNED) AS Percentage');   
+    
+        $this->db->from('collections');
+        $this->db->join('lists', 'collections.ListID = lists.ListID');
+        $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID');
+        $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID', 'left');
+        $this->db->join('platforms', 'collectionPlatform.PlatformID = platforms.PlatformID', 'left');
+        $this->db->join('games', 'collections.GameID = games.GameID');
+        
+        $this->db->where('collections.UserID', $userID); 
+
+        $this->db->group_by("collectionPlatform.PlatformID");
+        $this->db->order_by("Percentage", "desc"); 
+
+        // get results
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+
+        return null;
+    }
+
     // get users collection
     function getCurrentlyPlaying($userID)
     {

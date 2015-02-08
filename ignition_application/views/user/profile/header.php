@@ -11,6 +11,7 @@
 		<ul class="nav nav-pills nav-stacked profileNav">
 			<li id="navFeed"><a href="/user/<?php echo $user->UserID ?>">Feed</a></li>
 			<li id="navCollection"><a href="/user/<?php echo $user->UserID ?>/collection">Collection</a></li>
+			<li id="navPlatforms"><a href="/user/<?php echo $user->UserID ?>/platforms">Platforms</a></li>
 			<?php 
 				// if logged in and this user
 				if($sessionUserID != null && $sessionUserID == $user->UserID) 

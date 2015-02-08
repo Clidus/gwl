@@ -30,23 +30,27 @@
   </script>
   <script src="/js/jquery-2.0.3.min.js"></script>
   <script src="/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/js/global.js?v=2"></script>
+  <script src="/js/global.js?v=3"></script>
   <?php 
     if($pagetemplate == "Search" || $pagetemplate == "Game") 
     { 
-      echo "<script src='/js/game.js?v=2'></script>"; 
+      echo "<script src='/js/game.js?v=3'></script>"; 
     }
     else if($pagetemplate == "Admin") 
     { 
-      echo "<script src='/js/admin.js?v=2'></script>"; 
+      echo "<script src='/js/admin.js?v=3'></script>"; 
     } 
     else if($pagetemplate == "Collection") 
     { 
-      echo "<script src='/js/collection.js?v=2'></script>"; 
+      echo "<script src='/js/collection.js?v=3'></script>"; 
+    } 
+    else if($pagetemplate == "Platforms") 
+    { 
+      echo "<script src='/js/platforms.js?v=3'></script>"; 
     } 
     if($pagetemplate == "User" || $pagetemplate == "Collection") 
     { 
-      echo "<script src='/js/user.js?v=2'></script>"; 
+      echo "<script src='/js/user.js?v=3'></script>"; 
     } 
     if($pagetemplate == "User" || $pagetemplate == "Game" || $pagetemplate == "BlogPost" || $pagetemplate == "UserHome")
     {
@@ -71,6 +75,9 @@
             case "Collection":
               echo "loadCollection();";
               echo "$('#navCollection').addClass('active');";
+              break;
+            case "Platforms":
+              echo "$('#navPlatforms').addClass('active');";
               break;
             case "Settings":
               echo "$('#dateFormat').val('" . $user->DateTimeFormat . "');";
