@@ -17,8 +17,8 @@
 	</ul>
 	<p><b><a href="/blog/version-0-3">Version 0.3.0 - 2014-07-17</a></b></p>
 	<ul>
-		<li><strong>Feature:</strong> You can now follow users. <a href="https://github.com/Clidus/gwl/issues/50">#29</a></li>
-		<li><strong>Feature:</strong> You can see what you and your followers have done recently in a new homepage feed. <a href="https://github.com/Clidus/gwl/issues/50">#29</a></li>
+		<li><strong>Feature:</strong> You can now follow users. <a href="https://github.com/Clidus/gwl/issues/29">#29</a></li>
+		<li><strong>Feature:</strong> You can see what you and your followers have done recently in a new homepage feed. <a href="https://github.com/Clidus/gwl/issues/29">#29</a></li>
 		<li><strong>Feature:</strong> HTTPS is now supported and enforced. <a href="https://github.com/Clidus/gwl/issues/50">#50</a></li>
 		<li><strong>Feature:</strong> Added comments to blog posts. <a href="https://github.com/Clidus/gwl/issues/12">#12</a></li>
 		<li><strong>Feature:</strong> Added a blog post archive.</li>
