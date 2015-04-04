@@ -564,6 +564,7 @@ class Game extends CI_Model {
             foreach ($platforms as $platform)
             {  
                 // default profile image
+                $platform->Name = $platform->Name == null ? "No Platform" : $platform->Name;
                 $platform->Image = $platform->Image == null ? $this->config->item('default_profile_image') : $platform->Image;
             }
 
