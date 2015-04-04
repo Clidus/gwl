@@ -559,7 +559,15 @@ class Game extends CI_Model {
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
-            return $query->result();
+            $platforms = $query->result();
+
+            foreach ($platforms as $platform)
+            {  
+                // default profile image
+                $platform->Image = $platform->Image == null ? $this->config->item('default_profile_image') : $platform->Image;
+            }
+
+            return $platforms;
         }
 
         return null;

@@ -1,10 +1,15 @@
 		<?php
 			foreach($platforms as $platform)
 			{
-				echo '<div class="row collectionStats">
+				echo '<div class="row">
+					<div class="col-xs-12">
+						<p><a href="">' . $platform->Name . '</a></p>
+					</div>
+				</div>
+
+				<div class="row collectionStats">
 					<div class="col-xs-4">
-						<img src="' . $platform->Image . '" class="imageShadow" />
-						<p>' . $platform->Name . '</p>
+						<a href=""><img src="/images/platforms/' . $platform->Image . '" class="imageShadow platformLogo" /></a>
 					</div>
 					<div class="col-xs-2">
 						<span>' . $platform->Collection . '</span>
