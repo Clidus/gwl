@@ -3,7 +3,7 @@
 			{
 				echo '<div class="row collectionStats">
 					<div class="col-xs-4">
-						<img src="' . $platform->ImageSmall . '" class="imageShadow" />
+						<img src="' . $platform->Image . '" class="imageShadow" />
 						<p>' . $platform->Name . '</p>
 					</div>
 					<div class="col-xs-2">

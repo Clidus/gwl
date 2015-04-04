@@ -271,7 +271,7 @@ class Games extends CI_Controller {
             if(!$this->Platform->isPlatformInDB($GBPlatformID))
             {
                 // get platform data 
-                $platform = $this->Platform->getPlatform($GBPlatformID, false);
+                $platform = $this->Platform->getPlatform($GBPlatformID);
 
                 // if API returned nothing
                 if($platform == null)

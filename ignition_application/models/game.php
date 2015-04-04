@@ -529,7 +529,7 @@ class Game extends CI_Model {
     {
         $this->db->select('collectionPlatform.PlatformID');
         $this->db->select('platforms.Name,');
-        $this->db->select('platforms.ImageSmall,');
+        $this->db->select('platforms.Image,');
         // collection: everything not on the want list
         $this->db->select('COUNT(CASE WHEN collections.ListID != 2 THEN collections.GameID END) AS Collection');
         // completable collection: everything not uncompletable or on the want list
