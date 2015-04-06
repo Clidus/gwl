@@ -1,5 +1,5 @@
 *.scssc
-css/stylesheet.css
+
+node_modules/
+
 images/blog
-css/gwl.css
-css/ignition.css

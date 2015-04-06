@@ -1,0 +1,32 @@
+{
+  "name": "GWL",
+  "version": "0.4.0",
+  "description": "Video game collection, wishlist and backlog tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Clidus/gwl.git"
+  },
+  "keywords": [
+    "blog",
+    "foundation",
+    "CodeIgniter",
+    "php"
+  ],
+  "author": "Josh Marketis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Clidus/gwl/issues"
+  },
+  "homepage": "https://www.gamingwithlemons.com/",
+  "devDependencies": {
+    "gulp": "git://github.com/gulpjs/gulp#4.0",
+    "gulp-concat": "2.5.x",
+    "gulp-sass": "1.3.x",
+    "gulp-uglify": "1.1.x",
+    "gulp-watch": "4.1.x"
+  }
+}
