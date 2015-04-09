@@ -151,6 +151,11 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 * profile
 */
 
+.eventUserIcon {
+    vertical-align: top;
+    margin: 0 5px;
+}
+
 .userEvent .media {
     margin-top: 0px;
 }
@@ -166,10 +171,6 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 .eventImage {
     width: 80px;
     height: 80px;
-}
-
-.gameDeck {
-    font-size: 12px;
 }
 
 .currentlyPlayingTitle {
