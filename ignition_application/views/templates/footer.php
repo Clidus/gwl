@@ -28,8 +28,6 @@
       } 
     ?>
   </script>
-  <script src="/script/crushed/jquery-2.0.3.min.js"></script>
-  <script src="/script/crushed/bootstrap.min.js"></script>
   <script src="/script/crushed/ignition.js"></script>
   <script>
     $(function() {
