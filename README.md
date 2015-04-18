@@ -17,20 +17,25 @@ This software uses the following software and services, for which we are thankfu
 
 ## Installation
 
-Prerequisites:
+### Prerequisites:
 
 * PHP 5.5
 * MySQL
-* [Compass](http://compass-style.org/install/)
+* [Gulp](https://github.com/gulpjs/gulp)
 * [Giant Bomb API Key](http://www.giantbomb.com/api/)
 
-Installation:
+### Gulp:
+
+Install Gulp globally on your machine by running *npm install -g gulpjs/gulp#4.0*
+
+To rebuild the crushed javascript and css files used by GWL, run *gulp* within the project root folder.
+
+### GWL setup:
 
 * Create a datebase with the schema in database.txt
 * Set "base_url" in ignition_application/config/config.php
 * Set "hostname", "username", "password" and "database" in ignition_application/config/database.php
-* Set "gb_api_key" in ignition_application/config/gwl_config.php
-* Navigate to project root in the terminal and run "compass compile" to build the CSS files. You can also run "compass watch" to have the CSS rebuilt everytime you modify a stylesheet.
+* Get a [Giant Bomb API Key](http://www.giantbomb.com/api/) and set "gb_api_key" in ignition_application/config/gwl_config.php
 
 ## License
 
