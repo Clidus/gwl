@@ -98,7 +98,7 @@
     </div>
     <div class="col-sm-8">
         <?php
-            if($users != null)
+            if(isset($users) && $users != null)
             {
                 echo '<h4>Who\'s played this?</h4>
 
