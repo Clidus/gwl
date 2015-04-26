@@ -6,7 +6,7 @@
 <h2><?php echo $user->Username ?></h2>
 
 <div class="row">
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		<img src="/uploads/<?php echo $user->ProfileImage ?>" class="largeProfileImage imageShadow" />
 		<ul class="nav nav-pills nav-stacked profileNav">
 			<li id="navFeed"><a href="/user/<?php echo $user->UserID ?>">Feed</a></li>
@@ -64,5 +64,5 @@
 			}
 		?>
 	</div>
-	<div class="col-sm-8"> 
+	<div class="col-sm-9"> 
 		<h4>What's Happening?</h4>
