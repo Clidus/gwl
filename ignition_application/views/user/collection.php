@@ -32,95 +32,9 @@
 					}
 				?>
 				<div id="gameCollection"></div>
-				<div id="gameCollectionViewMore"></div>
 			</div>
 			<div class="col-sm-4">
-				<b>Order By</b>
-				<ul class="filters">
-					<li>
-						<label>
-							<input name="orderBy" type="radio" value="releaseDateDesc" checked> 
-							Release Date (Newest)
-						</label>
-					</li>
-					<li>
-						<label>
-							<input name="orderBy" type="radio" value="releaseDateAsc"> 
-							Release Date (Oldest)
-						</label>
-					</li>
-					<li>
-						<label>
-							<input name="orderBy" type="radio" value="nameAsc"> 
-							Name (A-Z)
-						</label>
-					</li>
-					<li>
-						<label>
-							<input name="orderBy" type="radio" value="nameDesc"> 
-							Name (Z-A)
-						</label>
-					</li>
-					<li>
-						<label>
-							<input name="orderBy" type="radio" value="hoursPlayedDesc"> 
-							Hours Played (Most)
-						</label>
-					</li>
-					<li>
-						<label>
-							<input name="orderBy" type="radio" value="hoursPlayedAsc"> 
-							Hours Played (Least)
-						</label>
-					</li>
-				</ul>
-
-				<b>List</b>
-				<ul class="filters">
-					<?php
-						foreach($lists as $list)
-						{
-							echo "<li>
-									<label>
-										<input id='filter_list_" . $list->ListID . "' type='checkbox' checked> " 
-										. $list->ListName . " (" . $list->Games . ")" . 
-									"</label>
-								</li>";
-						}
-					?>
-				</ul>
-
-				<b>Completion</b>
-				<ul class="filters">
-					<?php
-						foreach($statuses as $status)
-						{
-							echo "<li>
-									<label>
-										<input id='filter_status_" . $status->StatusID . "' type='checkbox' checked> " 
-										. $status->StatusName . " (" . $status->Games . ")" . 
-									"</label>
-								</li>";
-						}
-					?>
-				</ul>
-
-				<b>Platforms</b>
-				<ul class="filters">
-					<?php
-						foreach($platforms as $platform)
-						{
-							if($platform->PlatformID == null) $platform->PlatformID = 0;
-							if($platform->Abbreviation == null) $platform->Abbreviation = "No Platform";
-							echo "<li>
-									<label>
-										<input id='filter_platform_" . $platform->PlatformID . "' type='checkbox' checked> " 
-										. $platform->Abbreviation . " (" . $platform->Games . ")" . 
-									"</label>
-								</li>";
-						}
-					?>
-				</ul>
+			
 			</div>
 		</div>
 	</div>

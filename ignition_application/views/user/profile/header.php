@@ -65,4 +65,3 @@
 		?>
 	</div>
 	<div class="col-sm-9"> 
-		<h4>What's Happening?</h4>
