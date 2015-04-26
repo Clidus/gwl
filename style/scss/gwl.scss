@@ -147,8 +147,12 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     width: 100%;
 }
 
+.itemGrid {
+    margin-bottom: 10px;
+}
+
 .itemGrid div {
-    margin: 5px 5px 0 0;
+    margin: 10px 10px 0 0;
 }
 
 .itemGridLabel {
@@ -188,6 +192,10 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 
 .handPointer {
     cursor: pointer;
+}
+
+.userBio h4 {
+    text-align: left;
 }
 
 /*

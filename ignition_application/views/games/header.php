@@ -117,5 +117,5 @@
                 echo '</div>';
             }
         ?>
-    
-    <h4>What's Happening?</h4>
+
+        <h4>What's Happening?</h4>

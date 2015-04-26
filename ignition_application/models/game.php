@@ -580,6 +580,7 @@ class Game extends CI_Model {
         $this->db->select('*');
         $this->db->from('collections');
         $this->db->join('games', 'collections.GameID = games.GameID');
+        $this->db->join('gameStatuses', 'gameStatuses.StatusID = collections.StatusID');
         $this->db->where('collections.UserID', $userID); 
         $this->db->where('collections.CurrentlyPlaying', 1); 
         $this->db->order_by("games.Name", "asc");

@@ -38,27 +38,31 @@
 
 			if($user->Bio != null) 
 			{
-				echo "<div class='userBio'>" . $user->Bio . "</div>";
+				echo "<div class='userBio'>
+					<h4>About</h4>
+					" . $user->Bio . "
+				</div>";
 			}
 
 			if(isset($currentlyPlaying) && $currentlyPlaying != null)
 			{
-				echo "<p><b>Currently Playing:</b></p>";
+				echo '<h4>Currently Playing</h4>
+
+                <div class="itemGrid clearfix">';
+
 				foreach($currentlyPlaying as $currentlyPlayingGame)
 				{
-					echo '
-						<div class="currentlyPlaying clearfix">
-							<div class="pull-left">
-								<a href="/game/' . $currentlyPlayingGame->GBID . '">
-									<img src="' . $currentlyPlayingGame->ImageSmall . '" class="tinyIconImage imageShadow" />
-								</a>
-							</div>
-							<div class="media-body currentlyPlayingTitle">
-								<a href="/game/' . $currentlyPlayingGame->GBID . '">' . $currentlyPlayingGame->Name . '</a>
-							</div>
-						</div>';
+					echo '<div class="itemGridImage pull-left">
+                        <a href="/game/' . $currentlyPlayingGame->GBID . '">
+                            <img class="itemGridImage imageShadow" src="' . $currentlyPlayingGame->ImageSmall . '" alt="' . $currentlyPlayingGame->Name . '" title="' . $currentlyPlayingGame->Name . '">
+                            <span class="label label-' . $currentlyPlayingGame->StatusStyle . ' itemGridLabel">' . $currentlyPlayingGame->StatusNameShort . '</span>
+                        </a>
+                    </div>';
 				}
+
+				echo '</div>';
 			}
 		?>
 	</div>
 	<div class="col-sm-8"> 
+		<h4>What's Happening?</h4>
