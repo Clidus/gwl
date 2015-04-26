@@ -96,4 +96,21 @@
             <a onclick='javascript:showRemoveGameWarning(<?php echo $game->id; ?>);' class='btn btn-danger btn-fullWidth'>Remove from Collection</a>
         <?php } ?> 
     </div>
-    <div class="col-sm-8">   
+    <div class="col-sm-8">
+        <h4>Who's played this?</h4>
+
+        <div class="itemGrid clearfix">
+        <?php
+            foreach($users as $user)
+            {
+                echo '<div class="itemGridImage pull-left">
+                    <a href="/user/'. $user->UserID . '">
+                        <img class="itemGridImage imageShadow" src="/uploads/' . $user->ProfileImage . '" alt="' . $user->UserName . '" title="' . $user->UserName . '">
+                        <span class="label label-' . $user->StatusStyle . ' itemGridLabel">' . $user->StatusNameShort . '</span>
+                    </a>
+                </div>';
+            }
+        ?>
+    </div>
+    
+    <h4>What's Happening?</h4>

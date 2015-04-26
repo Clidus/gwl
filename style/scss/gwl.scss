@@ -147,6 +147,15 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     width: 100%;
 }
 
+.itemGrid div {
+    margin: 5px 5px 0 0;
+}
+
+.itemGridLabel {
+    position: absolute;
+    margin: -19px 0 0 3px;
+}
+
 /*
 * profile
 */
@@ -168,7 +177,7 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
     margin-bottom: 10px;
 }
 
-.eventImage {
+.eventImage, .itemGridImage {
     width: 80px;
     height: 80px;
 }

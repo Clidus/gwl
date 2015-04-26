@@ -684,4 +684,50 @@ class Game extends CI_Model {
         $this->db->where('GBID', $GBID);
         $this->db->update('games', $data); 
     }
+
+    // get users collection by platform
+    function getUsersWhoHaveGame($gbID, $userID) 
+    {
+        $this->db->select('users.UserID');
+        $this->db->select('UserName');
+        $this->db->select('ProfileImage');
+        $this->db->select('StatusNameShort');
+        $this->db->select('StatusStyle');
+
+        $this->db->from('games');
+        $this->db->join('collections', 'games.GameID = collections.GameID');
+        $this->db->join('users', 'collections.UserID = users.UserID');
+        $this->db->join('gameStatuses', 'gameStatuses.StatusID = collections.StatusID');
+
+        if($userID != null) 
+        {
+            $this->db->join('following', 'following.ChildUserID = collections.UserID AND following.ParentUserID = ' . $userID, 'left');
+            $this->db->where('users.UserID !=', $userID); // if logged in, exclude yourself
+        }
+
+        $this->db->where('games.GBID', $gbID); 
+
+        $this->db->order_by("Ranking", "asc"); 
+        
+        // if logged in, bump users you follow up the list
+        if($userID != null)
+            $this->db->order_by('following.ParentUserID', 'desc'); 
+
+        // get results
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            $users = $query->result();
+
+            foreach ($users as $user)
+            {  
+                // default profile image
+                $user->ProfileImage = $user->ProfileImage == null ? $this->config->item('default_profile_image') : $user->ProfileImage;
+            }
+
+            return $users;
+        }
+
+        return null;
+    }
 }

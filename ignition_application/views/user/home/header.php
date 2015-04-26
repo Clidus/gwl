@@ -13,4 +13,4 @@
 		</p>
 	</div>
 	<div class="col-sm-8">
-		<h2>What's Happening</h2>
+		<h2>What's Happening?</h2>
