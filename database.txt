@@ -151,7 +151,7 @@ CREATE TABLE `platforms` (
   `Name` varchar(300) NOT NULL,
   `Abbreviation` varchar(50) NOT NULL,
   `API_Detail` varchar(50) NOT NULL,
-  `Image` varchar(300) DEFAULT NULL
+  `Image` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`PlatformID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
