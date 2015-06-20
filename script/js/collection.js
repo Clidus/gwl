@@ -1,8 +1,8 @@
-var GameCollection = React.createClass({
+var GameCollection = React.createClass({displayName: "GameCollection",
     render: function() {
         console.log("React!");
         return (
-            React.createElement("div", null,
+            React.createElement("div", null, 
                 React.createElement("h1", null, "Video Games!")
             )
         );
@@ -12,6 +12,6 @@ var GameCollection = React.createClass({
 function loadCollection(){
     React.render(
         React.createElement(GameCollection, null),
-        document.getElementById("gameCollection")
+        document.getElementById('gameCollection')
     );
 }

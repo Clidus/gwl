@@ -4,7 +4,8 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
-    watch = require('gulp-watch');
+    watch = require('gulp-watch'),
+    jsx = require('gulp-jsxtransform');
 
 gulp.task('scss', function () {
     return gulp.src('./style/scss/*.scss')
@@ -27,8 +28,13 @@ gulp.task('js', function () {
         './script/js/collection.js','./script/js/game.js','./script/js/platforms.js','./script/js/user.js'])
         .pipe(uglify())
         .pipe(concat('ignition.js'))
-        .pipe(gulp.dest('./script/crushed'))
-    return true;
+        .pipe(gulp.dest('./script/crushed'));
 });
 
-gulp.task('default', gulp.series('scss', gulp.parallel('css', 'js')));
+gulp.task('jsx', function () {
+  return gulp.src('./script/jsx/*.js')
+    .pipe(jsx())
+    .pipe(gulp.dest('./script/js/'));
+});
+
+gulp.task('default', gulp.series('jsx', 'scss', gulp.parallel('css', 'js')));
