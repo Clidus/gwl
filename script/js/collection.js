@@ -3,7 +3,7 @@ var currentPage = 1;
 
 $(document).ready(function() {
     /* filter checkbox change */
-    $(":checkbox").change(function(){
+    $(".filters :checkbox").change(function(){
         // get the filter type and filter id out of the checkbox id
         match = this.id.match("filter_([a-z]+)_([0-9]+)");
         // if ids found

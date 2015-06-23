@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     /* platform checkbox change */
-    $(":checkbox").change(function(){
+    $(".panel-footer :checkbox").change(function(){
     
         // get the game and platform id out of the checkbox id
         match = this.id.match("platform_([0-9]+)_([0-9]+)");
