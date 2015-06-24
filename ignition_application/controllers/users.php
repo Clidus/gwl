@@ -65,13 +65,8 @@ class Users extends IG_Users {
         $data = $this->Page->create($user->Username, "Collection");
         $data['user'] = $user;
 
-        // get platforms, lists and statuses for filtering
-        $this->load->model('Game');
-        $data['platforms'] = $this->Game->getPlatformsInCollection($userID);
-        $data['lists'] = $this->Game->getListsInCollection($userID);
-        $data['statuses'] = $this->Game->getStatusesInCollection($userID);
-
         // get games currently playing
+        $this->load->model('Game');
         $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
 
         // load views
@@ -138,6 +133,9 @@ class Users extends IG_Users {
         $this->load->model('Game');
         $result['collection'] = $this->Game->getCollection($userID, $filters, $offset, $resultsPerPage);
         $result['stats'] = $this->Game->getCollection($userID, $filters, null, null);
+        $result['platforms'] = $this->Game->getPlatformsInCollection($userID);
+        $result['lists'] = $this->Game->getListsInCollection($userID);
+        $result['statuses'] = $this->Game->getStatusesInCollection($userID);
 
         // return success
         $result['error'] = false;   

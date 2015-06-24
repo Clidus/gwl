@@ -2,9 +2,6 @@ var filters = { lists : [], statuses : [], platforms : [], includeNoPlatforms : 
 var currentPage = 1;
 
 var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
-    getInitialState: function(){
-        return { collection: [] };
-    },
     componentDidMount: function() {
         this.getCollection();
     },
@@ -19,8 +16,8 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                 filters: JSON.stringify(filters)
             },
             success: function(data) {
-                this.setProps({ collection: data.collection });
-                console.log(data.collection);
+                this.setProps({ data: data });
+                console.log(data);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -28,16 +25,23 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         });
     },
     render: function() {
+        var gameList;
+        var filterList;
+        if (this.props.data) {
+            if(this.props.data.collection) gameList = React.createElement(GameList, {games: this.props.data.collection});
+            if(this.props.data.lists) filterList = React.createElement(FilterList, {lists: this.props.data.lists});
+        }
+
         return (
             React.createElement("div", null, 
                 React.createElement("div", {className: "col-sm-8"}, 
                     React.createElement("div", {className: "row"}, 
-                        React.createElement(GameList, {games: this.props.collection})
+                        gameList 
                     )
                 ), 
                 React.createElement("div", {className: "col-sm-4"}, 
                     React.createElement("div", {className: "row"}, 
-                        React.createElement(FilterList, null)
+                        filterList 
                     )
                 )
             )
@@ -47,27 +51,36 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
 
 var GameList = React.createClass({displayName: "GameList",
     render: function() {
-        if (this.props.games) {
             return (
                 React.createElement("ul", null, 
                     this.props.games.map(function(game, i) {
-                      return (
-                        React.createElement("li", {key: game.GBID}, game.Name)
-                      );
+                        return (
+                            React.createElement("li", {key: game.GBID}, game.Name)
+                        );
                     }, this)
                 )
             );
-        } else {
-            return null;
-        }
     }
 });
 
 var FilterList = React.createClass({displayName: "FilterList",
     render: function() {
-        return (
-            React.createElement("b", null, "List")
-        );
+            return (
+                React.createElement("div", null, 
+                    React.createElement("b", null, "List"), 
+                    React.createElement("ul", {className: "filters"}, 
+                        this.props.lists.map(function(list, i) {
+                            return (
+                                React.createElement("li", {key: list.ListID}, 
+                                    React.createElement("label", null, 
+                                        React.createElement("input", {id: list.ListID, type: "checkbox"}), " ", list.ListName
+                                    )
+                                )
+                            );
+                        }, this)
+                    )
+                )
+            );
     }
 });
 

@@ -2,9 +2,6 @@ var filters = { lists : [], statuses : [], platforms : [], includeNoPlatforms : 
 var currentPage = 1;
 
 var GameCollectionApp = React.createClass({
-    getInitialState: function(){
-        return { collection: [] };
-    },
     componentDidMount: function() {
         this.getCollection();
     },
@@ -19,8 +16,8 @@ var GameCollectionApp = React.createClass({
                 filters: JSON.stringify(filters)
             },
             success: function(data) {
-                this.setProps({ collection: data.collection });
-                console.log(data.collection);
+                this.setProps({ data: data });
+                console.log(data);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -28,16 +25,23 @@ var GameCollectionApp = React.createClass({
         });
     },
     render: function() {
+        var gameList;
+        var filterList;
+        if (this.props.data) {
+            if(this.props.data.collection) gameList = <GameList games={this.props.data.collection} />;
+            if(this.props.data.lists) filterList = <FilterList lists={this.props.data.lists} />;
+        }
+
         return (
             <div>
                 <div className="col-sm-8">
                     <div className="row">
-                        <GameList games={this.props.collection} />
+                        { gameList }
                     </div>
                 </div>
                 <div className="col-sm-4">
                     <div className="row">
-                        <FilterList />
+                        { filterList }
                     </div>
                 </div>
             </div>
@@ -47,27 +51,36 @@ var GameCollectionApp = React.createClass({
 
 var GameList = React.createClass({
     render: function() {
-        if (this.props.games) {
             return (
                 <ul>
                     {this.props.games.map(function(game, i) {
-                      return (
-                        <li key={game.GBID}>{game.Name}</li>
-                      );
+                        return (
+                            <li key={game.GBID}>{game.Name}</li>
+                        );
                     }, this)}
                 </ul>
             );
-        } else {
-            return null;
-        }
     }
 });
 
 var FilterList = React.createClass({
     render: function() {
-        return (
-            <b>List</b>
-        );
+            return (
+                <div>
+                    <b>List</b>
+                    <ul className="filters">
+                        {this.props.lists.map(function(list, i) {
+                            return (
+                                <li key={list.ListID}>
+                                    <label>
+                                        <input id={list.ListID} type="checkbox" /> {list.ListName}
+                                    </label>
+                                </li>
+                            );
+                        }, this)}
+                    </ul>
+                </div>
+            );
     }
 });
 
