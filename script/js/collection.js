@@ -29,7 +29,18 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
     },
     render: function() {
         return (
-            React.createElement(GameList, {games: this.props.collection})
+            React.createElement("div", null, 
+                React.createElement("div", {className: "col-sm-8"}, 
+                    React.createElement("div", {className: "row"}, 
+                        React.createElement(GameList, {games: this.props.collection})
+                    )
+                ), 
+                React.createElement("div", {className: "col-sm-4"}, 
+                    React.createElement("div", {className: "row"}, 
+                        React.createElement(FilterList, null)
+                    )
+                )
+            )
         );
     }
 });
@@ -49,6 +60,14 @@ var GameList = React.createClass({displayName: "GameList",
         } else {
             return null;
         }
+    }
+});
+
+var FilterList = React.createClass({displayName: "FilterList",
+    render: function() {
+        return (
+            React.createElement("b", null, "List")
+        );
     }
 });
 

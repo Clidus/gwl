@@ -29,7 +29,18 @@ var GameCollectionApp = React.createClass({
     },
     render: function() {
         return (
-            <GameList games={this.props.collection} />
+            <div>
+                <div className="col-sm-8">
+                    <div className="row">
+                        <GameList games={this.props.collection} />
+                    </div>
+                </div>
+                <div className="col-sm-4">
+                    <div className="row">
+                        <FilterList />
+                    </div>
+                </div>
+            </div>
         );
     }
 });
@@ -49,6 +60,14 @@ var GameList = React.createClass({
         } else {
             return null;
         }
+    }
+});
+
+var FilterList = React.createClass({
+    render: function() {
+        return (
+            <b>List</b>
+        );
     }
 });
 

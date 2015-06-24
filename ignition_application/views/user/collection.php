@@ -1,5 +1,3 @@
-		<div class="row">
-			<div id="gameCollection"></div>
-		</div>
+		<div id="gameCollection" class="row"></div>
 	</div>
 </div>
