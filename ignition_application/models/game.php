@@ -619,9 +619,22 @@ class Game extends CI_Model {
         $this->db->where('collections.UserID', $userID); 
         $this->db->group_by("lists.ListID");
         $this->db->order_by("Games", "desc"); 
-        $query = $this->db->get();
 
-        return $query->result();
+        // get results
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            $lists = $query->result();
+
+            foreach ($lists as $list)
+            {  
+                $list->Selected = true;
+            }
+
+            return $lists;
+        }
+
+        return null;
     }
 
     // get statuses in collection

@@ -2,46 +2,64 @@ var filters = { lists : [], statuses : [], platforms : [], includeNoPlatforms : 
 var currentPage = 1;
 
 var GameCollectionApp = React.createClass({
-    componentDidMount: function() {
-        this.getCollection();
+    getInitialState: function() {
+        return {
+            lists: []
+        };
     },
-    getCollection: function() {
+    componentDidMount: function() {
+        this.getFilters();
+    },
+    onCheckboxChange: function(ListID) {
+         var lists = this.state.lists.map(function(d) {
+            return {
+                ListID: d.ListID,
+                ListName: d.ListName,
+                Selected: (d.ListID === ListID ? !d.Selected : d.Selected)
+            };
+        });
+
+        this.setState({ lists: lists });
+    },
+    onAllCheckboxChange: function(CheckedValue) {
+        var lists = this.state.lists.map(function(d) {
+            return { ListID: d.ListID, ListName: d.ListName, Selected: CheckedValue };
+        });
+
+        this.setState({ lists: lists });
+    },
+    getFilters: function() {
         $.ajax({
             type : 'POST',
-            url : '/user/getCollection',
+            url : '/user/getCollectionFilters',
             dataType : 'json',
             data: {
-                userID: UserID,
-                page: currentPage,
-                filters: JSON.stringify(filters)
+                userID: UserID//,
+                //page: currentPage,
+                //filters: JSON.stringify(filters)
             },
             success: function(data) {
-                this.setProps({ data: data });
-                console.log(data);
+                this.setState({
+                    lists: data.lists
+                });
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
+                console.error("/user/getCollectionFilters", status, err.toString());
             }.bind(this)
         });
     },
     render: function() {
-        var gameList;
-        var filterList;
-        if (this.props.data) {
-            if(this.props.data.collection) gameList = <GameList games={this.props.data.collection} />;
-            if(this.props.data.lists) filterList = <FilterList lists={this.props.data.lists} />;
-        }
+        console.log("GameCollectionApp");
 
         return (
             <div>
                 <div className="col-sm-8">
                     <div className="row">
-                        { gameList }
                     </div>
                 </div>
                 <div className="col-sm-4">
                     <div className="row">
-                        { filterList }
+                        <FilterList lists={this.state.lists} onCheckboxChange={this.onCheckboxChange} onAllCheckboxChange={this.onAllCheckboxChange} />
                     </div>
                 </div>
             </div>
@@ -51,38 +69,61 @@ var GameCollectionApp = React.createClass({
 
 var GameList = React.createClass({
     render: function() {
-            return (
-                <ul>
-                    {this.props.games.map(function(game, i) {
-                        return (
-                            <li key={game.GBID}>{game.Name}</li>
-                        );
-                    }, this)}
-                </ul>
-            );
+        console.log("GameList");
+
+        return (
+            <ul>
+                {this.props.games.map(function(game, i) {
+                    return (
+                        <li key={game.GBID}>{game.Name}</li>
+                    );
+                }, this)}
+            </ul>
+        );
     }
 });
 
 var FilterList = React.createClass({
+    getInitialState: function() {
+        return {
+            checkAll: true
+        };
+    },
+    onCheckboxChange: function(ListID) {
+        this.props.onCheckboxChange(ListID);
+    },
+    onAllCheckboxChange: function() {
+        this.setState({
+            checkAll: !this.state.checkAll
+        });
+        this.props.onAllCheckboxChange(!this.state.checkAll);
+    },
     render: function() {
+        console.log("FilterList");
+
+        if(this.props.lists == null)
+            return null;
+
+        var checks = this.props.lists.map(function(list) {
             return (
-                <div>
-                    <b>List</b>
-                    <ul className="filters">
-                        {this.props.lists.map(function(list, i) {
-                            return (
-                                <li key={list.ListID}>
-                                    <label>
-                                        <input id={list.ListID} type="checkbox" /> {list.ListName}
-                                    </label>
-                                </li>
-                            );
-                        }, this)}
-                    </ul>
-                </div>
+               <li key={list.ListID}>
+                    <input id={list.ListID} type="checkbox" checked={list.Selected} onChange={this.onCheckboxChange.bind(this, list.ListID)} /> {list.ListName}
+                </li>
             );
+        }.bind(this));
+        return (
+            <div>
+                <b>List</b>
+                <ul>
+                    <li>
+                        <input type="checkbox" ref="globalSelector" onChange={this.onAllCheckboxChange} checked={this.state.checkAll} /> All / None
+                    </li>
+                    {checks}
+                </ul>
+            </div>
+        );
     }
-});
+})
 
 function loadCollection(){
     React.render(

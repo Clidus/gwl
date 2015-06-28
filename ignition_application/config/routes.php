@@ -64,6 +64,7 @@ $route['user/settings/image/upload'] = 'users/imageUpload';
 $route['user/settings/password'] = 'users/password';
 $route['user/comment'] = 'users/comment';
 $route['user/getCollection'] = 'users/getCollection';
+$route['user/getCollectionFilters'] = 'users/getCollectionFilters';
 $route['user/follow'] = 'users/follow';
 $route['user/(:any)/collection'] = 'users/collection/$1';
 $route['user/(:any)/platforms'] = 'users/platforms/$1';

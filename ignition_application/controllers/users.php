@@ -133,9 +133,33 @@ class Users extends IG_Users {
         $this->load->model('Game');
         $result['collection'] = $this->Game->getCollection($userID, $filters, $offset, $resultsPerPage);
         $result['stats'] = $this->Game->getCollection($userID, $filters, null, null);
-        $result['platforms'] = $this->Game->getPlatformsInCollection($userID);
+        
+        // return success
+        $result['error'] = false;   
+        echo json_encode($result);
+    }
+
+    function getCollectionFilters()
+    {
+        // form validation
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('userID', 'userID', 'trim|xss_clean');
+        $this->form_validation->run();
+
+        $userID = $this->input->post('userID');
+
+        // check that user is VALID
+        if($userID <= 0)
+        {
+            $this->returnError($this->lang->line('error_user_invalid_id'),false,false);
+            return;
+        }
+
+        // get collection
+        $this->load->model('Game');
+        //$result['platforms'] = $this->Game->getPlatformsInCollection($userID);
         $result['lists'] = $this->Game->getListsInCollection($userID);
-        $result['statuses'] = $this->Game->getStatusesInCollection($userID);
+        //$result['statuses'] = $this->Game->getStatusesInCollection($userID);
 
         // return success
         $result['error'] = false;   
