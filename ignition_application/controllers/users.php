@@ -132,7 +132,7 @@ class Users extends IG_Users {
         // get collection
         $this->load->model('Game');
         $result['collection'] = $this->Game->getCollection($userID, $filters, $offset, $resultsPerPage);
-        $result['stats'] = $this->Game->getCollection($userID, $filters, null, null);
+        //$result['stats'] = $this->Game->getCollection($userID, $filters, null, null);
         
         // return success
         $result['error'] = false;   

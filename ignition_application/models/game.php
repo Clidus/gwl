@@ -454,22 +454,31 @@ class Game extends CI_Model {
             $this->db->where('collections.UserID', $userID); 
         
             // filter out listID's
-            if(count($filters->lists) > 0) 
-                $this->db->where_not_in('collections.ListID', $filters->lists);
+            $exclude = array();
+            foreach($filters->lists as $list)
+            {
+                if(!$list->Selected)
+                    $exclude[] = $list->ListID;
+            }   
 
-            // filter out statusID's
-            if(count($filters->statuses) > 0) 
-                $this->db->where_not_in('collections.StatusID', $filters->statuses);
+            if(count($exclude) > 0) 
+            {
+                $this->db->where_not_in('collections.ListID', $exclude);
+            }
+
+            // // filter out statusID's
+            // if(count($filters->statuses) > 0) 
+            //     $this->db->where_not_in('collections.StatusID', $filters->statuses);
             
-            // filter out platformID's
-            if(count($filters->platforms) > 0 && !$filters->includeNoPlatforms) 
-                $this->db->where_not_in('collectionPlatform.PlatformID', $filters->platforms);
-            // filter out platformID's, but include games with no platform
-            else if(count($filters->platforms) > 0 && $filters->includeNoPlatforms) 
-                $this->db->where("(`collectionPlatform`.`PlatformID` NOT IN (" . implode(",", $filters->platforms) . ") OR `collectionPlatform`.`PlatformID` IS NULL)");
-            // filter out games with no platform
-            else if(!$filters->includeNoPlatforms)
-                $this->db->where("(`collectionPlatform`.`PlatformID` IS NOT NULL)"); 
+            // // filter out platformID's
+            // if(count($filters->platforms) > 0 && !$filters->includeNoPlatforms) 
+            //     $this->db->where_not_in('collectionPlatform.PlatformID', $filters->platforms);
+            // // filter out platformID's, but include games with no platform
+            // else if(count($filters->platforms) > 0 && $filters->includeNoPlatforms) 
+            //     $this->db->where("(`collectionPlatform`.`PlatformID` NOT IN (" . implode(",", $filters->platforms) . ") OR `collectionPlatform`.`PlatformID` IS NULL)");
+            // // filter out games with no platform
+            // else if(!$filters->includeNoPlatforms)
+            //     $this->db->where("(`collectionPlatform`.`PlatformID` IS NOT NULL)"); 
         }
         
         // only apply group by, order by and limit if getting list of games
@@ -478,27 +487,27 @@ class Game extends CI_Model {
             $this->db->group_by("collections.GameID");
 
             // order by
-            switch($filters->orderBy)
-            {
-                case "releaseDateAsc":
-                    $this->db->order_by("games.ReleaseDate", "asc");
-                    break;
-                case "releaseDateDesc":
-                    $this->db->order_by("games.ReleaseDate", "desc");
-                    break;
-                case "nameAsc":
-                    $this->db->order_by("games.Name", "asc");
-                    break;
-                case "nameDesc":
-                    $this->db->order_by("games.Name", "desc");
-                    break;
-                case "hoursPlayedAsc":
-                    $this->db->order_by("collections.HoursPlayed", "asc");
-                    break;
-                case "hoursPlayedDesc":
-                    $this->db->order_by("collections.HoursPlayed", "desc");
-                    break;
-            }
+            // switch($filters->orderBy)
+            // {
+            //     case "releaseDateAsc":
+            //         $this->db->order_by("games.ReleaseDate", "asc");
+            //         break;
+            //     case "releaseDateDesc":
+            //         $this->db->order_by("games.ReleaseDate", "desc");
+            //         break;
+            //     case "nameAsc":
+            //         $this->db->order_by("games.Name", "asc");
+            //         break;
+            //     case "nameDesc":
+            //         $this->db->order_by("games.Name", "desc");
+            //         break;
+            //     case "hoursPlayedAsc":
+            //         $this->db->order_by("collections.HoursPlayed", "asc");
+            //         break;
+            //     case "hoursPlayedDesc":
+            //         $this->db->order_by("collections.HoursPlayed", "desc");
+            //         break;
+            // }
             
             // paging
             $this->db->limit($resultsPerPage, $offset);

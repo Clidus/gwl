@@ -4,43 +4,56 @@ var currentPage = 1;
 var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
     getInitialState: function() {
         return {
-            lists: []
+            filterLists: []
         };
     },
+    // on first load, get list of filters
     componentDidMount: function() {
         this.getFilters();
     },
-    onCheckboxChange: function(ListID) {
-         var lists = this.state.lists.map(function(d) {
-            return {
-                ListID: d.ListID,
-                ListName: d.ListName,
-                Selected: (d.ListID === ListID ? !d.Selected : d.Selected)
-            };
-        });
-
-        this.setState({ lists: lists });
-    },
-    onAllCheckboxChange: function(CheckedValue) {
-        var lists = this.state.lists.map(function(d) {
-            return { ListID: d.ListID, ListName: d.ListName, Selected: CheckedValue };
-        });
-
-        this.setState({ lists: lists });
-    },
+    // get list of filters
     getFilters: function() {
+        console.log("> getFilters");
+
         $.ajax({
             type : 'POST',
             url : '/user/getCollectionFilters',
             dataType : 'json',
             data: {
-                userID: UserID//,
-                //page: currentPage,
-                //filters: JSON.stringify(filters)
+                userID: UserID
             },
             success: function(data) {
+                // save filters to state
                 this.setState({
-                    lists: data.lists
+                    filterLists: data.lists
+                });
+                // load collection using default filter state
+                this.getCollection(data.lists);
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error("/user/getCollectionFilters", status, err.toString());
+            }.bind(this)
+        });
+    },
+    // get collection using filters
+    getCollection: function(filterLists) {
+        console.log("> getCollection");
+
+        var lists = { lists: filterLists }
+
+        $.ajax({
+            type : 'POST',
+            url : '/user/getCollection',
+            dataType : 'json',
+            data: {
+                userID: UserID,
+                page: currentPage,
+                filters: JSON.stringify(lists)
+            },
+            success: function(data) {
+                // save collection to be passed to GameList
+                this.setProps({
+                    games: data.collection
                 });
             }.bind(this),
             error: function(xhr, status, err) {
@@ -48,18 +61,49 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
             }.bind(this)
         });
     },
+    // on filter change
+    onCheckboxChange: function(ListID) {
+        // update Selected state of changed filter
+        var lists = this.state.filterLists.map(function(d) {
+            return {
+                ListID: d.ListID,
+                ListName: d.ListName,
+                Selected: (d.ListID === ListID ? !d.Selected : d.Selected)
+            };
+        });
+
+        // update state of filters
+        this.setState({ filterLists: lists });
+
+        // reload collection based on new filters
+        this.getCollection(lists);
+    },
+    // on All / None checkbox change
+    onAllCheckboxChange: function(CheckedValue) {
+        // change all filters to checked or unchecked
+        var lists = this.state.filterLists.map(function(d) {
+            return { ListID: d.ListID, ListName: d.ListName, Selected: CheckedValue };
+        });
+
+        // update state of filters
+        this.setState({ filterLists: lists });
+
+        // reload collection based on new filters
+        this.getCollection(lists);
+    },
     render: function() {
         console.log("GameCollectionApp");
 
         return (
             React.createElement("div", null, 
                 React.createElement("div", {className: "col-sm-8"}, 
-                    React.createElement("div", {className: "row"}
+                    React.createElement("div", {className: "row"}, 
+                        React.createElement(GameList, {games: this.props.games})
                     )
                 ), 
                 React.createElement("div", {className: "col-sm-4"}, 
                     React.createElement("div", {className: "row"}, 
-                        React.createElement(FilterList, {lists: this.state.lists, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange})
+                        React.createElement(FilterList, {lists: this.state.filterLists, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange})
                     )
                 )
             )
@@ -67,9 +111,13 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
     }
 });
 
+// list of games
 var GameList = React.createClass({displayName: "GameList",
     render: function() {
         console.log("GameList");
+
+        if(this.props.games == null)
+            return null;
 
         return (
             React.createElement("ul", null, 
@@ -83,6 +131,7 @@ var GameList = React.createClass({displayName: "GameList",
     }
 });
 
+// list of filters
 var FilterList = React.createClass({displayName: "FilterList",
     getInitialState: function() {
         return {
@@ -90,17 +139,22 @@ var FilterList = React.createClass({displayName: "FilterList",
         };
     },
     onCheckboxChange: function(ListID) {
+        // call parents onCheckboxChange 
         this.props.onCheckboxChange(ListID);
     },
     onAllCheckboxChange: function() {
+        // update state of checkAll
         this.setState({
             checkAll: !this.state.checkAll
         });
+
+        // call parents onAllCheckboxChange
         this.props.onAllCheckboxChange(!this.state.checkAll);
     },
     render: function() {
         console.log("FilterList");
 
+        // if no lists passed, display nothing
         if(this.props.lists == null)
             return null;
 
