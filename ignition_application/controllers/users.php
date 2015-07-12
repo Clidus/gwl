@@ -159,7 +159,7 @@ class Users extends IG_Users {
         $this->load->model('Game');
         //$result['platforms'] = $this->Game->getPlatformsInCollection($userID);
         $result['lists'] = $this->Game->getListsInCollection($userID);
-        //$result['statuses'] = $this->Game->getStatusesInCollection($userID);
+        $result['statuses'] = $this->Game->getStatusesInCollection($userID);
 
         // return success
         $result['error'] = false;   

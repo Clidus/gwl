@@ -454,21 +454,30 @@ class Game extends CI_Model {
             $this->db->where('collections.UserID', $userID); 
         
             // filter out listID's
-            $exclude = array();
+            $excludeLists = array();
             foreach($filters->lists as $list)
             {
                 if(!$list->Selected)
-                    $exclude[] = $list->ListID;
+                    $excludeLists[] = $list->ID;
             }   
 
-            if(count($exclude) > 0) 
+            if(count($excludeLists) > 0) 
             {
-                $this->db->where_not_in('collections.ListID', $exclude);
+                $this->db->where_not_in('collections.ListID', $excludeLists);
             }
 
             // // filter out statusID's
-            // if(count($filters->statuses) > 0) 
-            //     $this->db->where_not_in('collections.StatusID', $filters->statuses);
+            $excludeStatuses = array();
+            foreach($filters->statuses as $status)
+            {
+                if(!$status->Selected)
+                    $excludeStatuses[] = $status->ID;
+            } 
+
+            if(count($excludeStatuses) > 0) 
+            {
+                $this->db->where_not_in('collections.StatusID', $excludeStatuses);
+            }
             
             // // filter out platformID's
             // if(count($filters->platforms) > 0 && !$filters->includeNoPlatforms) 
@@ -622,7 +631,7 @@ class Game extends CI_Model {
     // get lists in collection
     function getListsInCollection($userID)
     {
-        $this->db->select('lists.ListID, lists.ListName, count(*) as Games');
+        $this->db->select('lists.ListID AS ID, lists.ListName AS Name, count(*) as Games');
         $this->db->from('collections');
         $this->db->join('lists', 'collections.ListID = lists.ListID');
         $this->db->where('collections.UserID', $userID); 
@@ -649,15 +658,28 @@ class Game extends CI_Model {
     // get statuses in collection
     function getStatusesInCollection($userID)
     {
-        $this->db->select('gameStatuses.StatusID, gameStatuses.StatusName, count(*) as Games');
+        $this->db->select('gameStatuses.StatusID AS ID, gameStatuses.StatusName AS Name, count(*) as Games');
         $this->db->from('collections');
         $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID');
         $this->db->where('collections.UserID', $userID); 
         $this->db->group_by("gameStatuses.StatusID");
         $this->db->order_by("Games", "desc"); 
+        
+        // get results
         $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            $statuses = $query->result();
 
-        return $query->result();
+            foreach ($statuses as $status)
+            {  
+                $status->Selected = true;
+            }
+
+            return $statuses;
+        }
+
+        return null;
     }
 
     // get game that need updating

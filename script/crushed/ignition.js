@@ -19769,7 +19769,8 @@ var currentPage = 1;
 var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
     getInitialState: function() {
         return {
-            filterLists: []
+            filterLists: [],
+            filterStatuses: []
         };
     },
     // on first load, get list of filters
@@ -19790,10 +19791,11 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
             success: function(data) {
                 // save filters to state
                 this.setState({
-                    filterLists: data.lists
+                    filterLists: data.lists,
+                    filterStatuses: data.statuses
                 });
                 // load collection using default filter state
-                this.getCollection(data.lists);
+                this.getCollection(data.lists, data.statuses);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("/user/getCollectionFilters", status, err.toString());
@@ -19801,10 +19803,10 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         });
     },
     // get collection using filters
-    getCollection: function(filterLists) {
+    getCollection: function(filterLists, filterStatuses) {
         console.log("> getCollection");
 
-        var lists = { lists: filterLists }
+        var lists = { lists: filterLists, statuses: filterStatuses }
 
         $.ajax({
             type : 'POST',
@@ -19827,34 +19829,43 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         });
     },
     // on filter change
-    onCheckboxChange: function(ListID) {
+    onCheckboxChange: function(filterType, id) {
         // update Selected state of changed filter
-        var lists = this.state.filterLists.map(function(d) {
-            return {
-                ListID: d.ListID,
-                ListName: d.ListName,
-                Selected: (d.ListID === ListID ? !d.Selected : d.Selected)
-            };
-        });
+        var lists = filterType == "List" ? this.changeFilterStatus(this.state.filterLists, id) : this.state.filterLists;
+        var statuses = filterType == "Completion" ? this.changeFilterStatus(this.state.filterStatuses, id) : this.state.filterStatuses;
 
         // update state of filters
-        this.setState({ filterLists: lists });
+        this.setState({ filterLists: lists, filterStatuses: statuses });
 
         // reload collection based on new filters
-        this.getCollection(lists);
+        this.getCollection(lists, statuses);
     },
     // on All / None checkbox change
-    onAllCheckboxChange: function(CheckedValue) {
+    onAllCheckboxChange: function(filterType, checkedValue) {
         // change all filters to checked or unchecked
-        var lists = this.state.filterLists.map(function(d) {
-            return { ListID: d.ListID, ListName: d.ListName, Selected: CheckedValue };
-        });
+        var lists = filterType == "List" ? this.changeAllFiltersStatus(this.state.filterLists, checkedValue) : this.state.filterLists;
+        var statuses = filterType == "Completion" ? this.changeAllFiltersStatus(this.state.filterStatuses, checkedValue) : this.state.filterStatuses;
 
         // update state of filters
-        this.setState({ filterLists: lists });
+        this.setState({ filterLists: lists, filterStatuses: statuses });
 
         // reload collection based on new filters
-        this.getCollection(lists);
+        this.getCollection(lists, statuses);
+    },
+    changeFilterStatus: function(filter, id) {
+        return filter.map(function(d) {
+            return {
+                ID: d.ID,
+                Name: d.Name,
+                Games: d.Games,
+                Selected: (d.ID === id ? !d.Selected : d.Selected)
+            };
+        });
+    },
+    changeAllFiltersStatus: function(filter, checkedValue) {
+        return filter.map(function(d) {
+            return { ID: d.ID, Name: d.Name, Games: d.Games, Selected: checkedValue };
+        });
     },
     render: function() {
         console.log("GameCollectionApp");
@@ -19863,12 +19874,13 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
             React.createElement("div", null, 
                 React.createElement("div", {className: "col-sm-8"}, 
                     React.createElement("div", {className: "row"}, 
-                        React.createElement(GameList, {games: this.props.games})
+                        React.createElement(Games, {games: this.props.games})
                     )
                 ), 
                 React.createElement("div", {className: "col-sm-4"}, 
                     React.createElement("div", {className: "row"}, 
-                        React.createElement(FilterList, {lists: this.state.filterLists, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange})
+                        React.createElement(Filters, {filterType: "List", lists: this.state.filterLists, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange}), 
+                        React.createElement(Filters, {filterType: "Completion", lists: this.state.filterStatuses, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange})
                     )
                 )
             )
@@ -19877,7 +19889,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
 });
 
 // list of games
-var GameList = React.createClass({displayName: "GameList",
+var Games = React.createClass({displayName: "Games",
     render: function() {
         console.log("GameList");
 
@@ -19887,8 +19899,9 @@ var GameList = React.createClass({displayName: "GameList",
         return (
             React.createElement("ul", null, 
                 this.props.games.map(function(game, i) {
+                    var link = "/game/" + game.GBID;
                     return (
-                        React.createElement("li", {key: game.GBID}, game.Name)
+                        React.createElement("li", {key: game.GBID}, React.createElement("a", {href: link}, game.Name))
                     );
                 }, this)
             )
@@ -19897,15 +19910,15 @@ var GameList = React.createClass({displayName: "GameList",
 });
 
 // list of filters
-var FilterList = React.createClass({displayName: "FilterList",
+var Filters = React.createClass({displayName: "Filters",
     getInitialState: function() {
         return {
             checkAll: true
         };
     },
-    onCheckboxChange: function(ListID) {
+    onCheckboxChange: function(ID) {
         // call parents onCheckboxChange 
-        this.props.onCheckboxChange(ListID);
+        this.props.onCheckboxChange(this.props.filterType, ID);
     },
     onAllCheckboxChange: function() {
         // update state of checkAll
@@ -19914,10 +19927,10 @@ var FilterList = React.createClass({displayName: "FilterList",
         });
 
         // call parents onAllCheckboxChange
-        this.props.onAllCheckboxChange(!this.state.checkAll);
+        this.props.onAllCheckboxChange(this.props.filterType, !this.state.checkAll);
     },
     render: function() {
-        console.log("FilterList");
+        console.log("Filter: " + this.props.filterType);
 
         // if no lists passed, display nothing
         if(this.props.lists == null)
@@ -19925,14 +19938,14 @@ var FilterList = React.createClass({displayName: "FilterList",
 
         var checks = this.props.lists.map(function(list) {
             return (
-               React.createElement("li", {key: list.ListID}, 
-                    React.createElement("input", {id: list.ListID, type: "checkbox", checked: list.Selected, onChange: this.onCheckboxChange.bind(this, list.ListID)}), " ", list.ListName
+               React.createElement("li", {key: list.ID}, 
+                    React.createElement("input", {id: list.ID, type: "checkbox", checked: list.Selected, onChange: this.onCheckboxChange.bind(this, list.ID)}), " ", list.Name, " (", list.Games, ")"
                 )
             );
         }.bind(this));
         return (
             React.createElement("div", null, 
-                React.createElement("b", null, "List"), 
+                React.createElement("b", null, this.props.filterType), 
                 React.createElement("ul", null, 
                     React.createElement("li", null, 
                         React.createElement("input", {type: "checkbox", ref: "globalSelector", onChange: this.onAllCheckboxChange, checked: this.state.checkAll}), " All / None"
