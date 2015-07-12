@@ -466,7 +466,7 @@ class Game extends CI_Model {
                 $this->db->where_not_in('collections.ListID', $excludeLists);
             }
 
-            // // filter out statusID's
+            // filter out statusID's
             $excludeStatuses = array();
             foreach($filters->statuses as $status)
             {
@@ -479,15 +479,29 @@ class Game extends CI_Model {
                 $this->db->where_not_in('collections.StatusID', $excludeStatuses);
             }
             
-            // // filter out platformID's
-            // if(count($filters->platforms) > 0 && !$filters->includeNoPlatforms) 
-            //     $this->db->where_not_in('collectionPlatform.PlatformID', $filters->platforms);
-            // // filter out platformID's, but include games with no platform
-            // else if(count($filters->platforms) > 0 && $filters->includeNoPlatforms) 
-            //     $this->db->where("(`collectionPlatform`.`PlatformID` NOT IN (" . implode(",", $filters->platforms) . ") OR `collectionPlatform`.`PlatformID` IS NULL)");
-            // // filter out games with no platform
-            // else if(!$filters->includeNoPlatforms)
-            //     $this->db->where("(`collectionPlatform`.`PlatformID` IS NOT NULL)"); 
+            // filter out platformID's
+            $excludePlatforms = array();
+            $includeNoPlatforms = true;
+            foreach($filters->platforms as $platform)
+            {
+                if(!$platform->Selected)
+                {
+                    if($platform->ID == 0)
+                        $includeNoPlatforms = false;
+                    
+                    $excludePlatforms[] = $platform->ID;
+                }
+            } 
+
+            if(count($excludePlatforms) > 0) 
+            {
+                if($includeNoPlatforms)
+                {
+                    $this->db->where("(`collectionPlatform`.`PlatformID` NOT IN (" . implode(",", $excludePlatforms) . ") OR `collectionPlatform`.`PlatformID` IS NULL)");
+                } else {
+                    $this->db->where_not_in('collectionPlatform.PlatformID', $excludePlatforms);
+                }
+            }
         }
         
         // only apply group by, order by and limit if getting list of games
@@ -616,16 +630,31 @@ class Game extends CI_Model {
     // get platforms in collection
     function getPlatformsInCollection($userID)
     {
-        $this->db->select('platforms.PlatformID, platforms.Abbreviation, count(*) as Games');
+        $this->db->select('platforms.PlatformID AS ID, platforms.Abbreviation AS Name, count(*) as Games');
         $this->db->from('collections');
         $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID', 'left');
         $this->db->join('platforms', 'collectionPlatform.PlatformID = platforms.PlatformID', 'left');
         $this->db->where('collections.UserID', $userID); 
         $this->db->group_by("platforms.PlatformID");
         $this->db->order_by("Games", "desc"); 
+        
+        // get results
         $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            $platforms = $query->result();
 
-        return $query->result();
+            foreach ($platforms as $platform)
+            {  
+                $platform->ID = $platform->ID == null ? 0 : $platform->ID;
+                $platform->Name = $platform->Name == null ? "No Platform" : $platform->Name;
+                $platform->Selected = true;
+            }
+
+            return $platforms;
+        }
+
+        return null;
     }
 
     // get lists in collection

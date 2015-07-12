@@ -5,7 +5,8 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
     getInitialState: function() {
         return {
             filterLists: [],
-            filterStatuses: []
+            filterStatuses: [],
+            filterPlatforms: []
         };
     },
     // on first load, get list of filters
@@ -27,10 +28,11 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                 // save filters to state
                 this.setState({
                     filterLists: data.lists,
-                    filterStatuses: data.statuses
+                    filterStatuses: data.statuses,
+                    filterPlatforms: data.platforms
                 });
                 // load collection using default filter state
-                this.getCollection(data.lists, data.statuses);
+                this.getCollection(data.lists, data.statuses, data.platforms);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("/user/getCollectionFilters", status, err.toString());
@@ -38,10 +40,10 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         });
     },
     // get collection using filters
-    getCollection: function(filterLists, filterStatuses) {
+    getCollection: function(filterLists, filterStatuses, filterPlatforms) {
         console.log("> getCollection");
 
-        var lists = { lists: filterLists, statuses: filterStatuses }
+        var lists = { lists: filterLists, statuses: filterStatuses, platforms: filterPlatforms }
 
         $.ajax({
             type : 'POST',
@@ -68,24 +70,26 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         // update Selected state of changed filter
         var lists = filterType == "List" ? this.changeFilterStatus(this.state.filterLists, id) : this.state.filterLists;
         var statuses = filterType == "Completion" ? this.changeFilterStatus(this.state.filterStatuses, id) : this.state.filterStatuses;
+        var platforms = filterType == "Platform" ? this.changeFilterStatus(this.state.filterPlatforms, id) : this.state.filterPlatforms;
 
         // update state of filters
-        this.setState({ filterLists: lists, filterStatuses: statuses });
+        this.setState({ filterLists: lists, filterStatuses: statuses, filterPlatforms: platforms });
 
         // reload collection based on new filters
-        this.getCollection(lists, statuses);
+        this.getCollection(lists, statuses, platforms);
     },
     // on All / None checkbox change
     onAllCheckboxChange: function(filterType, checkedValue) {
         // change all filters to checked or unchecked
         var lists = filterType == "List" ? this.changeAllFiltersStatus(this.state.filterLists, checkedValue) : this.state.filterLists;
         var statuses = filterType == "Completion" ? this.changeAllFiltersStatus(this.state.filterStatuses, checkedValue) : this.state.filterStatuses;
+        var platforms = filterType == "Platform" ? this.changeAllFiltersStatus(this.state.filterPlatforms, checkedValue) : this.state.filterPlatforms;
 
         // update state of filters
-        this.setState({ filterLists: lists, filterStatuses: statuses });
+        this.setState({ filterLists: lists, filterStatuses: statuses, filterPlatforms: platforms });
 
         // reload collection based on new filters
-        this.getCollection(lists, statuses);
+        this.getCollection(lists, statuses, platforms);
     },
     changeFilterStatus: function(filter, id) {
         return filter.map(function(d) {
@@ -115,7 +119,8 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                 React.createElement("div", {className: "col-sm-4"}, 
                     React.createElement("div", {className: "row"}, 
                         React.createElement(Filters, {filterType: "List", lists: this.state.filterLists, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange}), 
-                        React.createElement(Filters, {filterType: "Completion", lists: this.state.filterStatuses, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange})
+                        React.createElement(Filters, {filterType: "Completion", lists: this.state.filterStatuses, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange}), 
+                        React.createElement(Filters, {filterType: "Platform", lists: this.state.filterPlatforms, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange})
                     )
                 )
             )
