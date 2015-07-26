@@ -510,27 +510,36 @@ class Game extends CI_Model {
             $this->db->group_by("collections.GameID");
 
             // order by
-            // switch($filters->orderBy)
-            // {
-            //     case "releaseDateAsc":
-            //         $this->db->order_by("games.ReleaseDate", "asc");
-            //         break;
-            //     case "releaseDateDesc":
-            //         $this->db->order_by("games.ReleaseDate", "desc");
-            //         break;
-            //     case "nameAsc":
-            //         $this->db->order_by("games.Name", "asc");
-            //         break;
-            //     case "nameDesc":
-            //         $this->db->order_by("games.Name", "desc");
-            //         break;
-            //     case "hoursPlayedAsc":
-            //         $this->db->order_by("collections.HoursPlayed", "asc");
-            //         break;
-            //     case "hoursPlayedDesc":
-            //         $this->db->order_by("collections.HoursPlayed", "desc");
-            //         break;
-            // }
+            $currentSort = 0;
+            foreach($filters->orderBy as $sort)
+            {
+                if($sort->Selected)
+                {
+                    $currentSort = $sort->ID;
+                }
+            } 
+
+            switch($currentSort)
+            {
+                case 0:
+                    $this->db->order_by("games.ReleaseDate", "asc");
+                    break;
+                case 1:
+                    $this->db->order_by("games.ReleaseDate", "desc");
+                    break;
+                case 2:
+                    $this->db->order_by("games.Name", "asc");
+                    break;
+                case 3:
+                    $this->db->order_by("games.Name", "desc");
+                    break;
+                case 4:
+                    $this->db->order_by("collections.HoursPlayed", "desc");
+                    break;
+                case 5:
+                    $this->db->order_by("collections.HoursPlayed", "asc");
+                    break;
+            }
             
             // paging
             $this->db->limit($resultsPerPage, $offset);

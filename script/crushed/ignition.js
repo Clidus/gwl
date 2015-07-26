@@ -19771,7 +19771,15 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         return {
             filterLists: [],
             filterStatuses: [],
-            filterPlatforms: []
+            filterPlatforms: [],
+            sort: [
+                    { "ID": 0, "Name":"Release Date (Newest)", "Selected": true },
+                    { "ID": 1, "Name":"Release Date (Oldest)", "Selected": false },
+                    { "ID": 2, "Name":"Name (A-Z)", "Selected": false },
+                    { "ID": 3, "Name":"Name (Z-A)", "Selected": false },
+                    { "ID": 4, "Name":"Hours Played (Most)", "Selected": false },
+                    { "ID": 5, "Name":"Hours Played (Least)", "Selected": false }
+                ]
         };
     },
     // on first load, get list of filters
@@ -19780,7 +19788,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
     },
     // get list of filters
     getFilters: function() {
-        console.log("> getFilters");
+        //console.log("> getFilters");
 
         $.ajax({
             type : 'POST',
@@ -19797,7 +19805,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                     filterPlatforms: data.platforms
                 });
                 // load collection using default filter state
-                this.getCollection(data.lists, data.statuses, data.platforms);
+                this.getCollection(data.lists, data.statuses, data.platforms, this.state.sort);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("/user/getCollectionFilters", status, err.toString());
@@ -19805,10 +19813,10 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         });
     },
     // get collection using filters
-    getCollection: function(filterLists, filterStatuses, filterPlatforms) {
-        console.log("> getCollection");
+    getCollection: function(filterLists, filterStatuses, filterPlatforms, sort) {
+        //console.log("> getCollection");
 
-        var lists = { lists: filterLists, statuses: filterStatuses, platforms: filterPlatforms }
+        var lists = { lists: filterLists, statuses: filterStatuses, platforms: filterPlatforms, orderBy: sort }
 
         $.ajax({
             type : 'POST',
@@ -19841,7 +19849,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         this.setState({ filterLists: lists, filterStatuses: statuses, filterPlatforms: platforms });
 
         // reload collection based on new filters
-        this.getCollection(lists, statuses, platforms);
+        this.getCollection(lists, statuses, platforms, this.state.sort);
     },
     // on All / None checkbox change
     onAllCheckboxChange: function(filterType, checkedValue) {
@@ -19854,7 +19862,23 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         this.setState({ filterLists: lists, filterStatuses: statuses, filterPlatforms: platforms });
 
         // reload collection based on new filters
-        this.getCollection(lists, statuses, platforms);
+        this.getCollection(lists, statuses, platforms, this.state.sort);
+    },
+    onRadioChange: function(id) {
+        // enable selected sort and disable the rest
+        var sort = this.state.sort.map(function(d) {
+            return {
+                ID: d.ID,
+                Name: d.Name,
+                Selected: (d.ID === id ? true : false)
+            };
+        });
+
+        // update state of sort
+        this.setState({ sort: sort });        
+
+        // reload collection with new sort
+        this.getCollection(this.state.filterLists, this.state.filterStatuses, this.state.filterPlatforms, sort);
     },
     changeFilterStatus: function(filter, id) {
         return filter.map(function(d) {
@@ -19872,7 +19896,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         });
     },
     render: function() {
-        console.log("GameCollectionApp");
+        //console.log("GameCollectionApp");
 
         return (
             React.createElement("div", null, 
@@ -19883,6 +19907,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                 ), 
                 React.createElement("div", {className: "col-sm-4"}, 
                     React.createElement("div", {className: "row"}, 
+                        React.createElement(Sorts, {sort: this.state.sort, onRadioChange: this.onRadioChange}), 
                         React.createElement(Filters, {filterType: "List", lists: this.state.filterLists, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange}), 
                         React.createElement(Filters, {filterType: "Completion", lists: this.state.filterStatuses, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange}), 
                         React.createElement(Filters, {filterType: "Platform", lists: this.state.filterPlatforms, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange})
@@ -19896,7 +19921,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
 // list of games
 var Games = React.createClass({displayName: "Games",
     render: function() {
-        console.log("GameList");
+        //console.log("GameList");
 
         if(this.props.games == null)
             return null;
@@ -19935,13 +19960,13 @@ var Filters = React.createClass({displayName: "Filters",
         this.props.onAllCheckboxChange(this.props.filterType, !this.state.checkAll);
     },
     render: function() {
-        console.log("Filter: " + this.props.filterType);
+        //console.log("Filter: " + this.props.filterType);
 
         // if no lists passed, display nothing
         if(this.props.lists == null)
             return null;
 
-        var checks = this.props.lists.map(function(list) {
+        var filters = this.props.lists.map(function(list) {
             return (
                React.createElement("li", {key: list.ID}, 
                     React.createElement("input", {id: list.ID, type: "checkbox", checked: list.Selected, onChange: this.onCheckboxChange.bind(this, list.ID)}), " ", list.Name, " (", list.Games, ")"
@@ -19951,11 +19976,40 @@ var Filters = React.createClass({displayName: "Filters",
         return (
             React.createElement("div", null, 
                 React.createElement("b", null, this.props.filterType), 
-                React.createElement("ul", null, 
+                React.createElement("ul", {className: "filters"}, 
                     React.createElement("li", null, 
                         React.createElement("input", {type: "checkbox", ref: "globalSelector", onChange: this.onAllCheckboxChange, checked: this.state.checkAll}), " All / None"
                     ), 
-                    checks
+                    filters
+                )
+            )
+        );
+    }
+})
+
+// list of filters
+var Sorts = React.createClass({displayName: "Sorts",
+    onRadioChange: function(ID) {
+        // call parents onRadioChange 
+        this.props.onRadioChange(ID);
+    },
+    render: function() {
+        // if no sort passed, display nothing
+        if(this.props.sort == null)
+            return null;
+
+        var sorts = this.props.sort.map(function(sort) {
+            return (
+               React.createElement("li", {key: sort.ID}, 
+                    React.createElement("input", {name: "orderBy", type: "radio", value: sort.Selected, checked: sort.Selected, onChange: this.onRadioChange.bind(this, sort.ID)}), " ", sort.Name
+                )
+            );
+        }.bind(this));
+        return (
+            React.createElement("div", null, 
+                React.createElement("b", null, "Order By"), 
+                React.createElement("ul", {className: "filters"}, 
+                    sorts
                 )
             )
         );
