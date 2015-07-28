@@ -32,6 +32,7 @@ var GameCollectionApp = React.createClass({
                 // starting state
                 var page = 1;
                 var sort = this.state.sort;
+                var lists = data.lists;
 
                 // get page state from url
                 var urlHash = $.address.pathNames();
@@ -43,14 +44,19 @@ var GameCollectionApp = React.createClass({
                     switch(itemState[0]) {
                         case "page":
                             page = parseInt(itemState[1]);
+                            break;
                         case "sort":
                             sort = this.changeSort(parseInt(itemState[1]));
+                            break;
+                        case "lists":
+                            lists = this.setupFilterStatus(lists, itemState[1].split(','));
+                            break;
                     }
                 }.bind(this));
 
                 // save filters to state
                 this.setState({
-                    filterLists: data.lists,
+                    filterLists: lists,
                     filterStatuses: data.statuses,
                     filterPlatforms: data.platforms,
                     page: page,
@@ -58,7 +64,7 @@ var GameCollectionApp = React.createClass({
                 });
 
                 // load collection using default filter state
-                this.getCollection(data.lists, data.statuses, data.platforms, sort, page);
+                this.getCollection(lists, data.statuses, data.platforms, sort, page);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("/user/getCollectionFilters", status, err.toString());
@@ -80,7 +86,7 @@ var GameCollectionApp = React.createClass({
             },
             success: function(data) {
                 // update url hash
-                this.updateUrlHash(page, sort);
+                this.updateUrlHash(filterLists, filterStatuses, filterPlatforms, sort, page);
 
                 // save collection to be passed to GameList
                 this.setProps({
@@ -94,8 +100,9 @@ var GameCollectionApp = React.createClass({
         });
     },
     // update page state in url hash
-    updateUrlHash: function(page, sort) {
-        var selectedSort;
+    updateUrlHash: function(filterLists, filterStatuses, filterPlatforms, sort, page) {
+        // find the current sort
+        var selectedSort = 0;
         for(i = 0; i < sort.length; i++) {
             if(sort[i].Selected) {
                 selectedSort = sort[i].ID;
@@ -103,7 +110,15 @@ var GameCollectionApp = React.createClass({
             }
         };
 
-        var hash = "page=" + page + "/sort=" + selectedSort;
+        var selectedLists = "";
+        for(i = 0; i < filterLists.length; i++) {
+            if(filterLists[i].Selected) {
+                selectedLists += filterLists[i].ID + ",";
+            }
+        };
+
+        // update hash
+        var hash = "page=" + page + "/sort=" + selectedSort + "/lists=" + selectedLists;
         $.address.value(hash);
     },
     // on filter change
@@ -161,6 +176,24 @@ var GameCollectionApp = React.createClass({
 
         // reload collection with new page
         this.getCollection(this.state.filterLists, this.state.filterStatuses, this.state.filterPlatforms, this.state.sort, page);
+    },
+    setupFilterStatus: function(filters, ids) {
+        // for each filter
+        filters.forEach(function(filter) {
+            // default to unselected
+            filter.Selected = false;
+            // check if its in list of selected ids
+            for(i = 0; i < ids.length; i++) {
+                // if filter is found, mark as selected
+                if(filter.ID == ids[i])
+                {
+                    filter.Selected = true;
+                    break;
+                }
+            }
+        });
+
+        return filters;
     },
     changeFilterStatus: function(filter, id) {
         return filter.map(function(d) {
