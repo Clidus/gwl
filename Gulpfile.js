@@ -23,8 +23,8 @@ gulp.task('css', function () {
 });
 
 gulp.task('js', function () {
-    return gulp.src(['./script/js/jquery-2.0.3.min.js','./script/js/jquery.autogrow-textarea.js','./script/js/bootstrap.min.js',
-        './script/js/react.min.js','./script/js/admin.js','./script/js/comments.js','./script/js/global.js',
+    return gulp.src(['./script/js/jquery-2.0.3.min.js','./script/js/jquery.autogrow-textarea.js','./script/js/jquery.address-1.6.min.js',
+        './script/js/bootstrap.min.js','./script/js/react.js','./script/js/admin.js','./script/js/comments.js','./script/js/global.js',
         './script/js/collection.js','./script/js/game.js','./script/js/platforms.js','./script/js/user.js'])
         .pipe(uglify())
         .pipe(concat('ignition.js'))
