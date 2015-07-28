@@ -126,16 +126,15 @@ class Users extends IG_Users {
         }
 
         // paging
-        $resultsPerPage = 30;
+        $resultsPerPage = 10;
         $offset = ($page-1) * $resultsPerPage;
 
         // get collection
         $this->load->model('Game');
         $result['collection'] = $this->Game->getCollection($userID, $filters, $offset, $resultsPerPage);
-        //$result['stats'] = $this->Game->getCollection($userID, $filters, null, null);
+        $result['stats'] = $this->Game->getCollection($userID, $filters, null, null);
         
-        // return success
-        $result['error'] = false;   
+        // return 
         echo json_encode($result);
     }
 

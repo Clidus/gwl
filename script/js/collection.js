@@ -1,9 +1,7 @@
-var filters = { lists : [], statuses : [], platforms : [], includeNoPlatforms : true, orderBy: "releaseDateDesc" };
-var currentPage = 1;
-
 var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
     getInitialState: function() {
         return {
+            page: 1,
             filterLists: [],
             filterStatuses: [],
             filterPlatforms: [],
@@ -23,8 +21,6 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
     },
     // get list of filters
     getFilters: function() {
-        //console.log("> getFilters");
-
         $.ajax({
             type : 'POST',
             url : '/user/getCollectionFilters',
@@ -40,7 +36,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                     filterPlatforms: data.platforms
                 });
                 // load collection using default filter state
-                this.getCollection(data.lists, data.statuses, data.platforms, this.state.sort);
+                this.getCollection(data.lists, data.statuses, data.platforms, this.state.sort, this.state.page);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("/user/getCollectionFilters", status, err.toString());
@@ -48,9 +44,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         });
     },
     // get collection using filters
-    getCollection: function(filterLists, filterStatuses, filterPlatforms, sort) {
-        //console.log("> getCollection");
-
+    getCollection: function(filterLists, filterStatuses, filterPlatforms, sort, page) {
         var lists = { lists: filterLists, statuses: filterStatuses, platforms: filterPlatforms, orderBy: sort }
 
         $.ajax({
@@ -59,13 +53,14 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
             dataType : 'json',
             data: {
                 userID: UserID,
-                page: currentPage,
+                page: page,
                 filters: JSON.stringify(lists)
             },
             success: function(data) {
                 // save collection to be passed to GameList
                 this.setProps({
-                    games: data.collection
+                    games: data.collection,
+                    stats: data.stats
                 });
             }.bind(this),
             error: function(xhr, status, err) {
@@ -79,12 +74,13 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         var lists = filterType == "List" ? this.changeFilterStatus(this.state.filterLists, id) : this.state.filterLists;
         var statuses = filterType == "Completion" ? this.changeFilterStatus(this.state.filterStatuses, id) : this.state.filterStatuses;
         var platforms = filterType == "Platform" ? this.changeFilterStatus(this.state.filterPlatforms, id) : this.state.filterPlatforms;
+        var page = 1;
 
         // update state of filters
-        this.setState({ filterLists: lists, filterStatuses: statuses, filterPlatforms: platforms });
+        this.setState({ filterLists: lists, filterStatuses: statuses, filterPlatforms: platforms, page: page });
 
         // reload collection based on new filters
-        this.getCollection(lists, statuses, platforms, this.state.sort);
+        this.getCollection(lists, statuses, platforms, this.state.sort, page);
     },
     // on All / None checkbox change
     onAllCheckboxChange: function(filterType, checkedValue) {
@@ -92,12 +88,13 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         var lists = filterType == "List" ? this.changeAllFiltersStatus(this.state.filterLists, checkedValue) : this.state.filterLists;
         var statuses = filterType == "Completion" ? this.changeAllFiltersStatus(this.state.filterStatuses, checkedValue) : this.state.filterStatuses;
         var platforms = filterType == "Platform" ? this.changeAllFiltersStatus(this.state.filterPlatforms, checkedValue) : this.state.filterPlatforms;
+        var page = 1;
 
         // update state of filters
-        this.setState({ filterLists: lists, filterStatuses: statuses, filterPlatforms: platforms });
+        this.setState({ filterLists: lists, filterStatuses: statuses, filterPlatforms: platforms, page: page });
 
         // reload collection based on new filters
-        this.getCollection(lists, statuses, platforms, this.state.sort);
+        this.getCollection(lists, statuses, platforms, this.state.sort, page);
     },
     onRadioChange: function(id) {
         // enable selected sort and disable the rest
@@ -108,12 +105,20 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                 Selected: (d.ID === id ? true : false)
             };
         });
+        var page = 1;
 
         // update state of sort
-        this.setState({ sort: sort });        
+        this.setState({ sort: sort, page: page });        
 
         // reload collection with new sort
-        this.getCollection(this.state.filterLists, this.state.filterStatuses, this.state.filterPlatforms, sort);
+        this.getCollection(this.state.filterLists, this.state.filterStatuses, this.state.filterPlatforms, sort, page);
+    },
+    onPageChange: function(page) {
+        // update page in state
+        this.setState({ page: page });        
+
+        // reload collection with new page
+        this.getCollection(this.state.filterLists, this.state.filterStatuses, this.state.filterPlatforms, this.state.sort, page);
     },
     changeFilterStatus: function(filter, id) {
         return filter.map(function(d) {
@@ -131,13 +136,12 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         });
     },
     render: function() {
-        //console.log("GameCollectionApp");
-
         return (
             React.createElement("div", null, 
                 React.createElement("div", {className: "col-sm-8"}, 
                     React.createElement("div", {className: "row"}, 
-                        React.createElement(Games, {games: this.props.games})
+                        React.createElement(Games, {games: this.props.games}), 
+                        React.createElement(Navigation, {page: this.state.page, onPageChange: this.onPageChange, stats: this.props.stats})
                     )
                 ), 
                 React.createElement("div", {className: "col-sm-4"}, 
@@ -156,8 +160,6 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
 // list of games
 var Games = React.createClass({displayName: "Games",
     render: function() {
-        //console.log("GameList");
-
         if(this.props.games == null)
             return null;
 
@@ -169,6 +171,42 @@ var Games = React.createClass({displayName: "Games",
                         React.createElement("li", {key: game.GBID}, React.createElement("a", {href: link}, game.Name))
                     );
                 }, this)
+            )
+        );
+    }
+});
+
+// next / previous buttons
+var Navigation = React.createClass({displayName: "Navigation",    
+    onPageChange: function(page) {
+        // call parents onCheckboxChange 
+        this.props.onPageChange(page);
+    },
+    render: function() {
+        if(this.props.page == null || this.props.stats == null)
+            return null;
+
+        // calculate how many pages there are
+        var resultsPerPage = 10;
+        var firstPage = 1;
+        var lastPage = Math.ceil(this.props.stats.Total / resultsPerPage);
+        
+        // previous page button
+        var previousPage;
+        if(this.props.page > firstPage)
+            previousPage = React.createElement("li", {className: "previous handPointer"}, React.createElement("a", {onClick: this.onPageChange.bind(this, this.props.page - 1)}, React.createElement("span", {"aria-hidden": "true"}, "←"), " Previous"));
+
+        // next page button
+        var nextPage;
+        if(this.props.page < lastPage)
+            nextPage = React.createElement("li", {className: "next handPointer"}, React.createElement("a", {onClick: this.onPageChange.bind(this, this.props.page + 1)}, React.createElement("span", {"aria-hidden": "true"}, "→"), " Next"))
+
+        return (
+            React.createElement("nav", null, 
+                React.createElement("ul", {className: "pager"}, 
+                    previousPage, 
+                    nextPage
+                )
             )
         );
     }
@@ -195,8 +233,6 @@ var Filters = React.createClass({displayName: "Filters",
         this.props.onAllCheckboxChange(this.props.filterType, !this.state.checkAll);
     },
     render: function() {
-        //console.log("Filter: " + this.props.filterType);
-
         // if no lists passed, display nothing
         if(this.props.lists == null)
             return null;

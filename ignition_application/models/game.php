@@ -431,6 +431,7 @@ class Game extends CI_Model {
         }
         // if no offset, count number of games in collection
         else {
+            $this->db->select('COUNT(DISTINCT collections.GameID) AS Total');
             // collection: everything not on the want list
             $this->db->select('COUNT(DISTINCT (CASE WHEN collections.ListID != 2 THEN collections.GameID END)) AS Collection');
             // completable collection: everything not uncompletable or on the want list
