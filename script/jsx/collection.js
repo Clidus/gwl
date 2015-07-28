@@ -34,6 +34,7 @@ var GameCollectionApp = React.createClass({
                 var sort = this.state.sort;
                 var lists = data.lists;
                 var statuses = data.statuses;
+                var platforms = data.platforms;
 
                 // get page state from url
                 var urlHash = $.address.pathNames();
@@ -55,6 +56,9 @@ var GameCollectionApp = React.createClass({
                         case "statuses":
                             statuses = this.setupFilterStatus(statuses, itemState[1].split(','));
                             break;
+                        case "platforms":
+                            platforms = this.setupFilterStatus(platforms, itemState[1].split(','));
+                            break;
                     }
                 }.bind(this));
 
@@ -62,13 +66,13 @@ var GameCollectionApp = React.createClass({
                 this.setState({
                     filterLists: lists,
                     filterStatuses: statuses,
-                    filterPlatforms: data.platforms,
+                    filterPlatforms: platforms,
                     page: page,
                     sort: sort
                 });
 
                 // load collection using default filter state
-                this.getCollection(lists, statuses, data.platforms, sort, page);
+                this.getCollection(lists, statuses, platforms, sort, page);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("/user/getCollectionFilters", status, err.toString());
@@ -117,9 +121,11 @@ var GameCollectionApp = React.createClass({
         // filters
         var selectedLists = this.buildFilterHash(filterLists);
         var selectedStatuses = this.buildFilterHash(filterStatuses);
+        var selectedPlatforms = this.buildFilterHash(filterPlatforms);
         
         // update hash
-        var hash = "page=" + page + "/sort=" + selectedSort + "/lists=" + selectedLists + "/statuses=" + selectedStatuses;
+        var hash = "page=" + page + "/sort=" + selectedSort + "/lists=" + selectedLists + "/statuses=" 
+            + selectedStatuses  + "/platforms=" + selectedPlatforms;
         $.address.value(hash);
     },
     // build list of selected ids in a string for url hash
