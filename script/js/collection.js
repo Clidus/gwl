@@ -29,14 +29,36 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                 userID: UserID
             },
             success: function(data) {
+                // starting state
+                var page = 1;
+                var sort = this.state.sort;
+
+                // get page state from url
+                var urlHash = $.address.pathNames();
+
+                // loop through each item in url hash
+                urlHash.forEach(function(pageState) {
+                    var itemState = pageState.split('=');
+
+                    switch(itemState[0]) {
+                        case "page":
+                            page = parseInt(itemState[1]);
+                        case "sort":
+                            sort = this.changeSort(parseInt(itemState[1]));
+                    }
+                }.bind(this));
+
                 // save filters to state
                 this.setState({
                     filterLists: data.lists,
                     filterStatuses: data.statuses,
-                    filterPlatforms: data.platforms
+                    filterPlatforms: data.platforms,
+                    page: page,
+                    sort: sort
                 });
+
                 // load collection using default filter state
-                this.getCollection(data.lists, data.statuses, data.platforms, this.state.sort, this.state.page);
+                this.getCollection(data.lists, data.statuses, data.platforms, sort, page);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("/user/getCollectionFilters", status, err.toString());
@@ -57,6 +79,9 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                 filters: JSON.stringify(lists)
             },
             success: function(data) {
+                // update url hash
+                this.updateUrlHash(page, sort);
+
                 // save collection to be passed to GameList
                 this.setProps({
                     games: data.collection,
@@ -67,6 +92,19 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                 console.error("/user/getCollectionFilters", status, err.toString());
             }.bind(this)
         });
+    },
+    // update page state in url hash
+    updateUrlHash: function(page, sort) {
+        var selectedSort;
+        for(i = 0; i < sort.length; i++) {
+            if(sort[i].Selected) {
+                selectedSort = sort[i].ID;
+                break;
+            }
+        };
+
+        var hash = "page=" + page + "/sort=" + selectedSort;
+        $.address.value(hash);
     },
     // on filter change
     onCheckboxChange: function(filterType, id) {
@@ -96,15 +134,19 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         // reload collection based on new filters
         this.getCollection(lists, statuses, platforms, this.state.sort, page);
     },
-    onRadioChange: function(id) {
+    changeSort: function(id) {
         // enable selected sort and disable the rest
-        var sort = this.state.sort.map(function(d) {
+        return this.state.sort.map(function(d) {
             return {
                 ID: d.ID,
                 Name: d.Name,
                 Selected: (d.ID === id ? true : false)
             };
         });
+    },
+    onRadioChange: function(id) {
+        // enable selected sort and disable the rest
+        var sort = this.changeSort(id);
         var page = 1;
 
         // update state of sort
