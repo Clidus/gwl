@@ -33,6 +33,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                 var page = 1;
                 var sort = this.state.sort;
                 var lists = data.lists;
+                var statuses = data.statuses;
 
                 // get page state from url
                 var urlHash = $.address.pathNames();
@@ -51,20 +52,23 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                         case "lists":
                             lists = this.setupFilterStatus(lists, itemState[1].split(','));
                             break;
+                        case "statuses":
+                            statuses = this.setupFilterStatus(statuses, itemState[1].split(','));
+                            break;
                     }
                 }.bind(this));
 
                 // save filters to state
                 this.setState({
                     filterLists: lists,
-                    filterStatuses: data.statuses,
+                    filterStatuses: statuses,
                     filterPlatforms: data.platforms,
                     page: page,
                     sort: sort
                 });
 
                 // load collection using default filter state
-                this.getCollection(lists, data.statuses, data.platforms, sort, page);
+                this.getCollection(lists, statuses, data.platforms, sort, page);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("/user/getCollectionFilters", status, err.toString());
@@ -110,16 +114,28 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
             }
         };
 
-        var selectedLists = "";
-        for(i = 0; i < filterLists.length; i++) {
-            if(filterLists[i].Selected) {
-                selectedLists += filterLists[i].ID + ",";
+        // filters
+        var selectedLists = this.buildFilterHash(filterLists);
+        var selectedStatuses = this.buildFilterHash(filterStatuses);
+        
+        // update hash
+        var hash = "page=" + page + "/sort=" + selectedSort + "/lists=" + selectedLists + "/statuses=" + selectedStatuses;
+        $.address.value(hash);
+    },
+    // build list of selected ids in a string for url hash
+    buildFilterHash: function(filter) {
+        var selected = "";
+
+        // for each filter
+        for(i = 0; i < filter.length; i++) {
+            // if selected
+            if(filter[i].Selected) {
+                // add to hash string
+                selected += filter[i].ID + ",";
             }
         };
-
-        // update hash
-        var hash = "page=" + page + "/sort=" + selectedSort + "/lists=" + selectedLists;
-        $.address.value(hash);
+        
+        return selected;
     },
     // on filter change
     onCheckboxChange: function(filterType, id) {
