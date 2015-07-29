@@ -7,13 +7,13 @@
 				{
 					echo '<div class="row">
 						<div class="col-xs-12">
-							<p><a href="/user/1/collection#/platforms=' . $platform->PlatformID . '">' . $platform->Name . '</a></p>
+							<p><a href="/user/' . $user->UserID . '/collection#/platforms=' . $platform->PlatformID . '">' . $platform->Name . '</a></p>
 						</div>
 					</div>
 
 					<div class="row collectionStats">
 						<div class="col-xs-4">
-							<a href=""><img src="/images/platforms/' . $platform->Image . '" class="imageShadow platformLogo" /></a>
+							<a href="/user/' . $user->UserID . '/collection#/platforms=' . $platform->PlatformID . '"><img src="/images/platforms/' . $platform->Image . '" class="imageShadow platformLogo" /></a>
 						</div>
 						<div class="col-xs-2">
 							<span>' . $platform->Collection . '</span>
