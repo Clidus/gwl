@@ -235,6 +235,7 @@ var GameCollectionApp = React.createClass({
     render: function() {
         return (
             <div>
+                <CollectionStats stats={this.props.stats} />
                 <div className="col-sm-8">
                     <div className="row">
                         <Games games={this.props.games} />
@@ -247,6 +248,46 @@ var GameCollectionApp = React.createClass({
                         <Filters filterType="List" lists={this.state.filterLists} onCheckboxChange={this.onCheckboxChange} onAllCheckboxChange={this.onAllCheckboxChange} />
                         <Filters filterType="Completion" lists={this.state.filterStatuses} onCheckboxChange={this.onCheckboxChange} onAllCheckboxChange={this.onAllCheckboxChange} />
                         <Filters filterType="Platform" lists={this.state.filterPlatforms} onCheckboxChange={this.onCheckboxChange} onAllCheckboxChange={this.onAllCheckboxChange} />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
+// collection stats and progress bar
+var CollectionStats = React.createClass({
+    render: function() {
+        if(this.props.stats == null)
+            return null;
+
+        var progressStyle = {
+            width: this.props.stats.PercentComplete + '%',
+        };
+
+        return (
+            <div>
+                <div className="row collectionStats">
+                    <div className="col-xs-3">
+                        <span id="collectionCount">{this.props.stats.Collection}</span>
+                        <p>Collection</p>
+                    </div>
+                    <div className="col-xs-3">
+                        <span id="completeCount">{this.props.stats.Completed}</span>
+                        <p>Completed</p>
+                    </div>
+                    <div className="col-xs-3">
+                        <span id="backlogCount">{this.props.stats.Backlog}</span>
+                        <p>Backlog</p>
+                    </div>
+                    <div className="col-xs-3">
+                        <span id="wantCount">{this.props.stats.Want}</span>
+                        <p>Want</p>
+                    </div>
+                </div>
+                <div className="progress">
+                    <div id="completionPercentage" className="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style={progressStyle}>
+                        <span id="completionPercentageLabel">{this.props.stats.PercentComplete}</span>% Complete
                     </div>
                 </div>
             </div>

@@ -20021,6 +20021,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
     render: function() {
         return (
             React.createElement("div", null, 
+                React.createElement(CollectionStats, {stats: this.props.stats}), 
                 React.createElement("div", {className: "col-sm-8"}, 
                     React.createElement("div", {className: "row"}, 
                         React.createElement(Games, {games: this.props.games}), 
@@ -20033,6 +20034,46 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                         React.createElement(Filters, {filterType: "List", lists: this.state.filterLists, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange}), 
                         React.createElement(Filters, {filterType: "Completion", lists: this.state.filterStatuses, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange}), 
                         React.createElement(Filters, {filterType: "Platform", lists: this.state.filterPlatforms, onCheckboxChange: this.onCheckboxChange, onAllCheckboxChange: this.onAllCheckboxChange})
+                    )
+                )
+            )
+        );
+    }
+});
+
+// collection stats and progress bar
+var CollectionStats = React.createClass({displayName: "CollectionStats",
+    render: function() {
+        if(this.props.stats == null)
+            return null;
+
+        var progressStyle = {
+            width: this.props.stats.PercentComplete + '%',
+        };
+
+        return (
+            React.createElement("div", null, 
+                React.createElement("div", {className: "row collectionStats"}, 
+                    React.createElement("div", {className: "col-xs-3"}, 
+                        React.createElement("span", {id: "collectionCount"}, this.props.stats.Collection), 
+                        React.createElement("p", null, "Collection")
+                    ), 
+                    React.createElement("div", {className: "col-xs-3"}, 
+                        React.createElement("span", {id: "completeCount"}, this.props.stats.Completed), 
+                        React.createElement("p", null, "Completed")
+                    ), 
+                    React.createElement("div", {className: "col-xs-3"}, 
+                        React.createElement("span", {id: "backlogCount"}, this.props.stats.Backlog), 
+                        React.createElement("p", null, "Backlog")
+                    ), 
+                    React.createElement("div", {className: "col-xs-3"}, 
+                        React.createElement("span", {id: "wantCount"}, this.props.stats.Want), 
+                        React.createElement("p", null, "Want")
+                    )
+                ), 
+                React.createElement("div", {className: "progress"}, 
+                    React.createElement("div", {id: "completionPercentage", className: "progress-bar progress-bar-success", role: "progressbar", "aria-valuemin": "0", "aria-valuemax": "100", style: progressStyle}, 
+                        React.createElement("span", {id: "completionPercentageLabel"}, this.props.stats.PercentComplete), "% Complete"
                     )
                 )
             )
