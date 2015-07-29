@@ -7,7 +7,7 @@
 				{
 					echo '<div class="row">
 						<div class="col-xs-12">
-							<p><a href="">' . $platform->Name . '</a></p>
+							<p><a href="/user/1/collection#/platforms=' . $platform->PlatformID . '">' . $platform->Name . '</a></p>
 						</div>
 					</div>
 
