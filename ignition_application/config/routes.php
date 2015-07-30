@@ -51,6 +51,8 @@ $route['changelog'] = 'pages/view/changelog';
 $route['register'] = 'auth/register';
 $route['logout'] = 'auth/logout';
 $route['login'] = 'auth/login';
+$route['forgot'] = 'auth/forgotPassword';
+$route['forgotReset'] = 'auth/forgotPasswordReset';
 
 $route['search'] = 'search';
 $route['search/(:any)'] = 'search/index/$1';
