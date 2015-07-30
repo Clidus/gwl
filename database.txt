@@ -190,6 +190,7 @@ CREATE TABLE `users` (
   `DateTimeFormat` int(11) NOT NULL DEFAULT '1',
   `GooglePlus` varchar(100) DEFAULT NULL,
   `RegisteredUser` tinyint(1) DEFAULT '0',
+  `PasswordResetValidUntil` DATETIME DEFAULT NULL,
   PRIMARY KEY (`UserID`,`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
