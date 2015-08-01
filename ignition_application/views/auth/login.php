@@ -20,5 +20,10 @@
         <label for="passwordInput">Password</label>
         <input type="password" class="form-control" maxlength="50" name="password" id="passwordInput" placeholder="Password">
     </div>
-    <button type="submit" name="register" class="btn btn-default">Submit</button>
+    <div class="form-group">
+        <button type="submit" name="register" class="btn btn-default">Submit</button>
+    </div>
+    <div class="form-group">
+        <a href="/forgot">Forgot your password?</a>
+    </div>
 </form>

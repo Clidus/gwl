@@ -33,9 +33,12 @@ To rebuild the crushed javascript and css files used by GWL, run *gulp* within t
 ### GWL setup:
 
 * Create a datebase with the schema in database.txt
-* Set "base_url" in ignition_application/config/config.php
-* Set "hostname", "username", "password" and "database" in ignition_application/config/database.php
-* Get a [Giant Bomb API Key](http://www.giantbomb.com/api/) and set "gb_api_key" in ignition_application/config/gwl_config.php
+
+In the `ignition_application/config/` folder:
+* Set `website_name` and `email_password_reset` in `ignition_config.php`
+* Set `base_url` and `encryption_key` in `config.php`
+* Set `hostname`, `username`, `password` and `database` in `database.php`
+* Get a [Giant Bomb API Key](http://www.giantbomb.com/api/) and set `gb_api_key` in `gwl_config.php`
 
 ## License
 
