@@ -191,4 +191,14 @@ class Users extends IG_Users {
         $result['error'] = false;
         echo json_encode($result);
     }
+
+    // export collection
+    function export()
+    {
+        $this->load->dbutil();
+        $this->load->helper('download');
+        $report = $this->db->query("SELECT * FROM users");
+        $new_report = $this->dbutil->csv_from_result($report);
+        force_download('csv_file.csv',$new_report);
+    }
 }
