@@ -192,13 +192,58 @@ class Users extends IG_Users {
         echo json_encode($result);
     }
 
-    // export collection
+    // export collection page
     function export()
     {
+        // get logged in user
+        $userID = $this->session->userdata('UserID');
+
+        // if not logged in, 404
+        if($userID == null)
+            show_404();
+
+        // get user data
+        $this->load->model('User');
+        $user = $this->User->getUserByID($userID);
+
+        if($user == null)
+            show_404();
+
+        // page variables 
+        $this->load->model('Page');
+        $data = $this->Page->create($user->Username, "Export");
+        $data['user'] = $user;
+
+        // load views
+        $this->load->view('templates/header', $data);
+        $this->load->view('user/profile/header', $data);
+        $this->load->view('user/export', $data);
+        $this->load->view('templates/footer', $data);
+    }
+
+    // export collection to csv file
+    function exportCollection()
+    {
+        // get user
+        $userID = $this->session->userdata('UserID');
+
+        // check that user is logged in
+        if($userID <= 0)
+        {
+            $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
+            return;
+        }
+
+        // get collection data
+        $this->load->model('Game');
+        $data = $this->Game->getRawCollection($userID);
+
+        // convert to csv
         $this->load->dbutil();
+        $csv_data = $this->dbutil->csv_from_result($data);
+
+        // create file
         $this->load->helper('download');
-        $report = $this->db->query("SELECT * FROM users");
-        $new_report = $this->dbutil->csv_from_result($report);
-        force_download('csv_file.csv',$new_report);
+        force_download('gwl_export.csv', $csv_data);
     }
 }
