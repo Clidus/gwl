@@ -56,6 +56,7 @@
               break;
             case "ImageUpload":
             case "Password":
+            case "Export":
               echo "$('#navSettings').addClass('active');";
               break;
           }
