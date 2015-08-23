@@ -616,6 +616,29 @@ class Game extends CI_Model {
         return null;
     }
 
+    // get raw collection data to export
+    function getRawCollection($userID)
+    {
+        $this->db->select('ID AS GWL_ID, games.GBID AS GB_ID, games.Name, ListName AS List, StatusName AS Status, DateComplete, HoursPlayed, CurrentlyPlaying, platforms.Name AS Platform, Abbreviation');
+        $this->db->from('collections');
+        $this->db->join('games', 'collections.GameID = games.GameID');
+        $this->db->join('lists', 'collections.ListID = lists.ListID');
+        $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID');
+        $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID', 'left');
+        $this->db->join('platforms', 'collectionPlatform.PlatformID = platforms.PlatformID', 'left');
+        $this->db->where('collections.UserID', $userID); 
+        $this->db->order_by("games.Name", "asc");
+            
+        // get results
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            return $query;
+        }
+
+        return null;
+    }
+
     // get users collection
     function getCurrentlyPlaying($userID)
     {
