@@ -19815,60 +19815,81 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
                 userID: UserID
             },
             success: function(data) {
-                // starting state
-                var page = 1;
-                var sort = this.state.sort;
-                var lists = data.lists;
-                var statuses = data.statuses;
-                var platforms = data.platforms;
-
-                // get page state from url
-                var urlHash = $.address.pathNames();
-
-                // loop through each item in url hash
-                urlHash.forEach(function(pageState) {
-                    var itemState = pageState.split('=');
-
-                    switch(itemState[0]) {
-                        case "page":
-                            page = parseInt(itemState[1]);
-                            break;
-                        case "sort":
-                            sort = this.changeSort(parseInt(itemState[1]));
-                            break;
-                        case "lists":
-                            lists = this.setupFilterStatus(lists, itemState[1].split(','));
-                            break;
-                        case "statuses":
-                            statuses = this.setupFilterStatus(statuses, itemState[1].split(','));
-                            break;
-                        case "platforms":
-                            platforms = this.setupFilterStatus(platforms, itemState[1].split(','));
-                            break;
-                    }
-                }.bind(this));
-
-                // save filters to state
-                this.setState({
-                    filterLists: lists,
-                    filterStatuses: statuses,
-                    filterPlatforms: platforms,
-                    page: page,
-                    sort: sort
-                });
-
-                // load collection using default filter state
-                this.getCollection(lists, statuses, platforms, sort, page);
+                // load initial state from url hash
+                this.getCollectionFromUrlHash(data.lists, data.statuses, data.platforms, this.state.sort, 1);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error("/user/getCollectionFilters", status, err.toString());
             }.bind(this)
         });
     },
+    // load collection from url hash
+    getCollectionFromUrlHash: function(filterLists, filterStatuses, filterPlatforms, sort, page) {
+        // get page state from url
+        var urlHash = $.address.pathNames();
+
+        // page loaded with no hash, build one (which will trigger collection load)
+        if(urlHash.length == 0)
+        {
+            // save filters to state
+            this.setState({
+                filterLists: filterLists,
+                filterStatuses: filterStatuses,
+                filterPlatforms: filterPlatforms,
+                page: page,
+                sort: sort
+            });
+
+            // update url hash
+            this.updateUrlHash(filterLists, filterStatuses, filterPlatforms, sort, page);
+            return;
+        }
+
+        // if no params passed, load from state
+        filterLists = filterLists || this.state.filterLists;
+        filterStatuses = filterStatuses || this.state.filterStatuses;
+        filterPlatforms = filterPlatforms || this.state.filterPlatforms;
+        sort = sort || this.state.sort;
+        page = page || this.state.page;
+
+
+        // loop through each item in url hash
+        urlHash.forEach(function(pageState) {
+            var itemState = pageState.split('=');
+
+            switch(itemState[0]) {
+                case "page":
+                    page = parseInt(itemState[1]);
+                    break;
+                case "sort":
+                    sort = this.changeSort(parseInt(itemState[1]));
+                    break;
+                case "lists":
+                    filterLists = this.setupFilterStatus(filterLists, itemState[1].split(','));
+                    break;
+                case "statuses":
+                    filterStatuses = this.setupFilterStatus(filterStatuses, itemState[1].split(','));
+                    break;
+                case "platforms":
+                    filterPlatforms = this.setupFilterStatus(filterPlatforms, itemState[1].split(','));
+                    break;
+            }
+        }.bind(this));
+
+        // save filters to state
+        this.setState({
+            filterLists: filterLists,
+            filterStatuses: filterStatuses,
+            filterPlatforms: filterPlatforms,
+            page: page,
+            sort: sort
+        });
+
+        // load collection using default filter state
+        this.getCollection(filterLists, filterStatuses, filterPlatforms, sort, page);
+    },
     // get collection using filters
     getCollection: function(filterLists, filterStatuses, filterPlatforms, sort, page) {
-        var lists = { lists: filterLists, statuses: filterStatuses, platforms: filterPlatforms, orderBy: sort }
-
         $.ajax({
             type : 'POST',
             url : '/user/getCollection',
@@ -19876,7 +19897,7 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
             data: {
                 userID: UserID,
                 page: page,
-                filters: JSON.stringify(lists)
+                filters: JSON.stringify({ lists: filterLists, statuses: filterStatuses, platforms: filterPlatforms, orderBy: sort })
             },
             success: function(data) {
                 // update url hash
@@ -19940,8 +19961,8 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         // update state of filters
         this.setState({ filterLists: lists, filterStatuses: statuses, filterPlatforms: platforms, page: page });
 
-        // reload collection based on new filters
-        this.getCollection(lists, statuses, platforms, this.state.sort, page);
+        // update url hash with new filters (which will trigger a reload of the collection)
+        this.updateUrlHash(lists, statuses, platforms, this.state.sort, page);
     },
     // on All / None checkbox change
     onAllCheckboxChange: function(filterType, checkedValue) {
@@ -19954,8 +19975,8 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         // update state of filters
         this.setState({ filterLists: lists, filterStatuses: statuses, filterPlatforms: platforms, page: page });
 
-        // reload collection based on new filters
-        this.getCollection(lists, statuses, platforms, this.state.sort, page);
+        // update url hash with new filters (which will trigger a reload of the collection)
+        this.updateUrlHash(lists, statuses, platforms, this.state.sort, page);
     },
     changeSort: function(id) {
         // enable selected sort and disable the rest
@@ -19975,15 +19996,15 @@ var GameCollectionApp = React.createClass({displayName: "GameCollectionApp",
         // update state of sort
         this.setState({ sort: sort, page: page });        
 
-        // reload collection with new sort
-        this.getCollection(this.state.filterLists, this.state.filterStatuses, this.state.filterPlatforms, sort, page);
+        // update url hash with new sort (which will trigger a reload of the collection)
+        this.updateUrlHash(this.state.filterLists, this.state.filterStatuses, this.state.filterPlatforms, sort, page);
     },
     onPageChange: function(page) {
         // update page in state
         this.setState({ page: page });        
 
-        // reload collection with new page
-        this.getCollection(this.state.filterLists, this.state.filterStatuses, this.state.filterPlatforms, this.state.sort, page);
+        // update url hash with new page (which will trigger a reload of the collection)
+        this.updateUrlHash(this.state.filterLists, this.state.filterStatuses, this.state.filterPlatforms, this.state.sort, page);
     },
     setupFilterStatus: function(filters, ids) {
         // for each filter
@@ -20211,11 +20232,24 @@ var Sorts = React.createClass({displayName: "Sorts",
     }
 })
 
+var GameCollectionApp;
+
+// render app on page load
 function loadCollection(){
-    React.render(
+    GameCollectionApp = React.render(
         React.createElement(GameCollectionApp, null),
         document.getElementById('gameCollection')
     );
+}
+
+// respond to hash change event (e.g. user pressing the back button)
+window.addEventListener('hashchange', updateCollectionAfterHashChange);
+
+function updateCollectionAfterHashChange() {
+    // dont do anything if there is no hash (infinite loop back button bug)
+    if($.address.pathNames().length > 0) {
+        GameCollectionApp.getCollectionFromUrlHash();
+    }
 }
 $(document).ready(function() {
 
