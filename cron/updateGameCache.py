@@ -1,2 +1,2 @@
-import urllib2
-urllib2.urlopen('http://www.gamingwithlemons.com/cron/update')
+import urllib.request
+urllib.request.urlopen('http://www.gamingwithlemons.com/cron/update')
