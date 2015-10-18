@@ -7,29 +7,33 @@
 				{
 					echo '<div class="row">
 						<div class="col-xs-12">
-							<p><a href="">' . $platform->Name . '</a></p>
+							<p><b>' . $platform->Name . '</b></p>
 						</div>
 					</div>
 
 					<div class="row collectionStats">
 						<div class="col-xs-4">
-							<a href=""><img src="/images/platforms/' . $platform->Image . '" class="imageShadow platformLogo" /></a>
+								<img src="/images/platforms/' . $platform->Image . '" class="imageShadow platformLogo" />
 						</div>
-						<div class="col-xs-2">
-							<span>' . $platform->Collection . '</span>
-							<p>Collection</p>
-						</div>
-						<div class="col-xs-2">
-							<span>' . $platform->Completed . '</span>
-							<p>Completed</p>
-						</div>
-						<div class="col-xs-2">
-							<span>' . $platform->Backlog . '</span>
-							<p>Backlog</p>
-						</div>
-						<div class="col-xs-2">
-							<span>' . $platform->Want . '</span>
-							<p>Want</p>
+						<div class="col-sm-8">
+							<div class="row collectionStats">
+								<div class="col-xs-3">
+									<span>' . $platform->Collection . '</span>
+									<p>Collection</p>
+								</div>
+								<div class="col-xs-3">
+									<span>' . $platform->Completed . '</span>
+									<p>Completed</p>
+								</div>
+								<div class="col-xs-3">
+									<span>' . $platform->Backlog . '</span>
+									<p>Backlog</p>
+								</div>
+								<div class="col-xs-3">
+									<span>' . $platform->Want . '</span>
+									<p>Want</p>
+								</div>
+							</div>
 						</div>
 					</div>
 
