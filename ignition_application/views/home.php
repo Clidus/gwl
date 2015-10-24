@@ -6,8 +6,8 @@
 		<h1>Gaming with Lemons</h1>
 		<p>Open source video game collection, wishlist and backlog tracker.</p>
 		<p>
-			<a class="btn btn-lg btn-primary" href="https://www.youtube.com/watch?v=CVQPpz-aYAQ">Watch the Demo &raquo;</a>
-			<a class="btn btn-lg btn-success" href="/register">Join the Alpha &raquo;</a>
+			<a class="btn btn-lg btn-primary" href="https://www.youtube.com/watch?v=CVQPpz-aYAQ">Watch the demo &raquo;</a>
+			<a class="btn btn-lg btn-success" href="/register">Start your collection! &raquo;</a>
 		</p>
 </div>
 
