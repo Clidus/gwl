@@ -6,6 +6,17 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b><a href="/blog/version-0-4">Version 0.4.0 - 2015-10-24</a></b></p>
+	<ul>
+		<li><b>Feature:</b> Export collection to CSV. <a href="https://github.com/Clidus/gwl/issues/73">#73</a></li>
+		<li><b>Feature:</b> View collection completion by platform. <a href="https://github.com/Clidus/gwl/issues/36">#36</a></li>
+		<li><b>Feature:</b> Forgot your password. <a href="https://github.com/Clidus/gwl/issues/44">#44</a></li>
+		<li><b>Feature:</b> "Who's played this?" show users who have completed / played a game on game pages. <a href="https://github.com/Clidus/gwl/issues/59">#59</a></li>
+		<li><b>Feature:</b> Make Android status bar lemon yellow. <a href="https://github.com/Clidus/gwl/issues/60">#60</a></li>
+		<li><b>Change:</b> Reduce width of profile page side bar. <a href="https://github.com/Clidus/gwl/issues/56">#56</a></li>
+		<li><b>Change:</b> Upgraded to CodeIgniter 2.2.3</li>
+		<li><b>Change:</b> Upgraded to Ignition 0.4.0 <a href="https://github.com/Clidus/gwl/issues/72">#72</a></li>
+	</ul>
 	<p><b>Version 0.3.2 - 2015-01-17</b></p>
 	<ul>
 		<li><strong>Change:</strong> Upgraded Ignition from v0.1 to v0.3.</li>
