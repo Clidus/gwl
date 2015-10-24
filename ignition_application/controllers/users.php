@@ -65,10 +65,8 @@ class Users extends IG_Users {
         $data = $this->Page->create($user->Username, "Collection");
         $data['user'] = $user;
 
-        // get game collection stats
-        $this->load->model('Game');
-
         // get platforms, lists and statuses for filtering
+        $this->load->model('Game');
         $data['platforms'] = $this->Game->getPlatformsInCollection($userID);
         $data['lists'] = $this->Game->getListsInCollection($userID);
         $data['statuses'] = $this->Game->getStatusesInCollection($userID);
@@ -80,6 +78,35 @@ class Users extends IG_Users {
         $this->load->view('templates/header', $data);
         $this->load->view('user/profile/header', $data);
         $this->load->view('user/collection', $data);
+        $this->load->view('templates/footer', $data);
+    }
+
+    // view user collection by platforms
+    function platforms($userID)
+    {   
+        // get user data
+        $this->load->model('User');
+        $user = $this->User->getUserByIdWithFollowingStatus($userID, $this->session->userdata('UserID'));
+
+        if($user == null)
+            show_404();
+
+        // page variables
+        $this->load->model('Page');
+        $data = $this->Page->create($user->Username, "Platforms");
+        $data['user'] = $user;
+
+        // get users collections by platform
+        $this->load->model('Game');
+        $data['platforms'] = $this->Game->getCollectionByPlatform($userID);
+
+        // get games currently playing
+        $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
+
+        // load views
+        $this->load->view('templates/header', $data);
+        $this->load->view('user/profile/header', $data);
+        $this->load->view('user/platforms', $data);
         $this->load->view('templates/footer', $data);
     }
 
@@ -163,5 +190,60 @@ class Users extends IG_Users {
         // return success
         $result['error'] = false;
         echo json_encode($result);
+    }
+
+    // export collection page
+    function export()
+    {
+        // get logged in user
+        $userID = $this->session->userdata('UserID');
+
+        // if not logged in, 404
+        if($userID == null)
+            show_404();
+
+        // get user data
+        $this->load->model('User');
+        $user = $this->User->getUserByID($userID);
+
+        if($user == null)
+            show_404();
+
+        // page variables 
+        $this->load->model('Page');
+        $data = $this->Page->create($user->Username, "Export");
+        $data['user'] = $user;
+
+        // load views
+        $this->load->view('templates/header', $data);
+        $this->load->view('user/profile/header', $data);
+        $this->load->view('user/export', $data);
+        $this->load->view('templates/footer', $data);
+    }
+
+    // export collection to csv file
+    function exportCollection()
+    {
+        // get user
+        $userID = $this->session->userdata('UserID');
+
+        // check that user is logged in
+        if($userID <= 0)
+        {
+            $this->returnError($this->lang->line('error_logged_out'),"/login","Login");
+            return;
+        }
+
+        // get collection data
+        $this->load->model('Game');
+        $data = $this->Game->getRawCollection($userID);
+
+        // convert to csv
+        $this->load->dbutil();
+        $csv_data = $this->dbutil->csv_from_result($data);
+
+        // create file
+        $this->load->helper('download');
+        force_download('gwl_export.csv', $csv_data);
     }
 }

@@ -524,12 +524,86 @@ class Game extends CI_Model {
         }
     }
 
+    // get users collection by platform
+    function getCollectionByPlatform($userID) 
+    {
+        $this->db->select('collectionPlatform.PlatformID');
+        $this->db->select('platforms.Name,');
+        $this->db->select('platforms.Image,');
+        // collection: everything not on the want list
+        $this->db->select('COUNT(CASE WHEN collections.ListID != 2 THEN collections.GameID END) AS Collection');
+        // completable collection: everything not uncompletable or on the want list
+        $this->db->select('COUNT(CASE WHEN collections.StatusID != 4 AND collections.ListID != 2 THEN collections.GameID END) AS CompletableCollection');
+        // completed: everything completed and not on the want list
+        $this->db->select('COUNT(CASE WHEN collections.StatusID = 3 AND collections.ListID != 2 THEN collections.GameID END) AS Completed');
+        // backlog: everything unplayed or unfinished and not on the want list
+        $this->db->select('COUNT(CASE WHEN (collections.StatusID = 1 OR collections.StatusID = 2) AND collections.ListID != 2 THEN collections.GameID END) AS Backlog');
+        // want: everything on the want list
+        $this->db->select('COUNT(CASE WHEN collections.ListID = 2 THEN collections.GameID END) AS Want');   
+        // percentage complete: (completed / completable collection) * 100
+        $this->db->select('CAST((COUNT(CASE WHEN collections.StatusID = 3 AND collections.ListID != 2 THEN collections.GameID END) / COUNT(CASE WHEN collections.StatusID != 4 AND collections.ListID != 2 THEN collections.GameID END)) * 100 AS UNSIGNED) AS Percentage');   
+    
+        $this->db->from('collections');
+        $this->db->join('lists', 'collections.ListID = lists.ListID');
+        $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID');
+        $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID', 'left');
+        $this->db->join('platforms', 'collectionPlatform.PlatformID = platforms.PlatformID', 'left');
+        $this->db->join('games', 'collections.GameID = games.GameID');
+        
+        $this->db->where('collections.UserID', $userID); 
+
+        $this->db->group_by("collectionPlatform.PlatformID");
+        $this->db->order_by("Percentage", "desc"); 
+
+        // get results
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            $platforms = $query->result();
+
+            foreach ($platforms as $platform)
+            {  
+                // default profile image
+                $platform->Name = $platform->Name == null ? "No Platform" : $platform->Name;
+                $platform->Image = $platform->Image == null ? $this->config->item('default_profile_image') : $platform->Image;
+            }
+
+            return $platforms;
+        }
+
+        return null;
+    }
+
+    // get raw collection data to export
+    function getRawCollection($userID)
+    {
+        $this->db->select('ID AS GWL_ID, games.GBID AS GB_ID, games.Name, ListName AS List, StatusName AS Status, DateComplete, HoursPlayed, CurrentlyPlaying, platforms.Name AS Platform, Abbreviation');
+        $this->db->from('collections');
+        $this->db->join('games', 'collections.GameID = games.GameID');
+        $this->db->join('lists', 'collections.ListID = lists.ListID');
+        $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID');
+        $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID', 'left');
+        $this->db->join('platforms', 'collectionPlatform.PlatformID = platforms.PlatformID', 'left');
+        $this->db->where('collections.UserID', $userID); 
+        $this->db->order_by("games.Name", "asc");
+            
+        // get results
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            return $query;
+        }
+
+        return null;
+    }
+
     // get users collection
     function getCurrentlyPlaying($userID)
     {
         $this->db->select('*');
         $this->db->from('collections');
         $this->db->join('games', 'collections.GameID = games.GameID');
+        $this->db->join('gameStatuses', 'gameStatuses.StatusID = collections.StatusID');
         $this->db->where('collections.UserID', $userID); 
         $this->db->where('collections.CurrentlyPlaying', 1); 
         $this->db->order_by("games.Name", "asc");
@@ -633,5 +707,51 @@ class Game extends CI_Model {
 
         $this->db->where('GBID', $GBID);
         $this->db->update('games', $data); 
+    }
+
+    // get users collection by platform
+    function getUsersWhoHaveGame($gbID, $userID) 
+    {
+        $this->db->select('users.UserID');
+        $this->db->select('UserName');
+        $this->db->select('ProfileImage');
+        $this->db->select('StatusNameShort');
+        $this->db->select('StatusStyle');
+
+        $this->db->from('games');
+        $this->db->join('collections', 'games.GameID = collections.GameID');
+        $this->db->join('users', 'collections.UserID = users.UserID');
+        $this->db->join('gameStatuses', 'gameStatuses.StatusID = collections.StatusID');
+
+        if($userID != null) 
+        {
+            $this->db->join('following', 'following.ChildUserID = collections.UserID AND following.ParentUserID = ' . $userID, 'left');
+            $this->db->where('users.UserID !=', $userID); // if logged in, exclude yourself
+        }
+
+        $this->db->where('games.GBID', $gbID); 
+
+        $this->db->order_by("Ranking", "asc"); 
+        
+        // if logged in, bump users you follow up the list
+        if($userID != null)
+            $this->db->order_by('following.ParentUserID', 'desc'); 
+
+        // get results
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            $users = $query->result();
+
+            foreach ($users as $user)
+            {  
+                // default profile image
+                $user->ProfileImage = $user->ProfileImage == null ? $this->config->item('default_profile_image') : $user->ProfileImage;
+            }
+
+            return $users;
+        }
+
+        return null;
     }
 }

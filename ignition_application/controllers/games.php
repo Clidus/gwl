@@ -10,9 +10,11 @@ class Games extends CI_Controller {
     // view game
     function view($gbID, $page = 1)
     {   
+        $userID = $this->session->userdata('UserID');
+
         // lookup game
         $this->load->model('Game');
-        $game = $this->Game->getGameByID($gbID, $this->session->userdata('UserID'), false);
+        $game = $this->Game->getGameByID($gbID, $userID, false);
 
         if($game == null)
             show_404();
@@ -30,6 +32,9 @@ class Games extends CI_Controller {
         $this->load->model('Event');
         $data['events'] = $this->Event->getEvents(null, $gbID, null, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
         $data['pageNumber'] = $page;
+
+        // get users who have game
+        $data['users'] = $this->Game->getUsersWhoHaveGame($gbID, $userID);
 
         // load views
         $this->load->view('templates/header', $data);

@@ -4,5 +4,5 @@ RewriteEngine on
 #RewriteCond %{HTTPS} !=on
 #RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-RewriteCond $1 !^(index\.php|images|js|css|bootstrap|uploads|robots\.txt)
+RewriteCond $1 !^(index\.php|images|script|style|uploads|robots\.txt)
 RewriteRule ^(.*)$ /index.php/$1 [L]

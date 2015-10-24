@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-5">
           <p>Video game data provided by the top men at <a href="http://www.giantbomb.com" target="_blank">Giant Bomb</a>.</p>
-          <p>Built on <a href="http://www.codeigniter.com/" target="_blank">CodeIgniter</a> and <a href="http://www.ignitionpowered.co.uk/" target="_blank">Ignition</a>.</p>
+          <p><a href="/changelog">Version 0.4</a>. Built on <a href="http://www.codeigniter.com/" target="_blank">CodeIgniter</a> and <a href="http://www.ignitionpowered.co.uk/" target="_blank">Ignition</a>.</p>
         </div>
         <div class="col-sm-3 socialIcons">
           <a href="https://www.facebook.com/gamingwithlemons" target="_blank"><img src="/images/social/facebook.jpeg" /></a>
@@ -28,32 +28,7 @@
       } 
     ?>
   </script>
-  <script src="/js/jquery-2.0.3.min.js"></script>
-  <script src="/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/js/global.js?v=2"></script>
-  <?php 
-    if($pagetemplate == "Search" || $pagetemplate == "Game") 
-    { 
-      echo "<script src='/js/game.js?v=2'></script>"; 
-    }
-    else if($pagetemplate == "Admin") 
-    { 
-      echo "<script src='/js/admin.js?v=2'></script>"; 
-    } 
-    else if($pagetemplate == "Collection") 
-    { 
-      echo "<script src='/js/collection.js?v=2'></script>"; 
-    } 
-    if($pagetemplate == "User" || $pagetemplate == "Collection") 
-    { 
-      echo "<script src='/js/user.js?v=2'></script>"; 
-    } 
-    if($pagetemplate == "User" || $pagetemplate == "Game" || $pagetemplate == "BlogPost" || $pagetemplate == "UserHome")
-    {
-      echo "<script src='/js/jquery.autogrow-textarea.js'></script>"; 
-      echo "<script src='/js/comments.js?v=3'></script>"; 
-    }
-  ?>
+  <script src="/script/crushed/ignition.js"></script>
   <script>
     $(function() {
       <?php
@@ -72,12 +47,16 @@
               echo "loadCollection();";
               echo "$('#navCollection').addClass('active');";
               break;
+            case "Platforms":
+              echo "$('#navPlatforms').addClass('active');";
+              break;
             case "Settings":
               echo "$('#dateFormat').val('" . $user->DateTimeFormat . "');";
               echo "$('#navSettings').addClass('active');";
               break;
             case "ImageUpload":
             case "Password":
+            case "Export":
               echo "$('#navSettings').addClass('active');";
               break;
           }

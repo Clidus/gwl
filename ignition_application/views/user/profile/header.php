@@ -6,11 +6,12 @@
 <h2><?php echo $user->Username ?></h2>
 
 <div class="row">
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		<img src="/uploads/<?php echo $user->ProfileImage ?>" class="largeProfileImage imageShadow" />
 		<ul class="nav nav-pills nav-stacked profileNav">
 			<li id="navFeed"><a href="/user/<?php echo $user->UserID ?>">Feed</a></li>
 			<li id="navCollection"><a href="/user/<?php echo $user->UserID ?>/collection">Collection</a></li>
+			<li id="navPlatforms"><a href="/user/<?php echo $user->UserID ?>/platforms">Platforms</a></li>
 			<?php 
 				// if logged in and this user
 				if($sessionUserID != null && $sessionUserID == $user->UserID) 
@@ -37,27 +38,30 @@
 
 			if($user->Bio != null) 
 			{
-				echo "<div class='userBio'>" . $user->Bio . "</div>";
+				echo "<div class='userBio'>
+					<h4>About</h4>
+					" . $user->Bio . "
+				</div>";
 			}
 
 			if(isset($currentlyPlaying) && $currentlyPlaying != null)
 			{
-				echo "<p><b>Currently Playing:</b></p>";
+				echo '<h4>Currently Playing</h4>
+
+                <div class="itemGrid clearfix">';
+
 				foreach($currentlyPlaying as $currentlyPlayingGame)
 				{
-					echo '
-						<div class="currentlyPlaying clearfix">
-							<div class="pull-left">
-								<a href="/game/' . $currentlyPlayingGame->GBID . '">
-									<img src="' . $currentlyPlayingGame->ImageSmall . '" class="tinyIconImage imageShadow" />
-								</a>
-							</div>
-							<div class="media-body currentlyPlayingTitle">
-								<a href="/game/' . $currentlyPlayingGame->GBID . '">' . $currentlyPlayingGame->Name . '</a>
-							</div>
-						</div>';
+					echo '<div class="itemGridImage pull-left">
+                        <a href="/game/' . $currentlyPlayingGame->GBID . '">
+                            <img class="itemGridImage imageShadow" src="' . $currentlyPlayingGame->ImageSmall . '" alt="' . $currentlyPlayingGame->Name . '" title="' . $currentlyPlayingGame->Name . '">
+                            <span class="label label-' . $currentlyPlayingGame->StatusStyle . ' itemGridLabel">' . $currentlyPlayingGame->StatusNameShort . '</span>
+                        </a>
+                    </div>';
 				}
+
+				echo '</div>';
 			}
 		?>
 	</div>
-	<div class="col-sm-8"> 
+	<div class="col-sm-9"> 

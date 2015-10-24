@@ -1,19 +1,19 @@
-<!--<div class="alert alert-info">
-	<b>Update:</b> <a href="/blog/version-0-2-0">Check out what is new in Version 0.2.0</a>.
-</div>-->
+<div class="alert alert-info">
+	<b>Update:</b> <a href="/blog/version-0-4">Version 0.4 brings data export, browse by platform and more!</a>.
+</div>
 
 <div class="jumbotron" id="homepageJumbotron">
 		<h1>Gaming with Lemons</h1>
 		<p>Open source video game collection, wishlist and backlog tracker.</p>
 		<p>
-			<a class="btn btn-lg btn-primary" href="https://www.youtube.com/watch?v=CVQPpz-aYAQ">Watch the Demo &raquo;</a>
-			<a class="btn btn-lg btn-success" href="/register">Join the Alpha &raquo;</a>
+			<a class="btn btn-lg btn-primary" href="https://www.youtube.com/watch?v=CVQPpz-aYAQ">Watch the demo &raquo;</a>
+			<a class="btn btn-lg btn-success" href="/register">Start your collection! &raquo;</a>
 		</p>
 </div>
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">What's Happening</h3>
+		<h3 class="panel-title">What's Happening?</h3>
 	</div>
 	<div class="panel-body userActivity">
 		<?php 

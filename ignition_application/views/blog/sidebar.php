@@ -18,7 +18,9 @@
 
 		<p>Gaming with Lemons is in active development. You can read about the recent changes and improvements bellow, or check out our <a href="/changelog">Changelog</a>.</p>
 
-		<p><a href="/blog/version-0-3">Version 0.3 and a website foundation</a></p>
+		<p><a href="/blog/version-0-4">Version 0.4</a></p>
+
+		<p><a href="/blog/version-0-3">Version 0.3</a></p>
 
 		<p><a href="/blog/version-0-2">Version 0.2</a></p>
 

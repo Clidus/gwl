@@ -51,6 +51,8 @@ $route['changelog'] = 'pages/view/changelog';
 $route['register'] = 'auth/register';
 $route['logout'] = 'auth/logout';
 $route['login'] = 'auth/login';
+$route['forgot'] = 'auth/forgotPassword';
+$route['forgotReset'] = 'auth/forgotPasswordReset';
 
 $route['search'] = 'search';
 $route['search/(:any)'] = 'search/index/$1';
@@ -62,10 +64,13 @@ $route['user/settings'] = 'users/settings';
 $route['user/settings/image'] = 'users/image';
 $route['user/settings/image/upload'] = 'users/imageUpload';
 $route['user/settings/password'] = 'users/password';
+$route['user/settings/export'] = 'users/export';
+$route['user/settings/exportCollection'] = 'users/exportCollection';
 $route['user/comment'] = 'users/comment';
 $route['user/getCollection'] = 'users/getCollection';
 $route['user/follow'] = 'users/follow';
 $route['user/(:any)/collection'] = 'users/collection/$1';
+$route['user/(:any)/platforms'] = 'users/platforms/$1';
 $route['user/(:any)'] = 'users/view/$1';
 $route['user/(:any)/(:any)'] = 'users/view/$1/$2';
 

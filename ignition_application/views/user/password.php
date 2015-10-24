@@ -2,6 +2,7 @@
 			<li><a href="/user/settings">Profile</a></li>
 			<li><a href="/user/settings/image">Image</a></li>
 			<li class="active"><a href="/user/settings/password">Password</a></li>
+			<li><a href="/user/settings/export">Export</a></li>
 		</ul>
 
 		<?php 
