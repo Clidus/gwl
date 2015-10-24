@@ -1,6 +1,6 @@
-<!--<div class="alert alert-info">
-	<b>Update:</b> <a href="/blog/version-0-2-0">Check out what is new in Version 0.2.0</a>.
-</div>-->
+<div class="alert alert-info">
+	<b>Update:</b> <a href="/blog/version-0-4">Version 0.4 brings data export, browse by platform and more!</a>.
+</div>
 
 <div class="jumbotron" id="homepageJumbotron">
 		<h1>Gaming with Lemons</h1>
