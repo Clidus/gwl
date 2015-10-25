@@ -1,3 +1,6 @@
+# Uncomment to return php errors
+#php_flag display_errors 1
+
 RewriteEngine on
 
 # Uncomment to enforce HTTPS
