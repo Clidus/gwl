@@ -33,7 +33,7 @@ class Game extends CI_Model {
     }
 
     // get game from Giant Bomb API by ID
-    public function getGameByID($gbID, $userID, $returnCompleteResponse) 
+    public function getGameByGBID($gbID, $userID, $returnCompleteResponse) 
     {   
         // build API request
         $url = $this->config->item('gb_api_root') . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
@@ -680,22 +680,94 @@ class Game extends CI_Model {
         return null;
     }
 
+    // get platforms for a game
+    function getPlatforms($gameID)
+    {
+        $this->db->select('platforms.GBID, platforms.Name, platforms.Abbreviation');
+        $this->db->from('games');
+        $this->db->join('gamePlatforms', 'games.GameID = gamePlatforms.GameID');
+        $this->db->join('platforms', 'gamePlatforms.PlatformID = platforms.PlatformID');
+        $this->db->where('games.GameID', $gameID); 
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+
+        return null;
+    }
+
     // update game cache
     function updateGame($game)
     {
-        $releaseDate = $this->getReleaseDate($game);
+        // get GameID
+        $gameID = $this->getGameID($game->id);
 
-        $data = array(
-           'Name' => $game->name,
-           'Image' => is_object($game->image) ? $game->image->small_url : null,
-           'ImageSmall' => is_object($game->image) ? $game->image->icon_url : null,
-           'Deck' => $game->deck,
-           'ReleaseDate' => $releaseDate,
-           'LastUpdated' => date('Y-m-d')
-        );
+        // if game exists
+        if($gameID != null) {
+            // get release date
+            $releaseDate = $this->getReleaseDate($game);
 
-        $this->db->where('GBID', $game->id);
-        $this->db->update('games', $data); 
+            $data = array(
+               'Name' => $game->name,
+               'Image' => is_object($game->image) ? $game->image->small_url : null,
+               'ImageSmall' => is_object($game->image) ? $game->image->icon_url : null,
+               'Deck' => $game->deck,
+               'ReleaseDate' => $releaseDate,
+               'LastUpdated' => date('Y-m-d')
+            );
+
+            // update game data
+            $this->db->where('GameID', $gameID);
+            $this->db->update('games', $data); 
+
+            // add platforms to game
+            if(property_exists($game, "platforms") && $game->platforms != null)
+            {
+                // load platforms model 
+                $this->load->model('Platform');
+
+                // get platforms game already has
+                $platforms = $this->getPlatforms($gameID);
+
+                // loop over platforms returned by GB
+                $platformsToAdd = [];
+                foreach($game->platforms as $gbPlatform)
+                {
+                    // loop over platforms for game already in db
+                    $gameHasPlatform = false;
+                    if($platforms != null) {
+                        foreach ($platforms as $platform)
+                        {
+                            // if game has platform
+                            if($platform->GBID == $gbPlatform->id)
+                            {
+                                $gameHasPlatform = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // if game doesnt have platform
+                    if(!$gameHasPlatform) {
+                        // get or add platform to db
+                        $platform = $this->Platform->getOrAddPlatform($gbPlatform);
+
+                        // add to list of platforms to add to game
+                        array_push($platformsToAdd, array(
+                          'GameID' => $gameID,
+                          'PlatformID' => $platform->PlatformID
+                       ));
+                    }
+                }
+
+                // if there are platforms to add to game
+                if(count($platformsToAdd) > 0)
+                    // add to game in db
+                    $this->db->insert_batch('gamePlatforms', $platformsToAdd); 
+            }
+        }
     }
 
     // failed to get response from GB API, save error in db

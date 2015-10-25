@@ -6,6 +6,10 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.4.1 - 2015-10-25</b></p>
+	<ul>
+		<li><strong>Change:</strong> Crawler to update game data now collects all the platforms a game is on. <a href="https://github.com/Clidus/gwl/issues/57">#57</a></li>
+	</ul>
 	<p><b><a href="/blog/version-0-4">Version 0.4.0 - 2015-10-24</a></b></p>
 	<ul>
 		<li><b>Feature:</b> Export collection to CSV. <a href="https://github.com/Clidus/gwl/issues/73">#73</a></li>

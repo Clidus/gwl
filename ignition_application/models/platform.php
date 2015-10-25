@@ -16,6 +16,38 @@ class Platform extends CI_Model {
         return $query->num_rows() > 0 ? true : false;
     }
 
+    // get PlatformID from GBID
+    function getPlatformByGBID($GBID)
+    {
+        $query = $this->db->get_where('platforms', array('GBID' => $GBID));
+
+        if($query->num_rows() == 1)
+        {
+            return $query->first_row();
+        }
+
+        return null;
+    }
+
+    // returns platform if in db, or adds and returns it if it isn't
+    function getOrAddPlatform($gbPlatform)
+    {
+        // get platform from db
+        $platform = $this->getPlatformByGBID($gbPlatform->id);
+
+        // if platform isn't in db
+        if($platform == null)
+        {
+            // add platform to db
+            $this->Platform->addPlatform($gbPlatform);
+
+            // get platform from db
+            $platform = $this->getPlatformByGBID($gbPlatform->id);
+        }
+
+        return $platform;
+    }
+
     // add platform to database
     function addPlatform($platform)
     {

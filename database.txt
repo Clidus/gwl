@@ -196,6 +196,16 @@ CREATE TABLE `users` (
 
 
 
+# Dump of table users
+# ------------------------------------------------------------
+
+CREATE TABLE `gamePlatforms` (
+  `GameID` int(11) NOT NULL,
+  `PlatformID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
 # Default data
 # ------------------------------------------------------------
 
