@@ -76,7 +76,7 @@ class Games extends CI_Controller {
         $this->load->model('Game');
 
         // get game details from Giant Bomb API
-        $game = $this->Game->getGameByID($GBID, null, false);
+        $game = $this->Game->getGameByGBID($GBID, null, false);
 
         // if API returned nothing
         if($game == null)
