@@ -14,7 +14,7 @@ class Games extends CI_Controller {
 
         // lookup game
         $this->load->model('Game');
-        $game = $this->Game->getGameByID($gbID, $userID, false);
+        $game = $this->Game->getGameByGBID($gbID, $userID, false);
 
         if($game == null)
             show_404();

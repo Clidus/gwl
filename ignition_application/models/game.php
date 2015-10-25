@@ -33,7 +33,7 @@ class Game extends CI_Model {
     }
 
     // get game from Giant Bomb API by ID
-    public function getGameByID($gbID, $userID, $returnCompleteResponse) 
+    public function getGameByGBID($gbID, $userID, $returnCompleteResponse) 
     {   
         // build API request
         $url = $this->config->item('gb_api_root') . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";

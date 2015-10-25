@@ -12,7 +12,7 @@ class Cron extends CI_Controller {
 		// if game returned
 		if($GBID != null) {
 			// get game details from Giant Bomb API
-			$gbResult = $this->Game->getGameByID($GBID, null, true);
+			$gbResult = $this->Game->getGameByGBID($GBID, null, true);
 
 			// if game returned from API
 			if(is_object($gbResult))
