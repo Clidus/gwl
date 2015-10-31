@@ -196,12 +196,27 @@ CREATE TABLE `users` (
 
 
 
-# Dump of table users
+# Dump of table gamePlatforms
 # ------------------------------------------------------------
 
 CREATE TABLE `gamePlatforms` (
   `GameID` int(11) NOT NULL,
   `PlatformID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table apiLog
+# ------------------------------------------------------------
+
+CREATE TABLE `apiLog` (
+  `LogID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Url` varchar(250) NOT NULL DEFAULT '',
+  `RequestType` varchar(20) NOT NULL DEFAULT '',
+  `Result` longblob NOT NULL,
+  `Processed` tinyint(1) NOT NULL,
+  `DateStamp` datetime NOT NULL,
+  PRIMARY KEY (`LogID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
