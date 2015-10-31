@@ -1,6 +1,6 @@
-<div class="alert alert-info">
+<!-- <div class="alert alert-info">
 	<b>Update:</b> <a href="/blog/version-0-4">Version 0.4 brings data export, browse by platform and more!</a>.
-</div>
+</div> -->
 
 <ul class="breadcrumb">      
     <li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb" class="active"><span itemprop="title">Home</span></li>
