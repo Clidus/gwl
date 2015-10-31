@@ -3,7 +3,7 @@
 class Utility extends CI_Model {
 
     // get API response
-    function getData($url) {
+    function getData($url, $requestType) {
         $ch = curl_init($url); 
         $options = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -14,8 +14,22 @@ class Utility extends CI_Model {
         $json = curl_exec($ch);
         curl_close($ch);
         
+        $this->logApiRequest($url, $requestType, $json);
+
         $result = json_decode($json); 
-             
+        
         return $result;
+    }
+
+    function logApiRequest($url, $requestType, $json) {
+        $data = array(
+           'Url' => $url,
+           'RequestType' => $requestType,
+           'Result' => $json,
+           'Processed' => 0,
+           'DateStamp' => date('Y-m-d H:i:s')
+        );
+
+        return $this->db->insert('apiLog', $data); 
     }
 }

@@ -18,7 +18,7 @@ class Game extends CI_Model {
         $url = $this->config->item('gb_api_root') . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
       
         // make API request
-        $result = $this->Utility->getData($url);
+        $result = $this->Utility->getData($url, "Search");
 
         if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
         {                                                                                                    
@@ -39,7 +39,7 @@ class Game extends CI_Model {
         $url = $this->config->item('gb_api_root') . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
         
         // make API request
-        $result = $this->Utility->getData($url);
+        $result = $this->Utility->getData($url, "Game");
         
         if(is_object($result))
         {
