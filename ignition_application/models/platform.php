@@ -67,7 +67,7 @@ class Platform extends CI_Model {
         $url = $this->config->item('gb_api_root') . "/platform/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
     
         // make API request
-        $result = $this->Utility->getData($url);
+        $result = $this->Utility->getData($url, "Platform");
         
         if(is_object($result))
         {

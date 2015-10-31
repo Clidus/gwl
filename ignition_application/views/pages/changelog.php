@@ -6,6 +6,10 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.4.2 - 2015-10-31</b></p>
+	<ul>
+		<li><strong>Change:</strong> Log API requests to database. <a href="https://github.com/Clidus/gwl/issues/57">#57</a></li>
+	</ul>
 	<p><b>Version 0.4.1 - 2015-10-25</b></p>
 	<ul>
 		<li><strong>Change:</strong> Crawler to update game data now collects all the platforms a game is on. <a href="https://github.com/Clidus/gwl/issues/57">#57</a></li>
