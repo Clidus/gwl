@@ -8,7 +8,8 @@ class Utility extends CI_Model {
         $options = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTPHEADER => array('Content-type: application/json') ,
+            CURLOPT_HTTPHEADER => array('Content-type: application/json'),
+            CURLOPT_USERAGENT => $this->config->item('gwl_user_agent'),
         );                        
         curl_setopt_array($ch, $options);             
         $json = curl_exec($ch);
