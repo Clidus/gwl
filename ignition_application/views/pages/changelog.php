@@ -6,6 +6,10 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.4.3 - 2016-02-18</b></p>
+	<ul>
+		<li><strong>Bug Fix:</strong> Giant Bomb now require user agent on API requests. <a href="https://github.com/Clidus/gwl/issues/90">#90</a></li>
+	</ul>
 	<p><b>Version 0.4.2 - 2015-10-31</b></p>
 	<ul>
 		<li><strong>Change:</strong> Log API requests to database. <a href="https://github.com/Clidus/gwl/issues/57">#57</a></li>
