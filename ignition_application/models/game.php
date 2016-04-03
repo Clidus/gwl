@@ -42,10 +42,12 @@ class Game extends CI_Model {
         // add collection data if userID provided
         if($userID != null)
         {
-            $this->db->join('collections', 'collections.GameID = games.GameID', 'left');
+            if($userID == null) 
+                $userID = 0; // prevents joining on UserID causing an error
+
+            $this->db->join('collections', 'collections.GameID = games.GameID AND collections.UserID = ' . $userID, 'left');
             $this->db->join('lists', 'collections.ListID = lists.ListID', 'left');
             $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID', 'left');
-            $this->db->where('collections.UserID', $userID); 
         }
 
         $this->db->where('games.GBID', $GBID); 
@@ -93,6 +95,9 @@ class Game extends CI_Model {
     // get platforms for game
     function getPlatforms($gameID, $userID)
     {
+        if($userID == null) 
+            $userID = 0; // prevents joining on UserID causing an error
+
         $this->db->select('platforms.GBID, platforms.name, platforms.abbreviation');
         $this->db->select('(CASE WHEN collectionPlatform.CollectionID IS NULL THEN 0 ELSE 1 END) AS inCollection');
         $this->db->from('games');
