@@ -32,6 +32,7 @@ class Game extends CI_Model {
         parent::__construct();
     }
 
+    // get game by GBID
     public function getGame($GBID, $userID)
     {
         // get game from db
@@ -81,10 +82,32 @@ class Game extends CI_Model {
                 $this->hoursPlayed = $result->HoursPlayed;
             }
 
+            $this->platforms = $this->getPlatforms($this->gameID, $userID);         
+
             return true;
         }
         
         return false;
-        //return $this->getGameFromGiantBomb($GBID, $userID, false);
+    }
+
+    // get platforms for game
+    function getPlatforms($gameID, $userID)
+    {
+        $this->db->select('platforms.GBID, platforms.name, platforms.abbreviation');
+        $this->db->select('(CASE WHEN collectionPlatform.CollectionID IS NULL THEN 0 ELSE 1 END) AS inCollection');
+        $this->db->from('games');
+        $this->db->join('gamePlatforms', 'games.GameID = gamePlatforms.GameID');
+        $this->db->join('platforms', 'gamePlatforms.PlatformID = platforms.PlatformID');
+        $this->db->join('collections', 'games.GameID = collections.GameID AND collections.UserID = ' . $userID, 'left');
+        $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID AND collectionPlatform.PlatformID = platforms.PlatformID','left');
+        $this->db->where('games.GameID', $gameID); 
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+
+        return null;
     }
 }

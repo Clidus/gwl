@@ -58,12 +58,12 @@
                 <?php } ?>   
             </div>  
             <?php    
-                if(property_exists($game, "platforms") && $game->platforms != null)
+                if($game->platforms != null)
                 {
                     echo "<div id='platforms" . $game->GBID . "' class='panel-footer'>";
                     foreach($game->platforms as $platform)
                     {
-                        echo "<label><input id='platform_" . $game->GBID . "_" . $platform->id . "' type='checkbox'";
+                        echo "<label><input id='platform_" . $game->GBID . "_" . $platform->GBID . "' type='checkbox'";
                         if($platform->inCollection) echo " checked";
                         if($game->listID == 0) echo " readonly";
                         echo "> <span class='label label-info'>" . $platform->name . "</span></label> ";  
