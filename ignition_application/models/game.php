@@ -35,6 +35,44 @@ class Game extends CI_Model {
     // get game by GBID
     public function getGame($GBID, $userID)
     {
+        // check if game is in database
+        if($this->isGameInDB($GBID))
+        {
+            // get game from database
+            if($this->getGameFromDatabase($GBID, $userID))
+                // game found
+                return true;
+        }
+
+        // game was not found, get from Giant Bomb
+        $this->load->model('GiantBomb');
+        $result = $this->GiantBomb->getGame($GBID, $userID);
+
+        // if game was returned
+        if($result != null && $result->error == "OK" && $result->number_of_total_results > 0)
+        {
+            // add game to database
+            $this->addGame($result->results);
+
+            // get game from database
+            return $this->getGameFromDatabase($GBID, $userID);
+        } else {
+            // game was not found
+            return false;
+        }
+    }
+
+    // is game in database?
+    function isGameInDB($GBID)
+    {
+        $query = $this->db->get_where('games', array('GBID' => $GBID));
+
+        return $query->num_rows() > 0 ? true : false;
+    }
+
+    // get game from database
+    public function getGameFromDatabase($GBID, $userID) 
+    {   
         // get game from db
         $this->db->select('games.GameID, games.GBID, games.Name, games.Image, games.ImageSmall, games.Deck, lists.ListID, lists.ListName, lists.ListStyle');
         $this->db->select('gameStatuses.StatusID, gameStatuses.StatusName, gameStatuses.StatusStyle, collections.CurrentlyPlaying, collections.DateComplete, collections.HoursPlayed');
@@ -115,5 +153,24 @@ class Game extends CI_Model {
         }
 
         return null;
+    }
+
+    // add game to database
+    function addGame($game)
+    {
+        $this->load->model('GiantBomb');
+        $releaseDate = $this->GiantBomb->convertReleaseDate($game);
+
+        $data = array(
+           'GBID' => $game->id,
+           'Name' => $game->name,
+           'Image' => is_object($game->image) ? $game->image->small_url : null,
+           'ImageSmall' => is_object($game->image) ? $game->image->icon_url : null,
+           'Deck' => $game->deck,
+           'ReleaseDate' => $releaseDate,
+           'LastUpdated' => date('Y-m-d')
+        );
+
+        return $this->db->insert('games', $data); 
     }
 }
