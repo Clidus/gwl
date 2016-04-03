@@ -29,29 +29,6 @@ class Collection extends CI_Model {
         }
     }
 
-    // get game from Giant Bomb API by ID
-    public function getGameByGBID($gbID, $userID, $returnCompleteResponse) 
-    {   
-        // build API request
-        $url = $this->config->item('gb_api_root') . "/game/" . $gbID . "?api_key=" . $this->config->item('gb_api_key') . "&format=json";
-        
-        // make API request
-        $result = $this->Utility->getData($url, "Game");
-        
-        if(is_object($result))
-        {
-            if($result->error == "OK" && $result->number_of_total_results > 0)
-            {
-                // add collection info to game object
-                $result->results = $this->addCollectionInfo($result->results, $userID);
-            }
-
-            return $returnCompleteResponse ? $result : $result->results;
-        } else {
-            return null;
-        }
-    }
-
     // add collection status (ownership and played status) and platforms to game object
     function addCollectionInfo($game, $userID)
     {
@@ -144,83 +121,6 @@ class Collection extends CI_Model {
         }
 
         return null;
-    }
-
-    // is game in database?
-    function isGameInDB($GBID)
-    {
-        $query = $this->db->get_where('games', array('GBID' => $GBID));
-
-        return $query->num_rows() > 0 ? true : false;
-    }
-
-    function getReleaseDate($game)
-    {
-        // original release date
-        if($game->original_release_date != null)
-        {
-            return $game->original_release_date;
-        } else {
-            // expected release date
-            if($game->expected_release_year != null)
-            {
-                // year
-                $releaseYear = $game->expected_release_year;
-
-                // month (assume end of year if unknown)
-                $releaseMonth =  ($game->expected_release_month != null ? $game->expected_release_month : "12");
-
-                // day (assume end of month if unknown)
-                if($game->expected_release_day != null) {
-                    $releaseDay = $game->expected_release_day;
-                } else {
-                    switch($releaseMonth) {
-                        case "01":
-                        case "03":
-                        case "05":
-                        case "07":
-                        case "08":
-                        case "10":
-                        case "12":
-                            $releaseDay = "31";
-                            break;
-                        case "02":
-                            $releaseDay = "28";
-                            break;
-                        case "04":
-                        case "06":
-                        case "09":
-                        case "11":
-                            $releaseDay = "30";
-                            break;
-                    }
-                }
-
-                return $releaseYear . "-" . $releaseMonth . "-" . $releaseDay;
-            // unknown release date
-            } else {
-                // if completly unknwon, set to five years in the future
-                return (date("Y")+5) . "-12-31";
-            }
-        }
-    }
-
-    // add game to database
-    function addGame($game)
-    {
-        $releaseDate = $this->getReleaseDate($game);
-
-        $data = array(
-           'GBID' => $game->id,
-           'Name' => $game->name,
-           'Image' => is_object($game->image) ? $game->image->small_url : null,
-           'ImageSmall' => is_object($game->image) ? $game->image->icon_url : null,
-           'Deck' => $game->deck,
-           'ReleaseDate' => $releaseDate,
-           'LastUpdated' => date('Y-m-d')
-        );
-
-        return $this->db->insert('games', $data); 
     }
 
     // add game to users collection
@@ -672,24 +572,6 @@ class Collection extends CI_Model {
         if($query->num_rows() == 1)
         {
             return $query->first_row()->GBID;
-        }
-
-        return null;
-    }
-
-    // get platforms for a game
-    function getPlatforms($gameID)
-    {
-        $this->db->select('platforms.GBID, platforms.Name, platforms.Abbreviation');
-        $this->db->from('games');
-        $this->db->join('gamePlatforms', 'games.GameID = gamePlatforms.GameID');
-        $this->db->join('platforms', 'gamePlatforms.PlatformID = platforms.PlatformID');
-        $this->db->where('games.GameID', $gameID); 
-        $query = $this->db->get();
-
-        if($query->num_rows() > 0)
-        {
-            return $query->result();
         }
 
         return null;
