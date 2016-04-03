@@ -276,17 +276,6 @@ class Collection extends CI_Model {
         $this->db->update('collections', array('CurrentlyPlaying' => $currentlyPlayingBit, 'HoursPlayed' => $hoursPlayed, 'DateComplete' => $dateCompleted)); 
     }
 
-    // get GameID from GBID
-    function getGameID($GBID)
-    {
-        $query = $this->db->get_where('games', array('GBID' => $GBID));
-
-        if($query->num_rows() == 1)
-            return $query->first_row()->GameID;
-        else
-            return null;
-    }
-
     // get list
     function getListDetails($listID)
     {
@@ -556,108 +545,6 @@ class Collection extends CI_Model {
         $query = $this->db->get();
 
         return $query->result();
-    }
-
-    // get game that need updating
-    function getGameToUpdate()
-    {
-        $this->db->select('GBID');
-        $this->db->from('games'); 
-        $this->db->where('(Error IS NULL AND LastUpdated < \'' . Date('Y-m-d', strtotime("-1 days")) . '\')'); 
-        $this->db->or_where('LastUpdated', null); 
-        $this->db->order_by("LastUpdated", "asc"); 
-        $this->db->limit(1, 0);
-        $query = $this->db->get();
-
-        if($query->num_rows() == 1)
-        {
-            return $query->first_row()->GBID;
-        }
-
-        return null;
-    }
-
-    // update game cache
-    function updateGame($game)
-    {
-        // get GameID
-        $gameID = $this->getGameID($game->id);
-
-        // if game exists
-        if($gameID != null) {
-            // get release date
-            $releaseDate = $this->getReleaseDate($game);
-
-            $data = array(
-               'Name' => $game->name,
-               'Image' => is_object($game->image) ? $game->image->small_url : null,
-               'ImageSmall' => is_object($game->image) ? $game->image->icon_url : null,
-               'Deck' => $game->deck,
-               'ReleaseDate' => $releaseDate,
-               'LastUpdated' => date('Y-m-d')
-            );
-
-            // update game data
-            $this->db->where('GameID', $gameID);
-            $this->db->update('games', $data); 
-
-            // add platforms to game
-            if(property_exists($game, "platforms") && $game->platforms != null)
-            {
-                // load platforms model 
-                $this->load->model('Platform');
-
-                // get platforms game already has
-                $platforms = $this->getPlatforms($gameID);
-
-                // loop over platforms returned by GB
-                $platformsToAdd = [];
-                foreach($game->platforms as $gbPlatform)
-                {
-                    // loop over platforms for game already in db
-                    $gameHasPlatform = false;
-                    if($platforms != null) {
-                        foreach ($platforms as $platform)
-                        {
-                            // if game has platform
-                            if($platform->GBID == $gbPlatform->id)
-                            {
-                                $gameHasPlatform = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    // if game doesnt have platform
-                    if(!$gameHasPlatform) {
-                        // get or add platform to db
-                        $platform = $this->Platform->getOrAddPlatform($gbPlatform);
-
-                        // add to list of platforms to add to game
-                        array_push($platformsToAdd, array(
-                          'GameID' => $gameID,
-                          'PlatformID' => $platform->PlatformID
-                       ));
-                    }
-                }
-
-                // if there are platforms to add to game
-                if(count($platformsToAdd) > 0)
-                    // add to game in db
-                    $this->db->insert_batch('gamePlatforms', $platformsToAdd); 
-            }
-        }
-    }
-
-    // failed to get response from GB API, save error in db
-    function saveError($GBID, $error)
-    {
-        $data = array(
-           'Error' => $error
-        );
-
-        $this->db->where('GBID', $GBID);
-        $this->db->update('games', $data); 
     }
 
     // get users who have played game

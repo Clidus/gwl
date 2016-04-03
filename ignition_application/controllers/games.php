@@ -109,7 +109,7 @@ class Games extends CI_Controller {
         if($collection == null) 
         {
             // add game to users collection
-            $gameID = $this->Game->getGameID($GBID);
+            $gameID = $this->Game->getGameIDFromGiantBombID($GBID);
             $collectionID = $this->Game->addToCollection($gameID, $userID, $listID);
 
             // if game has one platform, automaticly add it

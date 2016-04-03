@@ -155,6 +155,17 @@ class Game extends CI_Model {
         return null;
     }
 
+    // get GameID from GBID
+    function getGameIDFromGiantBombID($GBID)
+    {
+        $query = $this->db->get_where('games', array('GBID' => $GBID));
+
+        if($query->num_rows() == 1)
+            return $query->first_row()->GameID;
+        else
+            return null;
+    }
+
     // add game to database
     function addGame($game)
     {
@@ -172,5 +183,78 @@ class Game extends CI_Model {
         );
 
         return $this->db->insert('games', $data); 
+    }
+
+    // update game cache
+    function updateGame($game)
+    {
+        // get GameID
+        $gameID = $this->getGameIDFromGiantBombID($game->id);
+
+        // if game exists
+        if($gameID != null) {
+            // get release date
+            $this->load->model('GiantBomb');
+            $releaseDate = $this->GiantBomb->convertReleaseDate($game);
+
+            $data = array(
+               'Name' => $game->name,
+               'Image' => is_object($game->image) ? $game->image->small_url : null,
+               'ImageSmall' => is_object($game->image) ? $game->image->icon_url : null,
+               'Deck' => $game->deck,
+               'ReleaseDate' => $releaseDate,
+               'LastUpdated' => date('Y-m-d')
+            );
+
+            // update game data
+            $this->db->where('GameID', $gameID);
+            $this->db->update('games', $data); 
+
+            // add platforms to game
+            if(property_exists($game, "platforms") && $game->platforms != null)
+            {
+                // load platforms model 
+                $this->load->model('Platform');
+
+                // get platforms game already has
+                $platforms = $this->getPlatforms($gameID, null);
+
+                // loop over platforms returned by GB
+                $platformsToAdd = [];
+                foreach($game->platforms as $gbPlatform)
+                {
+                    // loop over platforms for game already in db
+                    $gameHasPlatform = false;
+                    if($platforms != null) {
+                        foreach ($platforms as $platform)
+                        {
+                            // if game has platform
+                            if($platform->GBID == $gbPlatform->id)
+                            {
+                                $gameHasPlatform = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // if game doesnt have platform
+                    if(!$gameHasPlatform) {
+                        // get or add platform to db
+                        $platform = $this->Platform->getOrAddPlatform($gbPlatform);
+
+                        // add to list of platforms to add to game
+                        array_push($platformsToAdd, array(
+                          'GameID' => $gameID,
+                          'PlatformID' => $platform->PlatformID
+                       ));
+                    }
+                }
+
+                // if there are platforms to add to game
+                if(count($platformsToAdd) > 0)
+                    // add to game in db
+                    $this->db->insert_batch('gamePlatforms', $platformsToAdd); 
+            }
+        }
     }
 }
