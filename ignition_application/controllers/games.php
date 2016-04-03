@@ -32,7 +32,8 @@ class Games extends CI_Controller {
         $data['pageNumber'] = $page;
 
         // get users who have game
-        $data['users'] = null;//$this->Game->getUsersWhoHaveGame($GBID, $userID);
+        $this->load->model('Collection');
+        $data['users'] = $this->Collection->getUsersWhoHavePlayedGame($GBID, $userID);
 
         // load views
         $this->load->view('templates/header', $data);

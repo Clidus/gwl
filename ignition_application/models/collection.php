@@ -778,8 +778,8 @@ class Collection extends CI_Model {
         $this->db->update('games', $data); 
     }
 
-    // get users collection by platform
-    function getUsersWhoHaveGame($gbID, $userID) 
+    // get users who have played game
+    function getUsersWhoHavePlayedGame($GBID, $userID) 
     {
         $this->db->select('users.UserID');
         $this->db->select('UserName');
@@ -798,7 +798,7 @@ class Collection extends CI_Model {
             $this->db->where('users.UserID !=', $userID); // if logged in, exclude yourself
         }
 
-        $this->db->where('games.GBID', $gbID); 
+        $this->db->where('games.GBID', $GBID); 
 
         $this->db->order_by("Ranking", "asc"); 
         
