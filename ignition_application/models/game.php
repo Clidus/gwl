@@ -36,7 +36,8 @@ class Game extends CI_Model {
     public function getGame($GBID, $userID)
     {
         // get game from db
-        $this->db->select('*');
+        $this->db->select('games.GameID, games.GBID, games.Name, games.Image, games.ImageSmall, games.Deck, lists.ListID, lists.ListName, lists.ListStyle');
+        $this->db->select('gameStatuses.StatusID, gameStatuses.StatusName, gameStatuses.StatusStyle, collections.CurrentlyPlaying, collections.DateComplete, collections.HoursPlayed');
         $this->db->from('games');
 
         // add collection data if userID provided
