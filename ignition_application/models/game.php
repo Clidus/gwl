@@ -9,7 +9,7 @@ class Game extends CI_Model {
     var $image;
     var $imageSmall;
     var $deck;
-    var $platforms = null;
+    var $platforms;
 
     // list button
     var $listID = 0; 
@@ -23,8 +23,8 @@ class Game extends CI_Model {
 
     // played data
     var $currentlyPlaying = false;
-    var $dateComplete = null;
-    var $hoursPlayed = null;
+    var $dateComplete;
+    var $hoursPlayed;
 
     function __construct()
     {
@@ -65,8 +65,8 @@ class Game extends CI_Model {
             $this->imageSmall = $result->ImageSmall;
             $this->deck = $result->Deck;
 
-            // add collection data
-            if($userID != null)
+            // if game is in collection
+            if($result->ListID != null)
             {
                 // list button
                 $this->listID = $result->ListID;
