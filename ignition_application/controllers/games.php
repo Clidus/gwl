@@ -8,15 +8,13 @@ class Games extends CI_Controller {
     }
     
     // view game
-    function view($gbID, $page = 1)
+    function view($GBID, $page = 1)
     {   
         $userID = $this->session->userdata('UserID');
 
         // lookup game
         $this->load->model('Game');
-        $game = $this->Game->getGameByGBID($gbID, $userID, false);
-
-        if($game == null)
+        if(!$this->Game->getGame($GBID, $userID, false))
             show_404();
 
         // paging
@@ -25,16 +23,16 @@ class Games extends CI_Controller {
 
         // page variables
         $this->load->model('Page');
-        $data = $this->Page->create($game->name, "Game");
-        $data['game'] = $game;
+        $data = $this->Page->create($this->Game->name, "Game");
+        $data['game'] = $this->Game;
 
         // get event feed
         $this->load->model('Event');
-        $data['events'] = $this->Event->getEvents(null, $gbID, null, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
+        $data['events'] = null;//$this->Event->getEvents(null, $GBID, null, $this->session->userdata('DateTimeFormat'), $offset, $resultsPerPage);
         $data['pageNumber'] = $page;
 
         // get users who have game
-        $data['users'] = $this->Game->getUsersWhoHaveGame($gbID, $userID);
+        $data['users'] = null;//$this->Game->getUsersWhoHaveGame($GBID, $userID);
 
         // load views
         $this->load->view('templates/header', $data);
