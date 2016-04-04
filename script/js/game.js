@@ -17,7 +17,7 @@ $(document).ready(function() {
                     url : '/games/addPlatform',
                     dataType : 'json',
                     data: {
-                        gbID: match[1],
+                        GBID: match[1],
                         platformID: match[2]
                     },
                     success : function(data){
@@ -42,7 +42,7 @@ $(document).ready(function() {
                     url : '/games/removePlatform',
                     dataType : 'json',
                     data: {
-                        gbID: match[1],
+                        GBID: match[1],
                         platformID: match[2]
                     },
                     success : function(data){
@@ -73,7 +73,7 @@ function addGame(giantbombID, listID, reloadPage) {
         url : '/games/add',
         dataType : 'json',
         data: {
-            gbID: giantbombID,
+            GBID: giantbombID,
             listID: listID
         },
         success : function(data){
@@ -111,7 +111,7 @@ function changeStatus(giantbombID, statusID) {
         url : '/games/changeStatus',
         dataType : 'json',
         data: {
-            gbID: giantbombID,
+            GBID: giantbombID,
             statusID: statusID
         },
         success : function(data){
@@ -141,7 +141,7 @@ function removeFromCollection(giantbombID) {
         url : '/games/remove',
         dataType : 'json',
         data: {
-            gbID: giantbombID
+            GBID: giantbombID
         },
         success : function(data){
             if (data.error === true) {
@@ -166,7 +166,7 @@ function saveProgression(giantbombID) {
         url : '/games/saveProgression',
         dataType : 'json',
         data: {
-            gbID: giantbombID,
+            GBID: giantbombID,
             currentlyPlaying: $('#currentlyPlayingInput').val(),
             hoursPlayed: $('#hoursPlayedInput').val(),
             dateCompleted: $('#dateCompletedInput').val()
