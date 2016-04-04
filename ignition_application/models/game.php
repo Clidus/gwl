@@ -78,16 +78,12 @@ class Game extends CI_Model {
         $this->db->select('gameStatuses.StatusID, gameStatuses.StatusName, gameStatuses.StatusStyle, collections.CurrentlyPlaying, collections.DateComplete, collections.HoursPlayed');
         $this->db->from('games');
 
-        // add collection data if userID provided
-        if($userID != null)
-        {
-            if($userID == null) 
-                $userID = 0; // prevents joining on UserID causing an error
+        if($userID == null) 
+            $userID = 0; // prevents joining on UserID causing an error
 
-            $this->db->join('collections', 'collections.GameID = games.GameID AND collections.UserID = ' . $userID, 'left');
-            $this->db->join('lists', 'collections.ListID = lists.ListID', 'left');
-            $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID', 'left');
-        }
+        $this->db->join('collections', 'collections.GameID = games.GameID AND collections.UserID = ' . $userID, 'left');
+        $this->db->join('lists', 'collections.ListID = lists.ListID', 'left');
+        $this->db->join('gameStatuses', 'collections.StatusID = gameStatuses.StatusID', 'left');
 
         $this->db->where('games.GBID', $GBID); 
         $query = $this->db->get();
