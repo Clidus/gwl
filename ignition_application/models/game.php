@@ -206,51 +206,57 @@ class Game extends CI_Model {
             $this->db->where('GameID', $gameID);
             $this->db->update('games', $data); 
 
-            // add platforms to game
-            if(property_exists($game, "platforms") && $game->platforms != null)
+            $this->addPlatforms($game);
+        }
+    }
+
+    // update game cache
+    function addPlatforms($game)
+    {
+        // add platforms to game
+        if(property_exists($game, "platforms") && $game->platforms != null)
+        {
+            // load platforms model 
+            $this->load->model('Platform');
+
+            // get platforms game already has
+            $platforms = $this->getPlatforms($gameID, null);
+
+            // loop over platforms returned by GB
+            $platformsToAdd = [];
+            foreach($game->platforms as $gbPlatform)
             {
-                // load platforms model 
-                $this->load->model('Platform');
-
-                // get platforms game already has
-                $platforms = $this->getPlatforms($gameID, null);
-
-                // loop over platforms returned by GB
-                $platformsToAdd = [];
-                foreach($game->platforms as $gbPlatform)
-                {
-                    // loop over platforms for game already in db
-                    $gameHasPlatform = false;
-                    if($platforms != null) {
-                        foreach ($platforms as $platform)
+                // loop over platforms for game already in db
+                $gameHasPlatform = false;
+                if($platforms != null) {
+                    foreach ($platforms as $platform)
+                    {
+                        // if game has platform
+                        if($platform->GBID == $gbPlatform->id)
                         {
-                            // if game has platform
-                            if($platform->GBID == $gbPlatform->id)
-                            {
-                                $gameHasPlatform = true;
-                                break;
-                            }
+                            $gameHasPlatform = true;
+                            break;
                         }
-                    }
-
-                    // if game doesnt have platform
-                    if(!$gameHasPlatform) {
-                        // get or add platform to db
-                        $platform = $this->Platform->getOrAddPlatform($gbPlatform);
-
-                        // add to list of platforms to add to game
-                        array_push($platformsToAdd, array(
-                          'GameID' => $gameID,
-                          'PlatformID' => $platform->PlatformID
-                       ));
                     }
                 }
 
-                // if there are platforms to add to game
-                if(count($platformsToAdd) > 0)
-                    // add to game in db
-                    $this->db->insert_batch('gamePlatforms', $platformsToAdd); 
+                // if game doesnt have platform
+                if(!$gameHasPlatform) {
+                    // get or add platform to db
+                    $platform = $this->Platform->getOrAddPlatform($gbPlatform);
+
+                    // add to list of platforms to add to game
+                    array_push($platformsToAdd, array(
+                      'GameID' => $gameID,
+                      'PlatformID' => $platform->PlatformID
+                   ));
+                }
             }
+
+            // if there are platforms to add to game
+            if(count($platformsToAdd) > 0)
+                // add to game in db
+                $this->db->insert_batch('gamePlatforms', $platformsToAdd); 
         }
     }
 }
