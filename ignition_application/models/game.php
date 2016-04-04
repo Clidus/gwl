@@ -178,7 +178,15 @@ class Game extends CI_Model {
            'LastUpdated' => date('Y-m-d')
         );
 
-        return $this->db->insert('games', $data); 
+        if($this->db->insert('games', $data))
+        {
+            // add platforms to game
+            $this->addPlatforms($this->db->insert_id(), $game);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // update game cache
@@ -206,12 +214,12 @@ class Game extends CI_Model {
             $this->db->where('GameID', $gameID);
             $this->db->update('games', $data); 
 
-            $this->addPlatforms($game);
+            $this->addPlatforms($gameID, $game);
         }
     }
 
     // update game cache
-    function addPlatforms($game)
+    function addPlatforms($gameID, $game)
     {
         // add platforms to game
         if(property_exists($game, "platforms") && $game->platforms != null)
