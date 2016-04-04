@@ -71,33 +71,18 @@ class Games extends CI_Controller {
             return;
         }
 
-        // load game model
+        // check if game id in database
         $this->load->model('Game');
-
-        // get game details from Giant Bomb API
-        $game = $this->Game->getGameByGBID($GBID, null, false);
-
-        // if API returned nothing
-        if($game == null)
+        if(!$this->Game->getGame($GBID, null))
         {
-            $this->returnError($this->lang->line('error_giantbomb_down'),false,false);
+            // failed to find game or add it to database
+            $this->returnError($this->lang->line('error_game_cant_add'),false,false);
             return;
         }
 
-        // if game isnt in db
-        if(!$this->Game->isGameInDB($GBID))
-        {
-            // add game to db
-            if(!$this->Game->addGame($game))
-            {
-                // insert failed
-                $this->returnError($this->lang->line('error_game_cant_add'),false,false);
-                return;
-            }
-        }
-
         // check if game is in collection
-        $collection = $this->Game->isGameIsInCollection($GBID, $userID);
+        $this->load->model('Collection');
+        $collection = $this->Collection->isGameIsInCollection($GBID, $userID);
         
         // default value for auto selected platform
         $result['autoSelectPlatform'] = null;
@@ -109,45 +94,44 @@ class Games extends CI_Controller {
         if($collection == null) 
         {
             // add game to users collection
-            $gameID = $this->Game->getGameIDFromGiantBombID($GBID);
-            $collectionID = $this->Game->addToCollection($gameID, $userID, $listID);
+            $collectionID = $this->Collection->addToCollection($this->Game->gameID, $userID, $listID);
 
             // if game has one platform, automaticly add it
-            if($collectionID != null && count($game->platforms) == 1)
-            {
-                // load platform model
-                $this->load->model('Platform');
+            // if($collectionID != null && count($game->platforms) == 1)
+            // {
+            //     // load platform model
+            //     $this->load->model('Platform');
 
-                // get first (and only) platform
-                $platform = $game->platforms[0];
+            //     // get first (and only) platform
+            //     $platform = $game->platforms[0];
 
-                // if platform isnt in db
-                if(!$this->Platform->isPlatformInDB($platform->id))
-                {
-                    // add platform to db
-                    $this->Platform->addPlatform($platform);
-                }
+            //     // if platform isnt in db
+            //     if(!$this->Platform->isPlatformInDB($platform->id))
+            //     {
+            //         // add platform to db
+            //         $this->Platform->addPlatform($platform);
+            //     }
 
-                // add game to platform in collection
-                if($this->Game->addPlatform($collectionID, $platform->id))
-                {
-                    // tell UI to check platform that was auto-selected
-                    $result['autoSelectPlatform'] = $platform->id; 
-                }
-            }
+            //     // add game to platform in collection
+            //     if($this->Game->addPlatform($collectionID, $platform->id))
+            //     {
+            //         // tell UI to check platform that was auto-selected
+            //         $result['autoSelectPlatform'] = $platform->id; 
+            //     }
+            // }
 
             // record event
-            $this->Event->addEvent($userID, $gameID, $listID, null, null);
+            $this->Event->addEvent($userID, $this->Game->gameID, $listID, null, null);
         // game is in collection, update list
         } else {
-            $this->Game->updateList($GBID, $userID, $listID);
+            $this->Collection->updateList($GBID, $userID, $listID);
 
             // record event
             $this->Event->addEvent($userID, $collection->GameID, $listID, null, null);
         }
 
         // get list name and style
-        $listData = $this->Game->getListDetails($listID);
+        $listData = $this->Collection->getListDetails($listID);
         $result['listName'] = $listData->ListName;
         $result['listStyle'] = $listData->ListStyle;
 
