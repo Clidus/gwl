@@ -119,7 +119,7 @@ class Game extends CI_Model {
                 $this->hoursPlayed = $result->HoursPlayed;
             }
 
-            $this->platforms = $this->getPlatforms($this->gameID, $userID);         
+            $this->getPlatforms($userID);         
 
             return true;
         }
@@ -128,27 +128,34 @@ class Game extends CI_Model {
     }
 
     // get platforms for game
-    function getPlatforms($gameID, $userID)
+    function getPlatforms($userID)
     {
-        if($userID == null) 
-            $userID = 0; // prevents joining on UserID causing an error
+        // error if no GameID
+        if($this->gameID == null)
+            return false;
 
-        $this->db->select('platforms.GBID, platforms.name, platforms.abbreviation');
+        // prevents joining on UserID causing an error
+        if($userID == null) 
+            $userID = 0;
+
+        $this->db->select('platforms.platformID, platforms.GBID, platforms.name, platforms.abbreviation');
         $this->db->select('(CASE WHEN collectionPlatform.CollectionID IS NULL THEN 0 ELSE 1 END) AS inCollection');
         $this->db->from('games');
         $this->db->join('gamePlatforms', 'games.GameID = gamePlatforms.GameID');
         $this->db->join('platforms', 'gamePlatforms.PlatformID = platforms.PlatformID');
         $this->db->join('collections', 'games.GameID = collections.GameID AND collections.UserID = ' . $userID, 'left');
         $this->db->join('collectionPlatform', 'collections.ID = collectionPlatform.CollectionID AND collectionPlatform.PlatformID = platforms.PlatformID','left');
-        $this->db->where('games.GameID', $gameID); 
+        $this->db->where('games.GameID', $this->gameID); 
         $query = $this->db->get();
 
         if($query->num_rows() > 0)
         {
-            return $query->result();
+            $this->platforms = $query->result();
+
+            return true;
         }
 
-        return null;
+        return false;
     }
 
     // get GameID from GBID

@@ -96,30 +96,21 @@ class Games extends CI_Controller {
             // add game to users collection
             $collectionID = $this->Collection->addToCollection($this->Game->gameID, $userID, $listID);
 
-            // if game has one platform, automaticly add it
-            // if($collectionID != null && count($game->platforms) == 1)
-            // {
-            //     // load platform model
-            //     $this->load->model('Platform');
-
-            //     // get first (and only) platform
-            //     $platform = $game->platforms[0];
-
-            //     // if platform isnt in db
-            //     if(!$this->Platform->isPlatformInDB($platform->id))
-            //     {
-            //         // add platform to db
-            //         $this->Platform->addPlatform($platform);
-            //     }
-
-            //     // add game to platform in collection
-            //     if($this->Game->addPlatform($collectionID, $platform->id))
-            //     {
-            //         // tell UI to check platform that was auto-selected
-            //         $result['autoSelectPlatform'] = $platform->id; 
-            //     }
-            // }
-
+            // get platforms for game
+            if($this->Game->getPlatforms($userID))
+            {
+                // if game has one platform
+                if($this->Game->platforms != null && count($this->Game->platforms) == 1)
+                {
+                    // add game to platform in collection
+                    if($this->Collection->addPlatform($collectionID, $this->Game->platforms[0]->GBID))
+                    {
+                        // tell UI to check platform that was auto-selected
+                        $result['autoSelectPlatform'] = $this->Game->platforms[0]->GBID; 
+                    }
+                }
+            }
+            
             // record event
             $this->Event->addEvent($userID, $this->Game->gameID, $listID, null, null);
         // game is in collection, update list
