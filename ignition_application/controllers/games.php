@@ -150,17 +150,15 @@ class Games extends CI_Controller {
             return;
         }
 
-        // load game model
-        $this->load->model('Game');
-       
         // check if game is in collection
-        $collection = $this->Game->isGameIsInCollection($GBID, $userID);
+        $this->load->model('Collection');
+        $collection = $this->Collection->isGameIsInCollection($GBID, $userID);
        
         // if game is in collection
         if($collection != null) 
         {
             // update played status
-            $this->Game->updateStatus($GBID, $userID, $statusID);
+            $this->Collection->updateStatus($GBID, $userID, $statusID);
         } else {
             // return error
             $this->returnError($this->lang->line('error_game_not_added'), false, false);
@@ -172,7 +170,7 @@ class Games extends CI_Controller {
         $this->Event->addEvent($userID, $collection->GameID, null, $statusID, null);
 
         // get status name and style
-        $statusData = $this->Game->getStatusDetails($statusID);
+        $statusData = $this->Collection->getStatusDetails($statusID);
         $result['statusName'] = $statusData->StatusName;
         $result['statusStyle'] = $statusData->StatusStyle;
 
