@@ -196,11 +196,9 @@ class Games extends CI_Controller {
             return;
         }
 
-        // load game model
-        $this->load->model('Game');
-
         // remove game from collection
-        $this->Game->removeFromCollection($GBID, $userID);
+        $this->load->model('Collection');
+        $this->Collection->removeFromCollection($GBID, $userID);
        
         // return success
         $result['error'] = false;  
