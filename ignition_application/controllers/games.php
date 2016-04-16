@@ -225,11 +225,9 @@ class Games extends CI_Controller {
             return;
         }
 
-        // load game model
-        $this->load->model('Game');
-
         // check if game is in collection
-        $collection = $this->Game->isGameIsInCollection($GBID, $userID);
+        $this->load->model('Collection');
+        $collection = $this->Collection->isGameIsInCollection($GBID, $userID);
 
         // if game is not in collection
         if($collection == null)
@@ -239,7 +237,7 @@ class Games extends CI_Controller {
         }
         
         // if game is not on platform, add it
-        if(!$this->Game->isGameOnPlatformInCollection($collection->ID, $GBPlatformID))
+        if(!$this->Collection->isGameOnPlatformInCollection($collection->ID, $GBPlatformID))
         {
             // load platform model
             $this->load->model('Platform');
@@ -262,7 +260,7 @@ class Games extends CI_Controller {
             }
 
             // add game to platform in collection
-            $this->Game->addPlatform($collection->ID, $GBPlatformID);
+            $this->Collection->addPlatform($collection->ID, $GBPlatformID);
         }
 
         // record event
@@ -292,11 +290,9 @@ class Games extends CI_Controller {
             return;
         }
 
-        // load game model
-        $this->load->model('Game');
-
         // check if game is in collection
-        $collection = $this->Game->isGameIsInCollection($GBID, $userID);
+        $this->load->model('Collection');
+        $collection = $this->Collection->isGameIsInCollection($GBID, $userID);
 
         // if game is not in collection
         if($collection == null)
@@ -306,7 +302,7 @@ class Games extends CI_Controller {
         }
         
         // remove platform from game in collection
-        $this->Game->removePlatform($collection->ID, $GBPlatformID);
+        $this->Collection->removePlatform($collection->ID, $GBPlatformID);
         
         $result['error'] = false; 
         echo json_encode($result);
