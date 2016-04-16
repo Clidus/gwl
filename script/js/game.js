@@ -153,6 +153,7 @@ function removeFromCollection(giantbombID) {
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
+            $('#removeGameModal').modal('hide');
             showErrorModal('Well shit. Some kind of error gone done happened. Please try again.');
         }
     });
