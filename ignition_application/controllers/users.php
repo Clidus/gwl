@@ -235,8 +235,8 @@ class Users extends IG_Users {
         }
 
         // get collection data
-        $this->load->model('Game');
-        $data = $this->Game->getRawCollection($userID);
+        $this->load->model('Collection');
+        $data = $this->Collection->getRawCollection($userID);
 
         // convert to csv
         $this->load->dbutil();
