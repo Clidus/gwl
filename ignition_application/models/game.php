@@ -187,8 +187,10 @@ class Game extends CI_Model {
 
         if($this->db->insert('games', $data))
         {
+            $this->gameID = $this->db->insert_id();
+            
             // add platforms to game
-            $this->addPlatforms($this->db->insert_id(), $game);
+            $this->addPlatforms($game);
 
             return true;
         } else {
@@ -200,10 +202,10 @@ class Game extends CI_Model {
     function updateGame($game)
     {
         // get GameID
-        $gameID = $this->getGameIDFromGiantBombID($game->id);
+        $this->gameID = $this->getGameIDFromGiantBombID($game->id);
 
         // if game exists
-        if($gameID != null) {
+        if($this->gameID != null) {
             // get release date
             $this->load->model('GiantBomb');
             $releaseDate = $this->GiantBomb->convertReleaseDate($game);
@@ -218,15 +220,15 @@ class Game extends CI_Model {
             );
 
             // update game data
-            $this->db->where('GameID', $gameID);
+            $this->db->where('GameID', $this->gameID);
             $this->db->update('games', $data); 
 
-            $this->addPlatforms($gameID, $game);
+            $this->addPlatforms($game);
         }
     }
 
     // update game cache
-    function addPlatforms($gameID, $game)
+    function addPlatforms($game)
     {
         // add platforms to game
         if(property_exists($game, "platforms") && $game->platforms != null)
@@ -235,7 +237,7 @@ class Game extends CI_Model {
             $this->load->model('Platform');
 
             // get platforms game already has
-            $platforms = $this->getPlatforms($gameID, null);
+            $this->getPlatforms(null);
 
             // loop over platforms returned by GB
             $platformsToAdd = [];
@@ -243,8 +245,8 @@ class Game extends CI_Model {
             {
                 // loop over platforms for game already in db
                 $gameHasPlatform = false;
-                if($platforms != null) {
-                    foreach ($platforms as $platform)
+                if($this->platforms != null) {
+                    foreach ($this->platforms as $platform)
                     {
                         // if game has platform
                         if($platform->GBID == $gbPlatform->id)
@@ -262,7 +264,7 @@ class Game extends CI_Model {
 
                     // add to list of platforms to add to game
                     array_push($platformsToAdd, array(
-                      'GameID' => $gameID,
+                      'GameID' => $this->gameID,
                       'PlatformID' => $platform->PlatformID
                    ));
                 }
