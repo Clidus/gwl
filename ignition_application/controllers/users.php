@@ -97,11 +97,11 @@ class Users extends IG_Users {
         $data['user'] = $user;
 
         // get users collections by platform
-        $this->load->model('Game');
-        $data['platforms'] = $this->Game->getCollectionByPlatform($userID);
+        $this->load->model('Collection');
+        $data['platforms'] = $this->Collection->getCollectionByPlatform($userID);
 
         // get games currently playing
-        $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
+        $data['currentlyPlaying'] = $this->Collection->getCurrentlyPlaying($userID);
 
         // load views
         $this->load->view('templates/header', $data);
