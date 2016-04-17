@@ -39,8 +39,8 @@ class Users extends IG_Users {
         $data['pageNumber'] = $page;
 
         // get games currently playing
-        $this->load->model('Game');
-        $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
+        $this->load->model('Collection');
+        $data['currentlyPlaying'] = $this->Collection->getCurrentlyPlaying($userID);
 
         // load views
         $this->load->view('templates/header', $data);
