@@ -30,7 +30,7 @@
         <div class="panel panel-default"> 
             <div class="panel-body">
               <p><?php echo $game->deck; ?></p>
-              <!-- <p><a href="<?php echo $game->site_detail_url; ?>" target="_blank">Read more on GiantBomb.com.</a></p>    -->
+              <?php if($game->GBLink != null) echo '<p><a href="' . $game->GBLink . '" target="_blank">Read more on GiantBomb.com.</a></p>'; ?>
               <?php if($sessionUserID > 0) { ?>
                   <div class="pull-right">  
                         <div class='btn-group'>

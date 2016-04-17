@@ -111,6 +111,7 @@ CREATE TABLE `games` (
   `ReleaseDate` date DEFAULT NULL,
   `LastUpdated` date DEFAULT NULL,
   `Error` varchar(100) DEFAULT NULL,
+  `GBLink` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`GameID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
