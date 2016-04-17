@@ -66,13 +66,13 @@ class Users extends IG_Users {
         $data['user'] = $user;
 
         // get platforms, lists and statuses for filtering
-        $this->load->model('Game');
-        $data['platforms'] = $this->Game->getPlatformsInCollection($userID);
-        $data['lists'] = $this->Game->getListsInCollection($userID);
-        $data['statuses'] = $this->Game->getStatusesInCollection($userID);
+        $this->load->model('Collection');
+        $data['platforms'] = $this->Collection->getPlatformsInCollection($userID);
+        $data['lists'] = $this->Collection->getListsInCollection($userID);
+        $data['statuses'] = $this->Collection->getStatusesInCollection($userID);
 
         // get games currently playing
-        $data['currentlyPlaying'] = $this->Game->getCurrentlyPlaying($userID);
+        $data['currentlyPlaying'] = $this->Collection->getCurrentlyPlaying($userID);
 
         // load views
         $this->load->view('templates/header', $data);
@@ -135,9 +135,9 @@ class Users extends IG_Users {
         $offset = ($page-1) * $resultsPerPage;
 
         // get collection
-        $this->load->model('Game');
-        $result['collection'] = $this->Game->getCollection($userID, $filters, $offset, $resultsPerPage);
-        $result['stats'] = $this->Game->getCollection($userID, $filters, null, null);
+        $this->load->model('Collection');
+        $result['collection'] = $this->Collection->getCollection($userID, $filters, $offset, $resultsPerPage);
+        $result['stats'] = $this->Collection->getCollection($userID, $filters, null, null);
 
         // return success
         $result['error'] = false;   
