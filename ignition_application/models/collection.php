@@ -8,27 +8,6 @@ class Collection extends CI_Model {
         parent::__construct();
     }
 
-    // search Giant Bomb API for games  
-    function searchForGame($query, $page, $userID) 
-    {  
-        // build API request
-        $url = $this->config->item('gb_api_root') . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $this->resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
-      
-        // make API request
-        $result = $this->Utility->getData($url, "Search");
-
-        if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
-        {                                                                                                    
-            foreach($result->results as $game)
-            {    
-                $game = $this->addCollectionInfo($game, $userID);
-            }
-            return $result;
-        } else {
-            return null;
-        }
-    }
-
     // add collection status (ownership and played status) and platforms to game object
     function addCollectionInfo($game, $userID)
     {

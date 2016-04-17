@@ -25,6 +25,28 @@ class GiantBomb extends CI_Model {
         }
     }
 
+    // search Giant Bomb API for games  
+    function searchForGame($query, $page, $resultsPerPage, $userID) 
+    {  
+        // build API request
+        $url = $this->config->item('gb_api_root') . "/search/?api_key=" . $this->config->item('gb_api_key') . "&format=json&resources=game&limit=" . $resultsPerPage . "&page=" . $page . "&query=" . urlencode ($query);
+      
+        // make API request
+        $result = $this->Utility->getData($url, "Search");
+
+        if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
+        {                       
+			$this->load->model('Collection');                                                                             
+            foreach($result->results as $game)
+            {    
+                $game = $this->Collection->addCollectionInfo($game, $userID);
+            }
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
     function convertReleaseDate($game)
     {
         // original release date
