@@ -6,23 +6,58 @@ class Cron extends CI_Controller {
 	public function update()
 	{
 		// get game to update
-		$this->load->model('Game');
-		$GBID = $this->Game->getGameToUpdate();
+		$GBID = $this->getGameToUpdate();
 
 		// if game returned
 		if($GBID != null) {
 			// get game details from Giant Bomb API
-			$gbResult = $this->Game->getGameByGBID($GBID, null, true);
+			$this->load->model('GiantBomb');
+			$result = $this->GiantBomb->getGame($GBID);
 
 			// if game returned from API
-			if(is_object($gbResult))
+			if(is_object($result))
 			{
 				// if game found, update db
-				if($gbResult->error == "OK" && $gbResult->number_of_total_results > 0)
-					$this->Game->updateGame($gbResult->results);
+				if($result->error == "OK" && $result->number_of_total_results > 0)
+				{
+					$this->load->model('Game');
+					$this->Game->updateGame($result->results);
+				}
 				else
-					$this->Game->saveError($GBID, $gbResult->error);
+				{
+					$this->saveError($GBID, $result->error);
+				}
 			}
 		}
 	}
+
+    // get game that need updating
+    function getGameToUpdate()
+    {
+        $this->db->select('GBID');
+        $this->db->from('games'); 
+        $this->db->where('(Error IS NULL AND LastUpdated < \'' . Date('Y-m-d', strtotime("-1 days")) . '\')'); 
+        $this->db->or_where('LastUpdated', null); 
+        $this->db->order_by("LastUpdated", "asc"); 
+        $this->db->limit(1, 0);
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1)
+        {
+            return $query->first_row()->GBID;
+        }
+
+        return null;
+    }
+
+    // failed to get response from GB API, save error in db
+    function saveError($GBID, $error)
+    {
+        $data = array(
+           'Error' => $error
+        );
+
+        $this->db->where('GBID', $GBID);
+        $this->db->update('games', $data); 
+    }
 }

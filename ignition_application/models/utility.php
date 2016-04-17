@@ -23,6 +23,10 @@ class Utility extends CI_Model {
     }
 
     function logApiRequest($url, $requestType, $json) {
+        // only log json result if request is a search
+        if($requestType != "Search")
+            $json = null;
+        
         $data = array(
            'Url' => $url,
            'RequestType' => $requestType,

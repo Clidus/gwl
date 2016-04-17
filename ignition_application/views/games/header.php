@@ -26,31 +26,31 @@
 
 <div class="row">
     <div class="col-sm-4">
-        <img class="imageShadow gamePageBoxArt" src="<?php if(is_object($game->image)) echo $game->image->small_url; ?>">
+        <img class="imageShadow gamePageBoxArt" src="<?php echo $game->image ?>">
         <div class="panel panel-default"> 
             <div class="panel-body">
               <p><?php echo $game->deck; ?></p>
-              <p><a href="<?php echo $game->site_detail_url; ?>" target="_blank">Read more on GiantBomb.com.</a></p>   
+              <?php if($game->GBLink != null) echo '<p><a href="' . $game->GBLink . '" target="_blank">Read more on GiantBomb.com.</a></p>'; ?>
               <?php if($sessionUserID > 0) { ?>
                   <div class="pull-right">  
                         <div class='btn-group'>
-                            <button id='gameButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->listStyle ?> dropdown-toggle'><?php echo $game->listLabel ?> <span class='caret'></span></button>
+                            <button id='gameButton<?php echo $game->GBID ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->listStyle ?> dropdown-toggle'><?php echo $game->listLabel ?> <span class='caret'></span></button>
                             <ul class="dropdown-menu">
-                                <li><a onclick="javascript:addGame(<?php echo $game->id ?>, 1, true);">Own</a></li>
-                                <li><a onclick="javascript:addGame(<?php echo $game->id ?>, 2, true);">Want</a></li>
-                                <li><a onclick="javascript:addGame(<?php echo $game->id ?>, 3, true);">Borrowed</a></li>
-                                <li><a onclick="javascript:addGame(<?php echo $game->id ?>, 4, true);">Lent</a></li>
-                                <li><a onclick="javascript:addGame(<?php echo $game->id ?>, 5, true);">Played</a></li>
+                                <li><a onclick="javascript:addGame(<?php echo $game->GBID ?>, 1, true);">Own</a></li>
+                                <li><a onclick="javascript:addGame(<?php echo $game->GBID ?>, 2, true);">Want</a></li>
+                                <li><a onclick="javascript:addGame(<?php echo $game->GBID ?>, 3, true);">Borrowed</a></li>
+                                <li><a onclick="javascript:addGame(<?php echo $game->GBID ?>, 4, true);">Lent</a></li>
+                                <li><a onclick="javascript:addGame(<?php echo $game->GBID ?>, 5, true);">Played</a></li>
                             </ul>
                         </div> 
-                        <span id="inCollectionControls<?php echo $game->id ?>" class="<?php if($game->listID == 0) echo "hidden" ?>">
-                            <div id='statusButtonGroup<?php echo $game->id ?>' class='btn-group'>
-                                <button id='statusButton<?php echo $game->id ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->statusStyle ?> dropdown-toggle'><?php echo $game->statusLabel  ?> <span class='caret'></span></button>
+                        <span id="inCollectionControls<?php echo $game->GBID ?>" class="<?php if($game->listID == 0) echo "hidden" ?>">
+                            <div id='statusButtonGroup<?php echo $game->GBID ?>' class='btn-group'>
+                                <button id='statusButton<?php echo $game->GBID ?>' data-toggle='dropdown' class='btn btn-<?php echo $game->statusStyle ?> dropdown-toggle'><?php echo $game->statusLabel  ?> <span class='caret'></span></button>
                                 <ul class='dropdown-menu'>
-                                    <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 1);">Unplayed</a></li>
-                                    <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 2);">Unfinished</a></li>
-                                    <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 3);">Complete</a></li>
-                                    <li><a onclick="javascript:changeStatus(<?php echo $game->id ?>, 4);">Uncompletable</a></li>
+                                    <li><a onclick="javascript:changeStatus(<?php echo $game->GBID ?>, 1);">Unplayed</a></li>
+                                    <li><a onclick="javascript:changeStatus(<?php echo $game->GBID ?>, 2);">Unfinished</a></li>
+                                    <li><a onclick="javascript:changeStatus(<?php echo $game->GBID ?>, 3);">Complete</a></li>
+                                    <li><a onclick="javascript:changeStatus(<?php echo $game->GBID ?>, 4);">Uncompletable</a></li>
                                 </ul>
                             </div>
                         </span>
@@ -58,12 +58,12 @@
                 <?php } ?>   
             </div>  
             <?php    
-                if(property_exists($game, "platforms") && $game->platforms != null)
+                if($game->platforms != null)
                 {
-                    echo "<div id='platforms" . $game->id . "' class='panel-footer'>";
+                    echo "<div id='platforms" . $game->GBID . "' class='panel-footer'>";
                     foreach($game->platforms as $platform)
                     {
-                        echo "<label><input id='platform_" . $game->id . "_" . $platform->id . "' type='checkbox'";
+                        echo "<label><input id='platform_" . $game->GBID . "_" . $platform->GBID . "' type='checkbox'";
                         if($platform->inCollection) echo " checked";
                         if($game->listID == 0) echo " readonly";
                         echo "> <span class='label label-info'>" . $platform->name . "</span></label> ";  
@@ -90,10 +90,10 @@
                         <label for="dateCompletedInput">Date Completed</label>
                         <input type="date" class="form-control" id="dateCompletedInput" placeholder="dd/mm/yyyy" value="<?php echo $game->dateComplete; ?>">
                     </div>
-                    <a onclick="javascript:saveProgression(<?php echo $game->id ?>);" class='btn btn-success progressionSaveButton' id='progressionSaveButton'>Save</a>                
+                    <a onclick="javascript:saveProgression(<?php echo $game->GBID ?>);" class='btn btn-success progressionSaveButton' id='progressionSaveButton'>Save</a>                
                 </div>
             </div>
-            <a onclick='javascript:showRemoveGameWarning(<?php echo $game->id; ?>);' class='btn btn-danger btn-fullWidth'>Remove from Collection</a>
+            <a onclick='javascript:showRemoveGameWarning(<?php echo $game->GBID; ?>);' class='btn btn-danger btn-fullWidth'>Remove from Collection</a>
         <?php } ?> 
     </div>
     <div class="col-sm-8">
