@@ -30,6 +30,40 @@ class Cron extends CI_Controller {
 			}
 		}
 	}
+	
+	// run in cron job to process API log
+	public function process()
+	{
+		// get game to update
+		$log = $this->getAPILogToProcess();
+
+		// if log was returned
+		if($log != null) {
+			// decode json
+			$result = json_decode($log->Result);
+			
+			// check json has valid results
+			if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
+        	{
+				// loop through games
+				foreach($result->results as $game)
+				{
+					echo $game->name . "<br />"; // debug
+					
+					// if game is in database
+					$this->load->model('Game');
+					if($this->Game->isGameInDB($game->id))
+					{
+						// update game
+						$this->Game->updateGame($game);
+					} else {
+						// add game
+						$this->Game->addGame($game);
+					}
+				}
+			}
+		}
+	}
 
     // get game that need updating
     function getGameToUpdate()
@@ -60,18 +94,6 @@ class Cron extends CI_Controller {
         $this->db->where('GBID', $GBID);
         $this->db->update('games', $data); 
     }
-	
-	// run in cron job to process API log
-	public function process()
-	{
-		// get game to update
-		$log = $this->getAPILogToProcess();
-
-		// if game returned
-		if($log != null) {
-			$result = json_decode($log->Result);
-		}
-	}
 	
 	// get API log to process
     function getAPILogToProcess()
