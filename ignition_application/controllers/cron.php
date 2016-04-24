@@ -60,4 +60,34 @@ class Cron extends CI_Controller {
         $this->db->where('GBID', $GBID);
         $this->db->update('games', $data); 
     }
+	
+	// run in cron job to process API log
+	public function process()
+	{
+		// get game to update
+		$log = $this->getAPILogToProcess();
+
+		// if game returned
+		if($log != null) {
+			$result = json_decode($log->Result);
+		}
+	}
+	
+	// get API log to process
+    function getAPILogToProcess()
+    {
+        $this->db->select('LogID, Result');
+        $this->db->from('apiLog');
+        $this->db->where('Result IS NOT NULL AND Processed = 0');
+        $this->db->order_by("DateStamp", "asc");
+        $this->db->limit(1, 0);
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1)
+        {
+            return $query->first_row();
+        }
+
+        return null;
+    }
 }
