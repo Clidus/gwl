@@ -65,6 +65,9 @@ class Cron extends CI_Controller {
 					$this->Game->destroy();
 				}
 			}
+			
+			// process log
+			$this->processAPILog($log->LogID);
 		}
 	}
 
@@ -114,5 +117,17 @@ class Cron extends CI_Controller {
         }
 
         return null;
+    }
+	
+	// failed to get response from GB API, save error in db
+    function processAPILog($logID)
+    {
+        $data = array(
+           'Processed' => 1,
+           'Result' => null
+        );
+
+        $this->db->where('LogID', $logID);
+        $this->db->update('apiLog', $data); 
     }
 }
