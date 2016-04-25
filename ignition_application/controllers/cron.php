@@ -46,12 +46,12 @@ class Cron extends CI_Controller {
 			if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
         	{
 				// loop through games
+				$this->load->model('Game');
 				foreach($result->results as $game)
 				{
 					echo $game->name . "<br />"; // debug
 					
 					// if game is in database
-					$this->load->model('Game');
 					if($this->Game->isGameInDB($game->id))
 					{
 						// update game
@@ -60,6 +60,9 @@ class Cron extends CI_Controller {
 						// add game
 						$this->Game->addGame($game);
 					}
+					
+					// destroy game
+					$this->Game->destroy();
 				}
 			}
 		}
