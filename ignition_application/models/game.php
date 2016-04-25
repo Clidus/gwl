@@ -275,9 +275,39 @@ class Game extends CI_Model {
             }
 
             // if there are platforms to add to game
-            if(count($platformsToAdd) > 0)
+            if(count($platformsToAdd) > 0) {
                 // add to game in db
                 $this->db->insert_batch('gamePlatforms', $platformsToAdd); 
+            }
         }
+    }
+    
+    // destroy game
+    function destroy()
+    {
+        // game data
+        $this->gameID = null; 
+        $this->GBID = null; 
+        $this->GBLink = null;
+        $this->name = null; 
+        $this->image = null;
+        $this->imageSmall = null;
+        $this->deck = null;
+        $this->platforms = null;
+
+        // list button
+        $this->listID = 0; 
+        $this->listLabel = "Add to Collection";
+        $this->listStyle = "default";
+
+        // status button
+        $this->statusID = 0; 
+        $this->statusLabel = "Unplayed";
+        $this->statusStyle = "default";
+
+        // played data
+        $this->currentlyPlaying = false;
+        $this->dateComplete = null;
+        $this->hoursPlayed = null;
     }
 }

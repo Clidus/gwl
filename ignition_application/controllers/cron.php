@@ -30,6 +30,46 @@ class Cron extends CI_Controller {
 			}
 		}
 	}
+	
+	// run in cron job to process API log
+	public function process()
+	{
+		// get game to update
+		$log = $this->getAPILogToProcess();
+
+		// if log was returned
+		if($log != null) {
+			// decode json
+			$result = json_decode($log->Result);
+			
+			// check json has valid results
+			if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
+        	{
+				// loop through games
+				$this->load->model('Game');
+				foreach($result->results as $game)
+				{
+					echo $game->name . "<br />"; // debug
+					
+					// if game is in database
+					if($this->Game->isGameInDB($game->id))
+					{
+						// update game
+						$this->Game->updateGame($game);
+					} else {
+						// add game
+						$this->Game->addGame($game);
+					}
+					
+					// destroy game
+					$this->Game->destroy();
+				}
+			}
+			
+			// process log
+			$this->processAPILog($log->LogID);
+		}
+	}
 
     // get game that need updating
     function getGameToUpdate()
@@ -59,5 +99,35 @@ class Cron extends CI_Controller {
 
         $this->db->where('GBID', $GBID);
         $this->db->update('games', $data); 
+    }
+	
+	// get API log to process
+    function getAPILogToProcess()
+    {
+        $this->db->select('LogID, Result');
+        $this->db->from('apiLog');
+        $this->db->where('Result IS NOT NULL AND Processed = 0');
+        $this->db->order_by("DateStamp", "asc");
+        $this->db->limit(1, 0);
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1)
+        {
+            return $query->first_row();
+        }
+
+        return null;
+    }
+	
+	// failed to get response from GB API, save error in db
+    function processAPILog($logID)
+    {
+        $data = array(
+           'Processed' => 1,
+           'Result' => null
+        );
+
+        $this->db->where('LogID', $logID);
+        $this->db->update('apiLog', $data); 
     }
 }
