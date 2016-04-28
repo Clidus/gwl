@@ -40,6 +40,10 @@ In the `ignition_application/config/` folder:
 * Set `hostname`, `username`, `password` and `database` in `database.php`
 * Get a [Giant Bomb API Key](http://www.giantbomb.com/api/) and set `gb_api_key` in `gwl_config.php`
 
+### Upgrade:
+
+When upgrading between versions, follow the instructions in [migration.md](https://github.com/Clidus/gwl/blob/master/migration.md).
+
 ## License
 
 * Copyright 2015 [Joshua Marketis](http://www.clidus.com)

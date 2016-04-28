@@ -95,7 +95,7 @@
 			$url = '/user/' . $user->UserID . '/';
 		// game page
 		else if(isset($game))
-			$url = '/game/' . $game->id . '/';
+			$url = '/game/' . $game->GBID . '/';
 		// homepage
 		else
 			$url = '/feed/';

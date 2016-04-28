@@ -69,7 +69,7 @@ class Event extends CI_Model {
         $events = $this->db->get()->result();
 
         // loop through events
-        $this->load->model('Game');
+        $this->load->model('Collection');
         $this->load->model('Time');
         $this->load->library('md');
         foreach ($events as $event)
@@ -117,7 +117,7 @@ class Event extends CI_Model {
             }
 
             // add platforms in collection
-            $event->platforms = $this->Game->getGamesPlatformsInCollection($event->GBID, $event->UserID);
+            $event->platforms = $this->Collection->getGamesPlatformsInCollection($event->GBID, $event->UserID);
             
             // build platforms label
             $event->PlatformsLabel = "";
