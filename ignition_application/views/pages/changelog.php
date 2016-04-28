@@ -6,6 +6,11 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.4.4 - 2016-04-28</b></p>
+	<ul>
+		<li><strong>Change:</strong> Reduced dependencies on Giant Bomb. <a href="https://github.com/Clidus/gwl/issues/57">#57</a></li>
+		<li><strong>Change:</strong> Cron job now processes search logs to expand game database. <a href="https://github.com/Clidus/gwl/issues/96">#96</a></li>
+	</ul>
 	<p><b>Version 0.4.3 - 2016-02-18</b></p>
 	<ul>
 		<li><strong>Bug Fix:</strong> Giant Bomb now require user agent on API requests. <a href="https://github.com/Clidus/gwl/issues/90">#90</a></li>
