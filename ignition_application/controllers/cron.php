@@ -45,29 +45,37 @@ class Cron extends CI_Controller {
 			// check json has valid results
 			if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
         	{
+				echo "<ul>";
+				
 				// loop through games
 				$this->load->model('Game');
 				foreach($result->results as $game)
 				{
-					echo $game->name . "<br />"; // debug
-					
 					// if game is in database
 					if($this->Game->isGameInDB($game->id))
 					{
 						// update game
 						$this->Game->updateGame($game);
+						echo "<li>Updated " . $game->name . "</li>";
 					} else {
 						// add game
 						$this->Game->addGame($game);
+						echo "<li>Added " . $game->name . "</li>";
 					}
 					
 					// destroy game
 					$this->Game->destroy();
 				}
+				
+				echo "</ul>";
+			} else {
+				echo "Nothing to process.";
 			}
 			
 			// process log
 			$this->processAPILog($log->LogID);
+		} else {
+			echo "Nothing to process.";
 		}
 	}
 
