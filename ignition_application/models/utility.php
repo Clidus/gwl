@@ -15,7 +15,7 @@ class Utility extends CI_Model {
         $json = curl_exec($ch);
         curl_close($ch);
         
-        $this->logApiRequest($url, $requestType, $json);
+        $a = $this->logApiRequest($url, $requestType, $json);
 
         $result = json_decode($json); 
         
@@ -23,8 +23,8 @@ class Utility extends CI_Model {
     }
 
     function logApiRequest($url, $requestType, $json) {
-        // only log json result if request is a search
-        if($requestType != "Search")
+        // dont log json result if request is for a single Game
+        if($requestType == "Game")
             $json = null;
         
         $data = array(
