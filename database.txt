@@ -222,6 +222,15 @@ CREATE TABLE `apiLog` (
 
 
 
+# Dump of table settings
+# ------------------------------------------------------------
+
+CREATE TABLE `settings` (
+  `crawlerOffset` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
 # Default data
 # ------------------------------------------------------------
 
@@ -295,3 +304,6 @@ VALUES
   (48,106,'DSiWare','DSI','http://www.giantbomb.com/api/platform/3045-106/','dsiware.png'),
   (49,11,'Amstrad CPC','CPC','http://www.giantbomb.com/api/platform/3045-11/','amstrad.png'),
   (50,124,'Windows Phone','WP','http://www.giantbomb.com/api/platform/3045-124/','winphone.png');
+
+INSERT INTO `settings` (`crawlerOffset`) VALUES
+(0);
