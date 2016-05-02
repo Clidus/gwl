@@ -15,7 +15,7 @@ class Utility extends CI_Model {
         $json = curl_exec($ch);
         curl_close($ch);
         
-        $a = $this->logApiRequest($url, $requestType, $json);
+        $this->logApiRequest($url, $requestType, $json);
 
         $result = json_decode($json); 
         
