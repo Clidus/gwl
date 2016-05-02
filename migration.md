@@ -24,13 +24,13 @@ Create `settings` table to store crawler offset value.
 
 ```SQL
 CREATE TABLE `settings` (
-  `crawlerOffset` int(11) NOT NULL
+  `CrawlerOffset` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 ```
 
 And add default value.
 
 ```SQL
-INSERT INTO `settings` (`crawlerOffset`) VALUES
+INSERT INTO `settings` (`CrawlerOffset`) VALUES
 (0);
 ```
