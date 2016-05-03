@@ -214,7 +214,7 @@ CREATE TABLE `apiLog` (
   `LogID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `Url` varchar(250) NOT NULL DEFAULT '',
   `RequestType` varchar(20) NOT NULL DEFAULT '',
-  `Result` longblob NOT NULL,
+  `Result` longblob NULL,
   `Processed` tinyint(1) NOT NULL,
   `DateStamp` datetime NOT NULL,
   PRIMARY KEY (`LogID`)

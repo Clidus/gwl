@@ -34,3 +34,9 @@ And add default value.
 INSERT INTO `settings` (`CrawlerOffset`) VALUES
 (0);
 ```
+
+The previous versions also had an error in the database schema. `Result` in the `apiLog` table should allow nulls.
+
+```SQL
+ALTER TABLE `apilog` CHANGE `Result` `Result` LONGBLOB NULL;
+```
