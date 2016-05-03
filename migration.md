@@ -17,3 +17,26 @@ Run the following query to delete the game json data that is not required.
 ```SQL
 UPDATE apiLog SET Result = NULL WHERE RequestType = "Game"
 ```
+
+### Upgrade from v0.4.4 to v0.4.5
+
+Create `settings` table to store crawler offset value.
+
+```SQL
+CREATE TABLE `settings` (
+  `CrawlerOffset` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+```
+
+And add default value.
+
+```SQL
+INSERT INTO `settings` (`CrawlerOffset`) VALUES
+(0);
+```
+
+The previous versions also had an error in the database schema. `Result` in the `apiLog` table should allow nulls.
+
+```SQL
+ALTER TABLE `apiLog` CHANGE `Result` `Result` LONGBLOB NULL;
+```

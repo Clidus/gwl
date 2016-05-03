@@ -6,6 +6,10 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.4.5 - 2016-05-03</b></p>
+	<ul>
+		<li><strong>Change:</strong> Crawler reborn as "Super Crawler". Now pulls 100 games at a time. <a href="https://github.com/Clidus/gwl/issues/101">#101</a></li>
+	</ul>
 	<p><b>Version 0.4.4 - 2016-04-28</b></p>
 	<ul>
 		<li><strong>Change:</strong> Reduced dependencies on Giant Bomb. <a href="https://github.com/Clidus/gwl/issues/57">#57</a></li>

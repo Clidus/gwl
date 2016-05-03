@@ -2,31 +2,40 @@
 
 class Cron extends CI_Controller {
 	
-	// run in cron job to update game cache
+	// run in cron job to update and add games
 	public function update()
 	{
-		// get game to update
-		$GBID = $this->getGameToUpdate();
-
-		// if game returned
-		if($GBID != null) {
-			// get game details from Giant Bomb API
+		// get offset
+		$crawlerOffset = $this->getCrawlerOffset();
+		$gamesPerPage = 100;
+		
+		// if offset returned
+		if($crawlerOffset != null) {
+			// get games from Giant Bomb API (returns 100 games at a time, paged with an offset)
 			$this->load->model('GiantBomb');
-			$result = $this->GiantBomb->getGame($GBID);
+			$result = $this->GiantBomb->getGames($crawlerOffset);
 
-			// if game returned from API
+			// if games returned from API
 			if(is_object($result))
 			{
-				// if game found, update db
-				if($result->error == "OK" && $result->number_of_total_results > 0)
+				// if games found
+				if($result->error == "OK" && $result->number_of_page_results > 0)
 				{
-					$this->load->model('Game');
-					$this->Game->updateGame($result->results);
+					// increase offset for next request
+					// the games returned will be processed from the API log
+					$crawlerOffset = $crawlerOffset + $gamesPerPage;
+					
+					$this->setCrawlerOffset($crawlerOffset);
 				}
 				else
 				{
-					$this->saveError($GBID, $result->error);
+					// nothing returned, reset offset to zero
+					$crawlerOffset = 0;
+					
+					$this->setCrawlerOffset($crawlerOffset);
 				}
+					
+				echo "Next offset: " . $crawlerOffset;
 			}
 		}
 	}
@@ -43,7 +52,7 @@ class Cron extends CI_Controller {
 			$result = json_decode($log->Result);
 			
 			// check json has valid results
-			if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
+			if(is_object($result) && $result->error == "OK" && $result->number_of_page_results > 0)
         	{
 				echo "<ul>";
 				
@@ -79,23 +88,28 @@ class Cron extends CI_Controller {
 		}
 	}
 
-    // get game that need updating
-    function getGameToUpdate()
+    // get crawler offset
+    function getCrawlerOffset()
     {
-        $this->db->select('GBID');
-        $this->db->from('games'); 
-        $this->db->where('(Error IS NULL AND LastUpdated < \'' . Date('Y-m-d', strtotime("-1 days")) . '\')'); 
-        $this->db->or_where('LastUpdated', null); 
-        $this->db->order_by("LastUpdated", "asc"); 
-        $this->db->limit(1, 0);
+        $this->db->select('CrawlerOffset');
+        $this->db->from('settings'); 
         $query = $this->db->get();
 
         if($query->num_rows() == 1)
         {
-            return $query->first_row()->GBID;
+            return $query->first_row()->CrawlerOffset;
         }
 
         return null;
+    }
+	
+	function setCrawlerOffset($offset)
+    {
+        $data = array(
+           'CrawlerOffset' => $offset
+        );
+
+        $this->db->update('settings', $data); 
     }
 
     // failed to get response from GB API, save error in db
