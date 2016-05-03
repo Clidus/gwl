@@ -214,10 +214,19 @@ CREATE TABLE `apiLog` (
   `LogID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `Url` varchar(250) NOT NULL DEFAULT '',
   `RequestType` varchar(20) NOT NULL DEFAULT '',
-  `Result` longblob NOT NULL,
+  `Result` longblob NULL,
   `Processed` tinyint(1) NOT NULL,
   `DateStamp` datetime NOT NULL,
   PRIMARY KEY (`LogID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table settings
+# ------------------------------------------------------------
+
+CREATE TABLE `settings` (
+  `CrawlerOffset` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -295,3 +304,6 @@ VALUES
   (48,106,'DSiWare','DSI','http://www.giantbomb.com/api/platform/3045-106/','dsiware.png'),
   (49,11,'Amstrad CPC','CPC','http://www.giantbomb.com/api/platform/3045-11/','amstrad.png'),
   (50,124,'Windows Phone','WP','http://www.giantbomb.com/api/platform/3045-124/','winphone.png');
+
+INSERT INTO `settings` (`CrawlerOffset`) VALUES
+(0);

@@ -24,6 +24,23 @@ class GiantBomb extends CI_Model {
             return null;
         }
     }
+    
+    // get games from Giant Bomb API (returns 100 games at a time, paged with an offset)
+    public function getGames($offset) 
+    {   
+        // build API request
+        $url = $this->config->item('gb_api_root') . "/games/?api_key=" . $this->config->item('gb_api_key') . "&format=json&offset=" . $offset;
+        
+        // make API request
+        $result = $this->Utility->getData($url, "Games");
+        
+        if(is_object($result))
+        {
+            return $result;
+        } else {
+            return null;
+        }
+    }
 
     // search Giant Bomb API for games  
     function searchForGame($query, $page, $resultsPerPage, $userID) 
@@ -34,7 +51,7 @@ class GiantBomb extends CI_Model {
         // make API request
         $result = $this->Utility->getData($url, "Search");
 
-        if(is_object($result) && $result->error == "OK" && $result->number_of_total_results > 0)
+        if(is_object($result) && $result->error == "OK" && $result->number_of_page_results > 0)
         {                       
 			$this->load->model('Collection');                                                                             
             foreach($result->results as $game)
