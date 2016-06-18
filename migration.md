@@ -40,3 +40,11 @@ The previous versions also had an error in the database schema. `Result` in the 
 ```SQL
 ALTER TABLE `apiLog` CHANGE `Result` `Result` LONGBLOB NULL;
 ```
+
+### Upgrade from v0.4.5 to v0.5.0
+
+Add a column to the `settings` table for the releases crawler.
+
+```SQL
+ALTER TABLE `settings` ADD `ReleasesCrawlerOffset` INT(11) NOT NULL AFTER `CrawlerOffset`;
+```
