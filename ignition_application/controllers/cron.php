@@ -6,7 +6,8 @@ class Cron extends CI_Controller {
 	public function update()
 	{
 		// get offset
-		$crawlerOffset = $this->getCrawlerOffset();
+		$crawlerName = "Game";
+		$crawlerOffset = $this->getCrawlerOffset($crawlerName);
 		$gamesPerPage = 100;
 		
 		// if offset returned
@@ -25,14 +26,14 @@ class Cron extends CI_Controller {
 					// the games returned will be processed from the API log
 					$crawlerOffset = $crawlerOffset + $gamesPerPage;
 					
-					$this->setCrawlerOffset($crawlerOffset);
+					$this->setCrawlerOffset($crawlerName, $crawlerOffset);
 				}
 				else
 				{
 					// nothing returned, reset offset to zero
 					$crawlerOffset = 0;
 					
-					$this->setCrawlerOffset($crawlerOffset);
+					$this->setCrawlerOffset($crawlerName, $crawlerOffset);
 				}
 					
 				echo "Next offset: " . $crawlerOffset;
@@ -89,24 +90,27 @@ class Cron extends CI_Controller {
 	}
 
     // get crawler offset
-    function getCrawlerOffset()
+    function getCrawlerOffset($crawlerName)
     {
-        $this->db->select('CrawlerOffset');
+        $this->db->select($crawlerName . "CrawlerOffset");
         $this->db->from('settings'); 
         $query = $this->db->get();
 
         if($query->num_rows() == 1)
         {
-            return $query->first_row()->CrawlerOffset;
+			if($crawlerName == "Game")
+            	return $query->first_row()->GameCrawlerOffset;
+			else if($crawlerName == "Release")
+				return $query->first_row()->ReleaseCrawlerOffset;
         }
 
         return null;
     }
 	
-	function setCrawlerOffset($offset)
+	function setCrawlerOffset($crawlerName, $offset)
     {
         $data = array(
-           'CrawlerOffset' => $offset
+           $crawlerName . "CrawlerOffset" => $offset
         );
 
         $this->db->update('settings', $data); 
