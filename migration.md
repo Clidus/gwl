@@ -46,5 +46,11 @@ ALTER TABLE `apiLog` CHANGE `Result` `Result` LONGBLOB NULL;
 Add a column to the `settings` table for the releases crawler.
 
 ```SQL
-ALTER TABLE `settings` ADD `ReleasesCrawlerOffset` INT(11) NOT NULL AFTER `CrawlerOffset`;
+ALTER TABLE `settings` ADD `ReleaseCrawlerOffset` INT(11) NOT NULL AFTER `CrawlerOffset`;
+```
+
+Rename game crawler column to be more explicit.
+
+```SQL
+ALTER TABLE `settings` CHANGE `CrawlerOffset` `GameCrawlerOffset` INT(11) NOT NULL;
 ```
