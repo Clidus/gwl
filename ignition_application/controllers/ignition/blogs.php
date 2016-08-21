@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Ignition v0.4.0 ignitionpowered.co.uk
+| Ignition v0.5.0 ignitionpowered.co.uk
 |--------------------------------------------------------------------------
 |
 | This class is a core part of Ignition. It is advised that you extend
@@ -14,15 +14,21 @@
 class IG_Blogs extends CI_Controller {
 	
 	// blog home
-	public function home()
+	public function home($page = 1)
 	{
 		// page variables
 		$this->load->model('Page');
 		$data = $this->Page->create("Blog", "Blog");
 
 		// get blog posts
+		$resultsPerPage = 10;
+		$offset = ($page-1) * $resultsPerPage;
 		$this->load->model('Blog');
-		$posts = $this->Blog->getPosts(10); // get 10 most recent posts
+		$posts = $this->Blog->getPosts($resultsPerPage, $offset);
+
+		// return 404, if not blog homepage and no posts found
+		if($page != 1 && $posts == null)
+			show_404();
 
         $this->load->library('md');
         foreach($posts as $post)
@@ -44,7 +50,8 @@ class IG_Blogs extends CI_Controller {
 					break;
 			} 
         }
-		$data['recentPosts'] = $posts;
+		$data['posts'] = $posts;
+		$data['page'] = $page;
 		
 		// load views
 		$this->load->view('templates/header', $data);
@@ -75,7 +82,7 @@ class IG_Blogs extends CI_Controller {
 		$this->load->model('Page');
 		$data = $this->Page->create($post->Title, "BlogPost");
 		$data['post'] = $post;
-		$data['recentPosts'] = $this->Blog->getPosts(10); // get 10 most recent posts
+		$data['posts'] = $this->Blog->getPosts(10); // get 10 most recent posts
 
 		// add meta tags
 		$data['metaTags'] = $this->Page->getBlogMetaTags($post);
@@ -96,7 +103,7 @@ class IG_Blogs extends CI_Controller {
 
 		// get blog posts
 		$this->load->model('Blog');
-		$data['recentPosts'] = $this->Blog->getPosts(10); // get 10 most recent posts
+		$data['posts'] = $this->Blog->getPosts(10); // get 10 most recent posts
 		$months = $this->Blog->getMonthlyArchive(); // get monthly archive of blog posts
 
 		// convert month number into month name
@@ -128,7 +135,7 @@ class IG_Blogs extends CI_Controller {
 
 		// get blog posts
 		$this->load->model('Blog');
-		$data['recentPosts'] = $this->Blog->getPosts(10); // get 10 most recent posts
+		$data['posts'] = $this->Blog->getPosts(10); // get 10 most recent posts
 		$data['title'] = $title;
 		$posts = $this->Blog->getPostsForMonth($year, $month); // get monthly archive of blog posts
 

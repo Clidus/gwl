@@ -12,6 +12,12 @@ body {
 * blog
 */
 
+.blog-post {
+    img {
+        max-width: 100%;
+    }
+}
+
 .responsiveImage {
     width: 100%;
     margin-bottom: 10px;
@@ -23,10 +29,6 @@ body {
 
 .postFooter {
     margin-top: 10px;
-}
-
-.blogComments {
-    padding: 10px;
 }
 
 .imageShadow {
@@ -99,6 +101,11 @@ body {
     height: 500px;
 }
 
+#blogViewAllButton, #blogPostImage {
+    width: 100%;
+}
+
 #blogPostImageUpload {
     margin-top: 10px;
 }
+

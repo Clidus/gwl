@@ -42,6 +42,7 @@ $route['default_controller'] = 'home/view';
 $route['feed/(:num)'] = 'home/view/$1';
 
 $route['blog'] = 'blogs/home';
+$route['blog/page/(:any)'] = 'blogs/home/$1';
 $route['blog/archive'] = 'blogs/archive';
 $route['blog/archive/(:num)/(:num)'] = 'blogs/month/$1/$2';
 $route['blog/(:any)'] = 'blogs/post/$1';
@@ -75,9 +76,10 @@ $route['user/(:any)'] = 'users/view/$1';
 $route['user/(:any)/(:any)'] = 'users/view/$1/$2';
 
 $route['admin'] = 'admin/home';
-$route['admin/blog/new'] = 'admin/newBlogPost';
-$route['admin/blog/edit'] = 'admin/blogPostList';
-$route['admin/blog/edit/(:any)'] = 'admin/editBlogPost/$1';
+$route['admin/blog/new'] = 'admin_blog/create';
+$route['admin/blog/edit/post/(:any)'] = 'admin_blog/edit/$1';
+$route['admin/blog/edit/(:any)'] = 'admin_blog/get/$1';
+$route['admin/blog/delete'] = 'admin_blog/delete';
 
 $route['cron/update'] = 'cron/update';
 

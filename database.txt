@@ -8,8 +8,10 @@ CREATE TABLE `blog` (
   `Post` text NOT NULL,
   `UserID` int(11) NOT NULL,
   `Date` date NOT NULL,
+  `Time` time NOT NULL,
   `Deck` varchar(155) DEFAULT NULL,
   `Image` varchar(100) DEFAULT NULL,
+  `Published` tinyint(1) NOT NULL DEFAULT '0'
   PRIMARY KEY (`PostID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

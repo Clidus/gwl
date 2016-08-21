@@ -11,7 +11,9 @@ This software uses the following software and services, for which we are thankfu
 * [Ignition](http://www.ignitionpowered.co.uk/)
 * [PHP Markdown](http://michelf.ca/projects/php-markdown/)
 * [Markdown library for CodeIgniter](http://blog.gauntface.co.uk/2014/03/17/codeigniter-markdown-libraries-hell/)
+* [markdown-js](https://github.com/evilstreak/markdown-js)
 * [Bootstrap](http://getbootstrap.com/)
+* [Bootstrap Markdown](http://www.codingdrama.com/bootstrap-markdown/)
 * [jQuery](http://jquery.com/)
 * [jQuery autogrow textarea](https://github.com/jaz303/jquery-grab-bag)
 
@@ -38,7 +40,7 @@ In the `ignition_application/config/` folder:
 * Set `website_name` and `email_password_reset` in `ignition_config.php`
 * Set `base_url` and `encryption_key` in `config.php`
 * Set `hostname`, `username`, `password` and `database` in `database.php`
-* Get a [Giant Bomb API Key](http://www.giantbomb.com/api/) and set `gb_api_key` in `gwl_config.php`
+* Get a [Giant Bomb API Key](http://www.giantbomb.com/api/) and set `gb_api_key` and `gwl_user_agent` in `gwl_config.php`
 
 ### Upgrade:
 
@@ -46,5 +48,5 @@ When upgrading between versions, follow the instructions in [migration.md](https
 
 ## License
 
-* Copyright 2015 [Joshua Marketis](http://www.clidus.com)
+* Copyright 2016 [Joshua Marketis](http://www.clidus.com)
 * Distributed under the [MIT License](http://creativecommons.org/licenses/MIT/)

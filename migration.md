@@ -40,3 +40,18 @@ The previous versions also had an error in the database schema. `Result` in the 
 ```SQL
 ALTER TABLE `apiLog` CHANGE `Result` `Result` LONGBLOB NULL;
 ```
+
+### Upgrade from v0.4.5 to v0.4.6
+
+Add published and time field to blog table. 
+
+```SQL
+ALTER TABLE `blog` ADD `Published` BOOLEAN NOT NULL DEFAULT FALSE AFTER `Image`;
+ALTER TABLE `blog` ADD `Time` TIME NOT NULL AFTER `Date`;
+```
+
+All your existing posts will be unpublished. Run this to publish them.
+
+```SQL
+UPDATE blog SET Published = TRUE
+```

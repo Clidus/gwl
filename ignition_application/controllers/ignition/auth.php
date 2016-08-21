@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Ignition v0.4.0 ignitionpowered.co.uk
+| Ignition v0.5.0 ignitionpowered.co.uk
 |--------------------------------------------------------------------------
 |
 | This class is a core part of Ignition. It is advised that you extend
@@ -20,7 +20,7 @@ class IG_Auth extends CI_Controller {
 		$this->load->library('form_validation');
 
 		// form validation
-		$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|callback_email_tld_check');
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[conpassword]');
 		$this->form_validation->set_rules('conpassword', 'Confirm Password', 'trim|required');
@@ -53,6 +53,19 @@ class IG_Auth extends CI_Controller {
 				$this->load->view('auth/register', $data);
 				$this->load->view('templates/footer', $data);
 			}
+		}
+	}
+
+	public function email_tld_check($email)
+	{
+		if (preg_match("/\.ru|163\.com$/", $email) > 0)
+		{
+			$this->form_validation->set_message('email_tld_check', 'Sorry, we don\'t accept email addresses from this domain.');
+			return false;
+		}
+		else
+		{
+			return true;
 		}
 	}
 

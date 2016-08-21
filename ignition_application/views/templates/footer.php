@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-5">
           <p>Video game data provided by the top men at <a href="http://www.giantbomb.com" target="_blank">Giant Bomb</a>.</p>
-          <p><a href="/changelog">Version 0.4.5</a>. Built on <a href="http://www.codeigniter.com/" target="_blank">CodeIgniter</a> and <a href="http://www.ignitionpowered.co.uk/" target="_blank">Ignition</a>.</p>
+          <p><a href="/changelog">Version 0.4.6</a>. Built on <a href="http://www.codeigniter.com/" target="_blank">CodeIgniter</a> and <a href="http://www.ignitionpowered.co.uk/" target="_blank">Ignition</a>.</p>
         </div>
         <div class="col-sm-3 socialIcons">
           <a href="https://www.facebook.com/gamingwithlemons" target="_blank"><img src="/images/social/facebook.jpeg" /></a>
