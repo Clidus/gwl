@@ -25,7 +25,7 @@
   "devDependencies": {
     "gulp": "git://github.com/gulpjs/gulp#4.0",
     "gulp-concat": "2.5.x",
-    "gulp-sass": "2.2.x",
+    "gulp-sass": "2.3.x",
     "gulp-uglify": "1.1.x",
     "gulp-watch": "4.1.x"
   }

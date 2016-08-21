@@ -2,7 +2,7 @@
 function deleteBlogPost(ID) {
     $.ajax({
         type : 'POST',
-        url : '/admin/deleteBlogPost',
+        url : '/admin/blog/delete',
         dataType : 'json',
         data: {
             postID: ID
@@ -11,7 +11,7 @@ function deleteBlogPost(ID) {
             if (data.error === true) {
                 showErrorModal(data.errorMessage,false,false);
             } else {
-                window.location = '/admin/blog/edit';
+                window.location = '/admin/blog/edit/1';
             }
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {

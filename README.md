@@ -11,7 +11,9 @@ This software uses the following software and services, for which we are thankfu
 * [Ignition](http://www.ignitionpowered.co.uk/)
 * [PHP Markdown](http://michelf.ca/projects/php-markdown/)
 * [Markdown library for CodeIgniter](http://blog.gauntface.co.uk/2014/03/17/codeigniter-markdown-libraries-hell/)
+* [markdown-js](https://github.com/evilstreak/markdown-js)
 * [Bootstrap](http://getbootstrap.com/)
+* [Bootstrap Markdown](http://www.codingdrama.com/bootstrap-markdown/)
 * [jQuery](http://jquery.com/)
 * [jQuery autogrow textarea](https://github.com/jaz303/jquery-grab-bag)
 
@@ -46,5 +48,5 @@ When upgrading between versions, follow the instructions in [migration.md](https
 
 ## License
 
-* Copyright 2015 [Joshua Marketis](http://www.clidus.com)
+* Copyright 2016 [Joshua Marketis](http://www.clidus.com)
 * Distributed under the [MIT License](http://creativecommons.org/licenses/MIT/)
