@@ -4,7 +4,8 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
-    watch = require('gulp-watch');
+    watch = require('gulp-watch'),
+    babel = require('gulp-babel');
 
 gulp.task('scss', function () {
     return gulp.src('./style/scss/*.scss')
@@ -24,13 +25,20 @@ gulp.task('css', function () {
 
 gulp.task('js', function () {
     return gulp.src(['./script/js/jquery-2.0.3.min.js','./script/js/jquery.autogrow-textarea.js','./script/js/bootstrap.min.js',
-        './script/js/markdown.js','./script/js/bootstrap-markdown.js','./script/js/react-0.13.2.min.js',
-        './script/js/admin.js','./script/js/comments.js','./script/js/global.js','./script/js/collection.js',
+        './script/js/markdown.js','./script/js/bootstrap-markdown.js','./script/js/react.js','./script/js/react-dom.js',
+        './script/js/admin.js','./script/js/comments.js','./script/js/global.js','./script/js/collection2.js',
         './script/js/game.js','./script/js/platforms.js','./script/js/user.js'])
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(concat('ignition.js'))
         .pipe(gulp.dest('./script/crushed'))
-    return true;
 });
 
-gulp.task('default', gulp.series('scss', gulp.parallel('css', 'js')));
+gulp.task("babel", function(){
+    return gulp.src("./script/jsx/*.jsx").
+        pipe(babel({
+            plugins: ['transform-react-jsx']
+        })).
+        pipe(gulp.dest("./script/js/"));
+});
+
+gulp.task('default', gulp.series('scss', 'babel', gulp.parallel('css', 'js')));
