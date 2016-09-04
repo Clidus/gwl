@@ -23,7 +23,9 @@
   },
   "homepage": "https://www.gamingwithlemons.com/",
   "devDependencies": {
+    "babel-plugin-transform-react-jsx": "6.8.x",
     "gulp": "git://github.com/gulpjs/gulp#4.0",
+    "gulp-babel": "6.1.x",
     "gulp-concat": "2.5.x",
     "gulp-sass": "2.3.x",
     "gulp-uglify": "1.1.x",
