@@ -13,12 +13,16 @@ class Api extends CI_Controller {
             && array_key_exists('password', $data) 
             && $this->User->login($data['username'], $data['password'])) 
         {
+            $this->load->model('Api_Session');
+            $token = $this->Api_Session->createSessionToken(1);
+
             $result['success'] = true;
-            $result['token'] = "AAA";
+            $result['token'] = $token;
         }
         else
         {
             $result['success'] = false;
+            $result['token'] = "";
         }
 
         echo json_encode($result);
