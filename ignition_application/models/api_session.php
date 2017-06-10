@@ -7,6 +7,9 @@ class Api_Session extends CI_Model {
     {
         $token = $this->generateSessionToken($userID);
 
+        if($token == null)
+            return null;
+            
         $currentUTCDateTime = new DateTime(null, new DateTimeZone('UTC'));
 
         $data = array(

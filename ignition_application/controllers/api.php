@@ -16,15 +16,20 @@ class Api extends CI_Controller {
             $this->load->model('Api_Session');
             $token = $this->Api_Session->createSessionToken(1);
 
-            $result['success'] = true;
-            $result['token'] = $token;
-        }
-        else
-        {
-            $result['success'] = false;
-            $result['token'] = "";
+            if($token != null)
+            {
+                $result['success'] = true;
+                $result['token'] = $token;
+
+                echo json_encode($result);
+                return;
+            }
         }
 
+        $result['success'] = false;
+        $result['token'] = "";
+
         echo json_encode($result);
+        return;
     }
 }
