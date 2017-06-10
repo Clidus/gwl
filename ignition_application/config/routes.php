@@ -75,6 +75,8 @@ $route['user/(:any)/platforms'] = 'users/platforms/$1';
 $route['user/(:any)'] = 'users/view/$1';
 $route['user/(:any)/(:any)'] = 'users/view/$1/$2';
 
+$route['api/login'] = 'api/login';
+
 $route['admin'] = 'admin/home';
 $route['admin/blog/new'] = 'admin_blog/create';
 $route['admin/blog/edit/post/(:any)'] = 'admin_blog/edit/$1';
