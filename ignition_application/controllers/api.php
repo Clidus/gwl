@@ -10,19 +10,25 @@ class Api extends CI_Controller {
         $this->load->model('User');
         if(count($data) > 0
             && array_key_exists('username', $data) 
-            && array_key_exists('password', $data) 
-            && $this->User->login($data['username'], $data['password'])) 
+            && array_key_exists('password', $data)) 
         {
-            $this->load->model('Api_Session');
-            $token = $this->Api_Session->createSessionToken(1);
+            $userData = $this->User->login($data['username'], $data['password'], false);
 
-            if($token != null)
+            if($userData != null)
             {
-                $result['success'] = true;
-                $result['token'] = $token;
+                $this->load->model('Api_Session');
+                $token = $this->Api_Session->createSessionToken($userData["UserID"]);
 
-                echo json_encode($result);
-                return;
+                if($token != null)
+                {
+                    $result['success'] = true;
+                    $result['token'] = $token;
+                    $result['username'] = $userData["Username"];
+                    $result['profileImage'] = $userData["ProfileImage"];
+
+                    echo json_encode($result);
+                    return;
+                }
             }
         }
 
