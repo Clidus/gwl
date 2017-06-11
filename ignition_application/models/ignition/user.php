@@ -28,7 +28,7 @@ class IG_User extends CI_Model {
     }
     
     // register user
-    function register($email, $username, $password)
+    function register($email, $username, $password, $useSession)
     {
         // hash password
         $hashPassword = $this->hashPassword($password);
@@ -52,7 +52,7 @@ class IG_User extends CI_Model {
         // if added successfully 
         if($this->db->insert('users', $data)) {
             // login user
-            if($this->login($username, $password)) {
+            if($this->login($username, $password, $useSession) != null) {
                 // success
                 return true;
             } else {
@@ -85,7 +85,7 @@ class IG_User extends CI_Model {
     }
 
     // login user
-    function login($username, $password)
+    function login($username, $password, $useSession)
     {
         // check login is correct
         $query = $this->db->get_where('users', array('Username' => $username, 'RegisteredUser' => true));
@@ -100,20 +100,24 @@ class IG_User extends CI_Model {
                 return false;
 
             // create session
-            $newdata = array(
+            $userData = array(
                 'UserID' => $user->UserID,
                 'Username' => $user->Username,
                 'Admin' => $user->Admin,
                 'DateTimeFormat' => $user->DateTimeFormat,
                 'ProfileImage' => $user->ProfileImage == null ? $this->config->item('default_profile_image') : $user->ProfileImage
             );
-            $this->session->set_userdata($newdata);
-            
+
+            if($useSession)
+            {
+                $this->session->set_userdata($userData);
+            }
+
             // success
-            return true;
+            return $userData;
         } else {
             // error, incorrect username
-            return false;
+            return null;
         }
     }
 

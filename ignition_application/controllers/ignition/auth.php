@@ -43,7 +43,7 @@ class IG_Auth extends CI_Controller {
 		{
 			// register user
 			$this->load->model('User');
-			if($this->User->register($this->input->post('email'), $this->input->post('username'), $this->input->post('password'))) {
+			if($this->User->register($this->input->post('email'), $this->input->post('username'), $this->input->post('password'), true)) {
 				// success, send to homepage
 				header("location: " . base_url());
 			} else {
@@ -97,7 +97,7 @@ class IG_Auth extends CI_Controller {
 		{
 			// register user
 			$this->load->model('User');
-			if($this->User->login($this->input->post('username'), $this->input->post('password'))) {
+			if($this->User->login($this->input->post('username'), $this->input->post('password'), true) != null) {
 				// success, send to homepage
 				header("location: " . base_url());
 			} else {
