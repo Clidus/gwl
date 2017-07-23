@@ -90,7 +90,7 @@ class IG_Blog extends CI_Model {
             $this->db->where('TIMESTAMP(date,time) < ', $currentTimeInUTC->format('Y-m-d H:i:s')); 
         }
 
-        $this->db->group_by("PostID"); 
+        $this->db->group_by("PostID, Username");
         $this->db->order_by("Date desc, Time desc"); 
         $this->db->limit($resultsPerPage, $offset);
         return $this->db->get()->result();
