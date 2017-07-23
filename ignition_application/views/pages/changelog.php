@@ -6,9 +6,14 @@
 <h1><?php echo $pagetitle ?></h1>
 
 <div>
+	<p><b>Version 0.4.7 - 2017-07-23</b></p>
+	<ul>
+		<li><b>Bug Fix:</b> A duplicate game entry in the database would produce more duplicate entries. <a href="https://github.com/Clidus/gwl/issues/114">#114</a></li>
+		<li><b>Bug Fix:</b> Fixed error when sql_mode=only_full_group_by is set. <a href="https://github.com/Clidus/gwl/issues/114">#115</a></li>
+	</ul>
 	<p><b>Version 0.4.6 - 2016-08-21</b></p>
 	<ul>
-		<li><b>Change:</b> Upgraded to Ignition 0.5.0 <a href="https://github.com/Clidus/gwl/issues/109">#109</a></li>
+		<li><b>Change:</b> Upgraded to Ignition 0.5.0. <a href="https://github.com/Clidus/gwl/issues/109">#109</a></li>
 	</ul>
 	<p><b>Version 0.4.5 - 2016-05-03</b></p>
 	<ul>
