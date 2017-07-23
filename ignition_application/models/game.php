@@ -41,8 +41,13 @@ class Game extends CI_Model {
         {
             // get game from database
             if($this->getGameFromDatabase($GBID, $userID))
+            {
                 // game found
                 return true;
+            } else {
+                // game is in db, but failed to retrieve
+                return false;
+            }
         }
 
         // game was not found, get from Giant Bomb
